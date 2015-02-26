@@ -25,6 +25,7 @@ if [ ! -e Download ]; then
   mkdir Download
 fi
 
+# echo "-- Basic info -----------------------------------------------------"
 # apt-get update && apt-get -y upgrade
 #
 # # hostname
@@ -37,7 +38,35 @@ fi
 # cp $RESOURCE/locale /etc/default/locale
 # dpkg-reconfigure locales
 
-# awesome-tmux
+# ssh
+# cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+# cp $RESOURCE/ssh/sshd_config /etc/ssh/sshd_config
+
+# cd $HOME
+# if [ ! -e Workspace ]; then
+#   mkdir Workspace
+# fi
+# if [ ! -e .ssh ]; then
+#   mkdir .ssh
+# fi
+# touch $HOME/.ssh/authorized_keys
+# cat $RESOURCE/ssh/.ssh/authorized_keys >> $HOME/.ssh/authorized_keys
+
+# # .bashrc .input.rc
+# if [ -s $HOME/.bashrc ]; then
+#   mv $HOME/.bashrc $HOME/.bashrc.backup
+# fi
+# cp $RESOURCE/.bashrc $HOME
+
+# cat >> $HOME/.inputrc << EOF
+# # Add by keluLI $CURTIME
+# set completion-ignore-case on
+# EOF
+# . $HOME/.bashrc
+
+
+# echo "-- awesome-tmux -----------------------------------------------------"
+# # awesome-tmux
 # cd $DOWNLOAD
 # apt-get -y install git rake
 # if [ ! -e maximum-awesome-linux ]; then
@@ -46,10 +75,17 @@ fi
 # cd maximum-awesome-linux
 # rake
 # cp $RESOURCE/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome
-# cp $RESOURCE/maximum-awesome-linux/.tmux.conf.local $HOME
+# cp $RESOURCE/maximum-awesome-linux/.tmux* $HOME
+# cp $RESOURCE/maximum-awesome-linux/.vimrc* $HOME
+# cp $RESOURCE/maximum-awesome-linux/vimrc.bundles $DOWNLOAD/maximum-awesome-linux/vimrc.bundles
+# ./fixln.sh
 
-# # git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-# echo "-- tmux-powerline install -----------------------------------------------------"
+# git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+# rm -r $HOME/.vim/bundle/vim-snipmate
+
+# echo "note that you should manual edit something with bundle"
+
+# # tmux-powerline
 # cd $DOWNLOAD
 # if [ ! -e tmux-powerline ]; then
 #   git clone https://github.com/erikw/tmux-powerline.git
@@ -62,60 +98,26 @@ fi
 # source-file ~/.tmux.conf.local
 # EOF
 
-# rm -r $HOME/.vim/bundle/vim-snipmate
-
-# ssh
-# cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
-# cp $RESOURCE/ssh/sshd_config /etc/ssh/sshd_config
-
-# cd $HOME
-# if [ ! -e .ssh ]; then
-#   mkdir .ssh
-# fi
-# git config --global user.name "$GITHUBNAME"
-# git config --global user.email "$GITHUBEMAIL"
-# touch $HOME/.ssh/authorized_keys
-# cat $RESOURCE/ssh/.ssh/authorized_keys >> $HOME/.ssh/authorized_keys
 
 
 # echo "-- github install ------------------------------------------------------"
 # # github
 # cd $HOME
-# if [ ! -e Workspace ]; then
-#   mkdir Workspace
-# fi
-# ssh-keygen -t rsa -f github -C "$GITHUBEMAIL"
+# git config --global user.name "$GITHUBNAME"
+# git config --global user.email "$GITHUBEMAIL"
+# ssh-keygen -t rsa -f id_rsa -C "$GITHUBEMAIL"
 
 # ssh-agent bash
 # ssh-agent -s
-# ssh-add ~/.ssh/github
+# ssh-add ~/.ssh/id_rsa
 # ssh -T git@github.com
 
-# cd $HOME/Workspace
-# git clone git@github.com:kelvinblood/KeluMacKit.git
-# git clone git@github.com:kelvinblood/kelvinblood.github.com.git
 
-# # .bashrc # .input.rc
-# if [ -s $HOME/.bashrc ]; then
-#   mv $HOME/.bashrc $HOME/.bashrc.backup
-# fi
-# cp $RESOURCE/.bashrc $HOME
-
-# cat >> $HOME/.inputrc << EOF
-# # Add by keluLI $CURTIME
-# set completion-ignore-case on
-# EOF
-
-# cd $RESOURCE/maximum-awesome-linux/
-# cp .vimrc* .tmux* ~/
-# cp KeluLinuxKit/Resource/maximum-awesome-linux/vimrc.bundles KeluLinuxKit/Download/maximum-awesome-linux/vimrc.bundles
-# ./fixln.sh
-
+# echo "-- github install ------------------------------------------------------"
 # # iptables
 # # PPTP
 # # SysBackup
 # # mutt & msmtp
-
 
 
 # LNMP
@@ -125,9 +127,7 @@ fi
 # cd lnmp1.1-full
 # ./debian.sh
 #
-#
 
-# . $HOME/.bashrc
 #
 
 
