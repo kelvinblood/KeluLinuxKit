@@ -10,7 +10,7 @@ cd $HOME
 cp .bashrc .inputrc .bash_profile $RESOURCE
 
 # tmux
-cp .tmux.conf.local .vimrc.bundles.local .vimrc.bundles.local $RESOURCE/maximum-awesome-linux
+cp .tmux.conf.local .vimrc.local .vimrc.bundles.local $RESOURCE/maximum-awesome-linux
 
 cp -R $DOWNLOAD/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome-linux/vim $DOWNLOAD/maximum-awesome-linux/vimrc $DOWNLOAD/maximum-awesome-linux/vimrc.bundles $RESOURCE/maximum-awesome-linux/
 
@@ -19,7 +19,7 @@ cp $DOWNLOAD/tmux-powerline/themes/default.sh $RESOURCE/tmux-powerline/default.s
 
 # PPTP
 cp -R /etc/pptpd.conf /etc/ppp $RESOURCE/PPTP
-mv $RESOURCE/PPTP/chap-secrets $SECRET
+mv $RESOURCE/PPTP/ppp/chap-secrets $SECRET
 
 # iptables
 cp /etc/iptables.test.rules $RESOURCE
