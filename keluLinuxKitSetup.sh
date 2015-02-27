@@ -25,6 +25,18 @@ if [ ! -e Download ]; then
   mkdir Download
 fi
 
+cd /etc
+if [ ! -e kelu ]; then
+  mkdir kelu
+fi
+# cd $HOME
+# if [ ! -e Workspace ]; then
+#   mkdir Workspace
+# fi
+# if [ ! -e .ssh ]; then
+#   mkdir .ssh
+# fi
+
 # echo "-- Basic info -----------------------------------------------------"
 # apt-get update && apt-get -y upgrade
 #
@@ -38,17 +50,11 @@ fi
 # cp $RESOURCE/locale /etc/default/locale
 # dpkg-reconfigure locales
 
-# ssh
+# # ssh
 # cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
 # cp $RESOURCE/ssh/sshd_config /etc/ssh/sshd_config
 
 # cd $HOME
-# if [ ! -e Workspace ]; then
-#   mkdir Workspace
-# fi
-# if [ ! -e .ssh ]; then
-#   mkdir .ssh
-# fi
 # touch $HOME/.ssh/authorized_keys
 # cat $RESOURCE/ssh/.ssh/authorized_keys >> $HOME/.ssh/authorized_keys
 
@@ -57,13 +63,16 @@ fi
 #   mv $HOME/.bashrc $HOME/.bashrc.backup
 # fi
 # cp $RESOURCE/.bashrc $HOME
+# cp $RESOURCE/.bash_profile $HOME
+# source $HOME/.bash_profile
+# source $HOME/.bashrc
 
 # cat >> $HOME/.inputrc << EOF
 # # Add by keluLI $CURTIME
 # set completion-ignore-case on
 # EOF
-# . $HOME/.bashrc
 
+# cp -R $RESOURCE/etckelu/* /etc/kelu
 
 # echo "-- awesome-tmux -----------------------------------------------------"
 # # awesome-tmux
@@ -113,28 +122,57 @@ fi
 # ssh -T git@github.com
 
 
-# echo "-- github install ------------------------------------------------------"
+# echo "-- security ------------------------------------------------------"
+# cd $HOME
+# PPTP="$RESOURCE/PPTP"
 # # iptables
+# cp $PPTP/iptables.test.rules /etc
+# cp $PPTP/iptables /etc/network/if-pre-up.d/iptables
+# iptables -F
+
+# iptables-restore < /etc/iptables.test.rules
+# iptables-save > /etc/iptables.up.rules
+
 # # PPTP
+# apt-get -y install pptpd
+# cp -r /etc/ppp /etc/ppp_backup
+# cp $PPTP/pptpd.conf /etc/pptpd.conf
+# cp $PPTP/pptpd-options /etc/ppp/pptpd-options
+# cp $PPTP/chap-secrets /etc/ppp/chap-secrets
+# echo 'net.ipv4.ip_forward=1' >> /etc/sysctl.conf
+# sysctl -p
+# service pptpd restart
+
+# # monitor
+# apt-get -y install iftop
+
 # # SysBackup
 # # mutt & msmtp
 
 
-# LNMP
+# # LNMP
+# echo "-- LNMP Install ------------------------------------------------------"
 # cd $DOWNLOAD
 # wget -c http://soft.vpser.net/lnmp/lnmp1.1-full.tar.gz
 # tar zxf lnmp1.1-full.tar.gz
 # cd lnmp1.1-full
 # ./debian.sh
-#
 
-#
+# cd $HOME
+# rm -rf /home/wwwroot/default/*
+# cp -R $HOME/tmp/home/wwwroot/* /home/wwwroot/
+# cp $HOME/tmp/usr/local/nginx/conf/nginx.conf /usr/local/nginx/conf/nginx.conf
+# cp -R $HOME/tmp/usr/local/nginx/conf/vhost /usr/local/nginx/conf/vhost
 
 
+# echo "-- Software Install ------------------------------------------------------"
+# # dropbox
+# cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
+# # ~/.dropbox-dist/dropboxd
+# # /etc/kelu/dropbox.py
 
 # echo "Install KeluLinuxKit 0.1 completed! enjoy it."
 # echo "But still, you need to follow these steps with manual work."
-# echo "1. edit your iTerm2 profile, e.g. http://blog.kelu.org/mac/2015/01/25/iterm2-2.html. "
-# echo "  It will help you a wonderful sightseeing of iTerms."
+# echo "1. dropbox authorized, by running ~/.dropbox-dist/dropboxd . and then running /etc/kelu/dropbox.py start to sync"
 # echo "2. adding plugin: Supertab neocomplcache. seeing more about how to manage plugin by Bundle"
 # echo "3. some useful tools, e.g. [github.app](https://mac.github.com) "
