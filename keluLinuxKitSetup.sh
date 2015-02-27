@@ -8,6 +8,7 @@ GITHUBNAME='kelvinblood'
 GITHUBEMAIL='kelvinbloodzz@gmail.com'
 DOWNLOAD="$KELULINUXKIT/Download"
 RESOURCE="$KELULINUXKIT/Resource"
+SECRET="$RESOURCE/secret"
 echo "========================================================================="
 echo "KeluLinuxKit V0.1 for Debian 7.8"
 echo "KeluLinuxKit will install in this path: $KELULINUXKIT"
@@ -61,11 +62,14 @@ fi
 
 # # ssh
 # cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
-# cp $RESOURCE/ssh/sshd_config /etc/ssh/sshd_config
+# cp $SECRET/sshd_config /etc/ssh/sshd_config
 
 # cd $HOME
 # touch $HOME/.ssh/authorized_keys
-# cat $RESOURCE/ssh/.ssh/authorized_keys >> $HOME/.ssh/authorized_keys
+# mv authorized_keys authorized_keys_old
+# cp -r $SECRET/.ssh $HOME
+# cat authorized_keys_old >> authorized_keys
+# rm authorized_keys_old
 
 # # .bashrc .input.rc
 # if [ -s $HOME/.bashrc ]; then
@@ -133,21 +137,21 @@ fi
 
 # echo "-- security ------------------------------------------------------"
 # cd $HOME
-# PPTP="$RESOURCE/PPTP"
 # # iptables
-# cp $PPTP/iptables.test.rules /etc
-# cp $PPTP/iptables /etc/network/if-pre-up.d/iptables
+# cp $KELULINUXKIT/iptables.test.rules /etc
+# cp $KELULINUXKIT/iptables /etc/network/if-pre-up.d/iptables
 # iptables -F
 
 # iptables-restore < /etc/iptables.test.rules
 # iptables-save > /etc/iptables.up.rules
 
 # # PPTP
+# PPTP="$RESOURCE/PPTP"
 # apt-get -y install pptpd
-# cp -r /etc/ppp /etc/ppp_backup
+# mv /etc/ppp /etc/ppp_backup
 # cp $PPTP/pptpd.conf /etc/pptpd.conf
-# cp $PPTP/pptpd-options /etc/ppp/pptpd-options
-# cp $PPTP/chap-secrets /etc/ppp/chap-secrets
+# cp -r $PPTP/ppp /etc
+# cp $KELULINUXKIT/secret/chap-secrets /etc/ppp/chap-secrets
 # echo 'net.ipv4.ip_forward=1' >> /etc/sysctl.conf
 # sysctl -p
 # service pptpd restart
@@ -206,7 +210,11 @@ fi
 
 # mail
 # apt-get -y install mutt msmtp
+# if [ -e $SECRET/.muttrc ]; then
+# cp $SECRET/.muttrc $SECRET/.msmtprc $HOME
+# else
 # cp $RESOURCE/.muttrc $RESOURCE/.msmtprc $HOME
+# fi
 
 # cron
 # crontab /etc/kelu/keluCrontab
