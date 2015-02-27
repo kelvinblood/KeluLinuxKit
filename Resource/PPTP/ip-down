@@ -55,11 +55,6 @@ echo "$logoutTime $PEERNAME 登出处理开始" >> $logWarnFile
 if [ ! -e $logFile ]; then
     echo "$logoutTime $PEERNAME 没有$logFile 文件,不记录登出信息" >> $logWarnFile
 else
-    # 修改登陆数量，-1
-    loginNum=`head -n1 $logFile | cut -d " " -f 1`
-    loginNum=`echo "scale=0;$loginNum-1"|bc`;
-    sed -i "1s/^[0-9]*/$loginNum/" $logFile
-
     sed -n "/\<$PEERNAME\>/p" $logFile |sed -n "/\<$PPP_IFACE\>/p" | awk '{FS=" "}$2==1{print}' | tee $logMatchFile
 
     matchAccountNum=`cat $logMatchFile | wc -l`

@@ -48,15 +48,10 @@ if [ ! -e $logFile ]; then
     onlinePPTP=`last|grep still|grep ppp|wc -l`
     echo "$onlinePPTP `pptpd -v`" | tee -a $logFile $logWarnFile
     echo 'Seq OnlineFlag DEVICE IFNAME TTY IPLOCAL IPREMOTE PPP_IPPARAM LOGIN_TIME LOGOUT_TIME DURING_TIME DATASEND DATARECV DATASUM SPEED'| tee -a $logFile $logWarnFile
-else
-    # 修改序列号
-    loginPre=`tail -n1 $logFile | cut -d " " -f 1`
+  else
+    # loginSeq
+    loginPre=`tail -n1 $logFile | cut -d " " -f 1`;
     loginSeq=`echo "scale=0;$loginPre+1"|bc`;
-
-    # 修改在线人数
-    loginNum=`head -n1 $logFile | cut -d " " -f 1`
-    loginNum=`echo "scale=0;$loginNum+1"|bc`;
-    sed -i "1s/^[0-9]*/$loginNum/" $logFile
 fi
 
 echo "$loginSeq $loginState $PEERNAME $PPP_IFACE $PPP_TTY $PPP_LOCAL $PPP_REMOTE $PPP_IPPARAM $loginTime " | tee -a $logFile $logWarnFile
