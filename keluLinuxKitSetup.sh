@@ -29,13 +29,17 @@ cd /etc
 if [ ! -e kelu ]; then
   mkdir kelu
 fi
-# cd $HOME
-# if [ ! -e Workspace ]; then
-#   mkdir Workspace
-# fi
-# if [ ! -e .ssh ]; then
-#   mkdir .ssh
-# fi
+
+cd $HOME
+if [ ! -e Workspace ]; then
+  mkdir Workspace
+fi
+if [ ! -e .ssh ]; then
+  mkdir .ssh
+fi
+if [ ! -e Download ]; then
+  mkdir Download
+fi
 
 # echo "-- Basic info -----------------------------------------------------"
 # apt-get update && apt-get -y upgrade
@@ -174,6 +178,13 @@ fi
 # # transmission
 # apt-get -y install transmission-daemon
 # service transmission-daemon stop
+# cd $HOME/Download
+# if [ ! -e transmission-daemon ]; then
+#   mkdir transmission-daemon
+#   cd transmission-daemon
+#   mkdir downloads
+#   mkdir incomplete-downloads
+# fi
 # mv /etc/transmission-daemon/settings.json /etc/transmission-daemon/settings.json_backup
 # cp $RESOURCE/transmission-daemon/settings.json /etc/transmission-daemon/settings.json
 # service transmission-daemon restart
