@@ -37,8 +37,8 @@ fi
 if [ ! -e .ssh ]; then
   mkdir .ssh
 fi
-if [ ! -e Download ]; then
-  mkdir Download
+if [ ! -e Downloads ]; then
+  mkdir Downloads
 fi
 
 # echo "-- Basic info -----------------------------------------------------"
@@ -178,7 +178,7 @@ fi
 # # transmission
 # apt-get -y install transmission-daemon
 # service transmission-daemon stop
-# cd $HOME/Download
+# cd $HOME/Downloads
 # if [ ! -e transmission-daemon ]; then
 #   mkdir transmission-daemon
 #   cd transmission-daemon
@@ -190,6 +190,13 @@ fi
 # service transmission-daemon restart
 
 # # xrdp
+# apt-get -y install jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy
+# goto http://get.adobe.com/cn/flashplayer/
+# cp $RESOURCE/flash.x86_64.tar.gz /tmp
+# cd /tmp
+# tar -xzvf flash.x86_64.tar.gz > /dev/null
+# cp libflashplayer.so /usr/lib/mozilla/plugins/libflashplayer.so
+# cp -r usr/* /usr/
 
 # echo "Install KeluLinuxKit 0.1 completed! enjoy it."
 # echo "But still, you need to follow these steps with manual work."
