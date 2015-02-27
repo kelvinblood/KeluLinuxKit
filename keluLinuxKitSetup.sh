@@ -41,6 +41,11 @@ if [ ! -e Downloads ]; then
   mkdir Downloads
 fi
 
+cd /var/log
+if [ ! -e daily-report ]; then
+  mkdir daily-report
+fi
+
 # echo "-- Basic info -----------------------------------------------------"
 # apt-get update && apt-get -y upgrade
 #
@@ -198,8 +203,17 @@ fi
 # cp libflashplayer.so /usr/lib/mozilla/plugins/libflashplayer.so
 # cp -r usr/* /usr/
 
+
+# mail
+# apt-get -y install mutt msmtp
+# cp $RESOURCE/.muttrc $RESOURCE/.msmtprc $HOME
+
+# cron
+# crontab /etc/kelu/keluCrontab
+# service cron restart
+
 # echo "Install KeluLinuxKit 0.1 completed! enjoy it."
 # echo "But still, you need to follow these steps with manual work."
 # echo "1. dropbox authorized, by running ~/.dropbox-dist/dropboxd . and then running /etc/kelu/dropbox.py start to sync"
 # echo "2. adding plugin: Supertab neocomplcache. seeing more about how to manage plugin by Bundle"
-# echo "3. some useful tools, e.g. [github.app](https://mac.github.com) "
+# echo "3. edit your email account on $HOME/.msmtprc and $HOME/.muttrc "
