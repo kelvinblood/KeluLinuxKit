@@ -171,6 +171,15 @@ fi
 # # ~/.dropbox-dist/dropboxd
 # # /etc/kelu/dropbox.py
 
+# # transmission
+# apt-get -y install transmission-daemon
+# service transmission-daemon stop
+# mv /etc/transmission-daemon/settings.json /etc/transmission-daemon/settings.json_backup
+# cp $RESOURCE/transmission-daemon/settings.json /etc/transmission-daemon/settings.json
+# service transmission-daemon restart
+
+# # xrdp
+
 # echo "Install KeluLinuxKit 0.1 completed! enjoy it."
 # echo "But still, you need to follow these steps with manual work."
 # echo "1. dropbox authorized, by running ~/.dropbox-dist/dropboxd . and then running /etc/kelu/dropbox.py start to sync"
