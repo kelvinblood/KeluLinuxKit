@@ -44,7 +44,7 @@ ip() {
   iptables -L;
 }
 
-alias tn='tmux new -s kelu'
+alias tn='tmux new -s'
 alias tll='tmux ls'
-alias tt='tmux attach -t kelu'
+alias tt='tmux attach -t'
 alias tk='tmux kill-session -t'

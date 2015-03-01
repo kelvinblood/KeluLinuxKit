@@ -1,0 +1,46 @@
+" set nocursorline " don't highlight current line
+
+" keyboard shortcuts
+inoremap jj <ESC>
+
+" gui settings
+if (&t_Co == 256 || has('gui_running'))
+  if ($TERM_PROGRAM == 'iTerm.app')
+    colorscheme solarized
+  else
+    colorscheme desert
+  endif
+endif
+
+set hlsearch " 搜索关键词高亮
+set statusline=YUKI.N>\ こんにちは\ %m%r\ %=
+set statusline+=\ %{&ff}\ %Y\ 0x%02.2B
+set statusline+=\ %-21(%11(%l/%L%),%-3v\ %P%)
+set completeopt=longest,menu " 补全
+
+" 加速补全
+" supertab
+" 在输入变量名或路径名等符号中途按Tab键，得到以前输入过的符号列表，并通过Tab键循环选择。
+"0 - 不记录上次的补全方式
+"1 - 记住上次的补全方式,直到用其他的补全命令改变它
+"2 - 记住上次的补全方式,直到按ESC退出插入模式为止
+let g:SuperTabRetainCompletionType=2
+let g:SuperTabDefaultCompletionType=""
+"
+" vim配置及自动补全插件neocomplcache
+" 使用缓存，自动补全时效率高、生成的关键词列表准确等优点。
+let g:neocomplcache_enable_at_startup=1
+
+" Remove trailing whitespace when writing a buffer, but not for diff files.
+" 自动去除无效空白，包括行尾和文件尾
+" @see http://blog.bs2.to/post/EdwardLee/17961
+function RemoveTrailingWhitespace()
+ if &ft != "diff"
+  let b:curcol = col(".")
+  let b:curline = line(".")
+  silent! %s/\s\+$//
+  silent! %s/\(\s*\n\)\+\%$//
+  call cursor(b:curline, b:curcol)
+ endif
+endfunction
+autocmd BufWritePre * call RemoveTrailingWhitespace()
