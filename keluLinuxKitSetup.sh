@@ -87,23 +87,23 @@ fi
 
 # cp -R $RESOURCE/etckelu/* /etc/kelu
 
-# echo "-- awesome-tmux -----------------------------------------------------"
-# # awesome-tmux
-# cd $DOWNLOAD
-# apt-get -y install git rake
-# if [ ! -e maximum-awesome-linux ]; then
-#   git clone https://github.com/justaparth/maximum-awesome-linux.git
-# fi
-# cd maximum-awesome-linux
-# rake
+echo "-- awesome-tmux -----------------------------------------------------"
+# awesome-tmux
+cd $DOWNLOAD
+apt-get -y install git rake
+if [ ! -e maximum-awesome-linux ]; then
+  git clone https://github.com/justaparth/maximum-awesome-linux.git
+fi
+cd maximum-awesome-linux
+rake
 # cp $RESOURCE/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome
 # cp $RESOURCE/maximum-awesome-linux/.tmux* $HOME
 # cp $RESOURCE/maximum-awesome-linux/.vimrc* $HOME
 # cp $RESOURCE/maximum-awesome-linux/vimrc.bundles $DOWNLOAD/maximum-awesome-linux/vimrc.bundles
 # ./fixln.sh
 
-# git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-# rm -r $HOME/.vim/bundle/vim-snipmate
+# # git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+# # rm -r $HOME/.vim/bundle/vim-snipmate
 
 # echo "note that you should manual edit something with bundle"
 
