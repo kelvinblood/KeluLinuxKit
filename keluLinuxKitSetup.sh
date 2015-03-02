@@ -4,11 +4,12 @@ clear
 
 KELULINUXKIT=$(pwd)
 NOWTIME=$(date)
-GITHUBNAME='kelvinblood'
-GITHUBEMAIL='kelvinbloodzz@gmail.com'
+GITHUBNAME=''
+GITHUBEMAIL=''
 DOWNLOAD="$KELULINUXKIT/Download"
 RESOURCE="$KELULINUXKIT/Resource"
 SECRET="$RESOURCE/secret"
+
 echo "========================================================================="
 echo "KeluLinuxKit V0.1 for Debian 7.8"
 echo "KeluLinuxKit will install in this path: $KELULINUXKIT"
@@ -47,9 +48,14 @@ if [ ! -e daily-report ]; then
   mkdir daily-report
 fi
 
+echo ''
+echo ''
+echo ''
 echo "-- Basic info -----------------------------------------------------"
 apt-get update && apt-get -y upgrade
+apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy iftop mutt msmtp pptpd transmission-daemon
 
+cd $HOME
 # hostname
 echo "kelu.org" > /etc/hostname
 hostname -F /etc/hostname
@@ -64,12 +70,12 @@ dpkg-reconfigure locales
 cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
 cp $SECRET/sshd_config /etc/ssh/sshd_config
 
-cd $HOME
-touch $HOME/.ssh/authorized_keys
-mv authorized_keys authorized_keys_old
+if [ -e $SECRET ]; then
 cp -r $SECRET/.ssh $HOME
-cat authorized_keys_old >> authorized_keys
-rm authorized_keys_old
+else
+cd $HOME
+mkdir .ssh
+fi
 
 # .bashrc .input.rc
 if [ -s $HOME/.bashrc ]; then
@@ -77,8 +83,6 @@ if [ -s $HOME/.bashrc ]; then
 fi
 cp $RESOURCE/.bashrc $HOME
 cp $RESOURCE/.bash_profile $HOME
-source $HOME/.bash_profile
-source $HOME/.bashrc
 
 cat >> $HOME/.inputrc << EOF
 # Add by keluLI $CURTIME
@@ -87,8 +91,11 @@ EOF
 
 cp -R $RESOURCE/etckelu/* /etc/kelu
 
+echo ''
+echo ''
+echo ''
 echo "-- awesome-tmux -----------------------------------------------------"
-apt-get -y install vim
+# apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev
 # awesome-tmux
 cd $DOWNLOAD
 apt-get -y install git rake
@@ -105,8 +112,6 @@ cp $RESOURCE/maximum-awesome-linux/vimrc.bundles $DOWNLOAD/maximum-awesome-linux
 
 # git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
 # rm -r $HOME/.vim/bundle/vim-snipmate
-
-echo "note that you should manual edit something with bundle"
 
 # tmux-powerline
 cd $DOWNLOAD
@@ -133,7 +138,7 @@ iptables-save > /etc/iptables.up.rules
 
 # PPTP
 PPTP="$RESOURCE/PPTP"
-apt-get -y install pptpd
+# apt-get -y install pptpd
 mv /etc/ppp /etc/ppp_backup
 cp $PPTP/pptpd.conf /etc/pptpd.conf
 cp -r $PPTP/ppp /etc
@@ -142,33 +147,18 @@ echo 'net.ipv4.ip_forward=1' >> /etc/sysctl.conf
 sysctl -p
 service pptpd restart
 
-# monitor
-apt-get -y install iftop
-
-# LNMP
-echo "-- LNMP Install ------------------------------------------------------"
-cd $HOME
-wget -c http://soft.vpser.net/lnmp/lnmp1.1-full.tar.gz
-tar zxf lnmp1.1-full.tar.gz
-rm lnmp1.1-full.tar.gz
-# cd lnmp1.1-full
-# ./debian.sh
-
-# cd $HOME
-# rm -rf /home/wwwroot/default/*
-# cp -R $HOME/tmp/home/wwwroot/* /home/wwwroot/
-# cp $HOME/tmp/usr/local/nginx/conf/nginx.conf /usr/local/nginx/conf/nginx.conf
-# cp -R $HOME/tmp/usr/local/nginx/conf/vhost /usr/local/nginx/conf/vhost
-
-
-echo "-- Software Install ------------------------------------------------------"
+echo "-- Dropbox Install ------------------------------------------------------"
 # dropbox
 cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
 # ~/.dropbox-dist/dropboxd
 # /etc/kelu/dropbox.py
 
+echo ''
+echo ''
+echo ''
+echo "-- transmission Install ------------------------------------------------------"
 # transmission
-apt-get -y install transmission-daemon
+# apt-get -y install transmission-daemon
 service transmission-daemon stop
 cd $HOME/Downloads
 if [ ! -e transmission-daemon ]; then
@@ -181,9 +171,13 @@ mv /etc/transmission-daemon/settings.json /etc/transmission-daemon/settings.json
 cp $RESOURCE/transmission-daemon/settings.json /etc/transmission-daemon/settings.json
 service transmission-daemon restart
 
+echo ''
+echo ''
+echo ''
+echo "-- xrdp Install ------------------------------------------------------"
 # xrdp
-apt-get -y install jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy
-goto http://get.adobe.com/cn/flashplayer/
+# apt-get -y install jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy
+# goto http://get.adobe.com/cn/flashplayer/
 cp $RESOURCE/flash.x86_64.tar.gz /tmp
 cd /tmp
 tar -xzvf flash.x86_64.tar.gz > /dev/null
@@ -192,7 +186,7 @@ cp -r usr/* /usr/
 
 
 # mail
-apt-get -y install mutt msmtp
+# apt-get -y install mutt msmtp
 if [ -e $SECRET/.muttrc ]; then
 cp $SECRET/.muttrc $SECRET/.msmtprc $HOME
 else
@@ -203,6 +197,9 @@ fi
 crontab /etc/kelu/keluCrontab
 service cron restart
 
+echo ''
+echo ''
+echo ''
 echo "-- github install ------------------------------------------------------"
 # github
 cd $HOME/.ssh
@@ -213,12 +210,17 @@ ssh-keygen -t rsa -f id_rsa -C "$GITHUBEMAIL"
 ssh-agent bash
 ssh-agent -s
 ssh-add ~/.ssh/id_rsa
+exit
 
+echo ''
+echo ''
+echo ''
+echo "-- Almost done ------------------------------------------------------"
 echo "Install KeluLinuxKit 0.1 completed! enjoy it."
 echo "You have install those things: .bashrc .input.rc tmux iptables PPTP iftop"
 echo " dropbox transmission xrdp mutt&msmtp cron github"
 echo "But still, you need to follow these steps with manual work."
-echo "1. dropbox authorized, by running ~/.dropbox-dist/dropboxd . and then running /etc/kelu/dropbox.py start to sync"
+echo "1. dropbox authorized, by running ~/.dropbox-dist/dropboxd and then running /etc/kelu/dropbox.py start to sync"
 echo "2. adding plugin: Supertab neocomplcache. seeing more about how to manage plugin by Bundle."
 echo "3. edit your email account on $HOME/.msmtprc and $HOME/.muttrc if you havent add secret foler."
 echo "4. check your github account by: ssh -T git@github.com"
