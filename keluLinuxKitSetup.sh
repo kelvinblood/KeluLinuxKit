@@ -70,7 +70,7 @@ dpkg-reconfigure locales
 
 # ssh
 cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
-cp $SECRET/sshd_config /etc/ssh/sshd_config
+cp $RESOURCE/sshd_config /etc/ssh/sshd_config
 
 if [ -e $SECRET ]; then
 cp -r $SECRET/.ssh $HOME
