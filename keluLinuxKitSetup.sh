@@ -13,7 +13,7 @@ SECRET="$RESOURCE/secret"
 # # apt-get update
 # sudo passwd root
 # su -
-# apt-get -y install wget unzip
+# apt-get -y install zip
 # wget https://github.com/kelvinblood/KeluLinuxKit/archive/master.zip
 # unzip master.zip
 # mv KeluLinuxKit-master/ KeluLinuxKit
@@ -70,7 +70,7 @@ dpkg-reconfigure locales
 
 # ssh
 cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
-cp $RESOURCE/sshd_config /etc/ssh/sshd_config
+# cp $RESOURCE/sshd_config /etc/ssh/sshd_config
 
 if [ -e $SECRET ]; then
 cp -r $SECRET/.ssh $HOME
