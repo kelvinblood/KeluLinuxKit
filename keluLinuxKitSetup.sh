@@ -10,6 +10,15 @@ DOWNLOAD="$KELULINUXKIT/Download"
 RESOURCE="$KELULINUXKIT/Resource"
 SECRET="$RESOURCE/secret"
 
+# # apt-get update
+# sudo passwd root
+# su -
+# apt-get -y install wget unzip
+# wget https://github.com/kelvinblood/KeluLinuxKit/archive/master.zip
+# unzip master.zip
+# mv KeluLinuxKit-master/ KeluLinuxKit
+# cd KeluLinuxKit
+
 echo "========================================================================="
 echo "KeluLinuxKit V0.1 for Debian 7.8"
 echo "KeluLinuxKit will install in this path: $KELULINUXKIT"
@@ -18,8 +27,8 @@ echo "For more information please visit http://project.kelu.org/kelulinuxkit"
 echo "========================================================================="
 
 # Check if user is root
-if [ $(id -u) = "0" ]; then
-  echo "Warning: You should not be a root to run this script if you are not a root, press Enter to continue, any key to abort."
+if [ $(id -u) != "0" ]; then
+  echo "Warning: You should be a root to run this script."
 fi
 
 
@@ -47,13 +56,6 @@ cd /var/log
 if [ ! -e daily-report ]; then
   mkdir daily-report
 fi
-
-echo ''
-echo ''
-echo ''
-echo "-- Basic info -----------------------------------------------------"
-apt-get update && apt-get -y upgrade
-apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy iftop mutt msmtp pptpd transmission-daemon
 
 cd $HOME
 # hostname
@@ -90,6 +92,13 @@ set completion-ignore-case on
 EOF
 
 cp -R $RESOURCE/etckelu/* /etc/kelu
+echo ''
+echo ''
+echo ''
+echo "-- Basic info -----------------------------------------------------"
+apt-get update && apt-get -y upgrade
+apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy iftop mutt msmtp pptpd transmission-daemon git-man less liberror-perl libruby1.9.1 rsync ruby ruby1.9.1 zip
+
 
 echo ''
 echo ''
@@ -129,8 +138,8 @@ EOF
 echo "-- security ------------------------------------------------------"
 cd $HOME
 # iptables
-cp $KELULINUXKIT/iptables.test.rules /etc
-cp $KELULINUXKIT/iptables /etc/network/if-pre-up.d/iptables
+cp $RESOURCE/iptables.test.rules /etc
+cp $RESOURCE/iptables /etc/network/if-pre-up.d/iptables
 iptables -F
 
 iptables-restore < /etc/iptables.test.rules
