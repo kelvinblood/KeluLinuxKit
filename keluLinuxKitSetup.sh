@@ -97,8 +97,7 @@ echo ''
 echo ''
 echo "-- Basic info -----------------------------------------------------"
 apt-get update && apt-get -y upgrade
-apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy iftop mutt msmtp pptpd transmission-daemon git-man less liberror-perl libruby1.9.1 rsync ruby ruby1.9.1 zip
-
+apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy iftop mutt msmtp pptpd transmission-daemon git-man less liberror-perl libruby1.9.1 rsync ruby ruby1.9.1 zip exuberant-ctags
 
 echo ''
 echo ''
@@ -154,7 +153,6 @@ cp -r $PPTP/ppp /etc
 cp $KELULINUXKIT/secret/chap-secrets /etc/ppp/chap-secrets
 echo 'net.ipv4.ip_forward=1' >> /etc/sysctl.conf
 sysctl -p
-service pptpd restart
 
 echo "-- Dropbox Install ------------------------------------------------------"
 # dropbox
@@ -178,7 +176,6 @@ if [ ! -e transmission-daemon ]; then
 fi
 mv /etc/transmission-daemon/settings.json /etc/transmission-daemon/settings.json_backup
 cp $RESOURCE/transmission-daemon/settings.json /etc/transmission-daemon/settings.json
-service transmission-daemon restart
 
 echo ''
 echo ''
@@ -204,7 +201,6 @@ fi
 
 # cron
 crontab /etc/kelu/keluCrontab
-service cron restart
 
 echo ''
 echo ''
@@ -221,6 +217,10 @@ ssh-agent -s
 ssh-add ~/.ssh/id_rsa
 exit
 
+service transmission-daemon restart
+service pptpd restart
+service cron restart
+service ssh restart
 echo ''
 echo ''
 echo ''
