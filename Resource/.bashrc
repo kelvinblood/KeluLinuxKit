@@ -1,6 +1,6 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
-# for color
-export CLICOLOR=1
+export EDITOR="/usr/bin/vim" # crontab 编辑器
+export CLICOLOR=1 # for color
 PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 export LSCOLORS='gxfxcxdxbxegedabagacad'
 # grep
@@ -15,10 +15,11 @@ alias vi='vim'
 alias ls='ls $LS_OPTIONS'
 alias ll='ls $LS_OPTIONS -alh'
 alias la='last | head'
-alias p='pstree -a'
+alias p='netstat -antp'
+alias pp='pstree -a'
 alias lastn='last | grep -vn "^[i]" | grep -v "root" | grep -v "reboot" | grep -v "surface"'
 alias ta='tail -f /var/log/syslog'
-alias tapp='tail -f /var/log/pptpd.log'
+alias tapp='tail -f /var/log/pptpd.warn.log'
 alias dr='/etc/kelu/dropbox.py'
 alias lnmp='/etc/kelu/lnmp'
 alias dudir='du --max-depth=1 -ah 2> /dev/null | sort -hr | head '
@@ -31,6 +32,7 @@ alias kreal='/etc/kelu/keluReal.sh'
 umask 022
 
 alias cdh='cd ~'
+alias cdkelu='cd /home/wwwroot/kelu.org'
 alias cddr='cd /root/Dropbox'
 alias cdlog='cd /var/log'
 alias cdgit='cd /home/github/kelvinblood.github.com/draft/Linux'

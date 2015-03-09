@@ -17,6 +17,8 @@ SECRET="$RESOURCE/secret"
 # mv KeluLinuxKit-master/ KeluLinuxKit
 # cd KeluLinuxKit
 
+# pkill -kill -t pts/1命令踢出第一个用户。
+
 echo "========================================================================="
 echo "KeluLinuxKit V0.1 for Debian 7.8"
 echo "KeluLinuxKit will install in this path: $KELULINUXKIT"
@@ -96,6 +98,7 @@ echo ''
 echo "-- Basic info -----------------------------------------------------"
 apt-get update && apt-get -y upgrade
 apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy iftop mutt msmtp pptpd transmission-daemon git-man less liberror-perl libruby1.9.1 rsync ruby ruby1.9.1 zip exuberant-ctags
+apt-get -r remove rpcbind
 
 echo ''
 echo ''
