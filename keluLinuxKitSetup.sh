@@ -7,6 +7,7 @@ NOWTIME=$(date)
 DOWNLOAD="$KELULINUXKIT/Download"
 RESOURCE="$KELULINUXKIT/Resource"
 SECRET="$RESOURCE/secret"
+LONGBIT=`getconf LONG_BIT`
 
 # # apt-get update
 # sudo passwd root
@@ -157,7 +158,12 @@ sysctl -p
 
 echo "-- Dropbox Install ------------------------------------------------------"
 # dropbox
-cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
+cd $HOME
+if [ 32 == $LONGBIT ];then
+  wget -O - "https://www.dropbox.com/download?plat=lnx.x86" | tar xzf -
+else
+  wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
+fi
 # ~/.dropbox-dist/dropboxd
 # /etc/kelu/dropbox.py
 
