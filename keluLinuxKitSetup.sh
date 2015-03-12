@@ -46,9 +46,6 @@ cd $HOME
 if [ ! -e Workspace ]; then
   mkdir Workspace
 fi
-if [ ! -e .ssh ]; then
-  mkdir .ssh
-fi
 if [ ! -e Downloads ]; then
   mkdir Downloads
 fi
@@ -71,13 +68,14 @@ dpkg-reconfigure locales
 
 # ssh
 cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
-# cp $RESOURCE/sshd_config /etc/ssh/sshd_config
+if [ ! -e .ssh ]; then
+  mkdir .ssh
+else
+  mv .ssh .ssh_backup
+fi
 
 if [ -e $SECRET ]; then
-cp -r $SECRET/.ssh $HOME
-else
-cd $HOME
-mkdir .ssh
+  cp -r $SECRET/.ssh $HOME
 fi
 
 # .bashrc .input.rc
