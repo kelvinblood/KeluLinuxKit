@@ -57,8 +57,8 @@ fi
 
 cd $HOME
 # hostname
-echo "kelu.org" > /etc/hostname
-hostname -F /etc/hostname
+# echo "kelu.org" > /etc/hostname
+# hostname -F /etc/hostname
 
 # time zone
 dpkg-reconfigure tzdata
@@ -67,16 +67,16 @@ cp $RESOURCE/locale /etc/default/locale
 dpkg-reconfigure locales
 
 # ssh
-cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
-if [ ! -e .ssh ]; then
-  mkdir .ssh
-else
-  mv .ssh .ssh_backup
-fi
-
-if [ -e $SECRET ]; then
-  cp -r $SECRET/.ssh $HOME
-fi
+# cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+# if [ ! -e .ssh ]; then
+#   mkdir .ssh
+# else
+#   mv .ssh .ssh_backup
+# fi
+# 
+# if [ -e $SECRET ]; then
+#   cp -r $SECRET/.ssh $HOME
+# fi
 
 # .bashrc .input.rc
 if [ -s $HOME/.bashrc ]; then
@@ -154,62 +154,62 @@ cp $KELULINUXKIT/secret/chap-secrets /etc/ppp/chap-secrets
 echo 'net.ipv4.ip_forward=1' >> /etc/sysctl.conf
 sysctl -p
 
-echo "-- Dropbox Install ------------------------------------------------------"
-# dropbox
-cd $HOME
-if [ 32 == $LONGBIT ];then
-  wget -O - "https://www.dropbox.com/download?plat=lnx.x86" | tar xzf -
-else
-  wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
-fi
+#echo "-- Dropbox Install ------------------------------------------------------"
+## dropbox
+#cd $HOME
+#if [ 32 == $LONGBIT ];then
+#  wget -O - "https://www.dropbox.com/download?plat=lnx.x86" | tar xzf -
+#else
+#  wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
+#fi
 # ~/.dropbox-dist/dropboxd
 # /etc/kelu/dropbox.py
 
-echo ''
-echo ''
-echo ''
-echo "-- transmission Install ------------------------------------------------------"
-# transmission
-# apt-get -y install transmission-daemon
-service transmission-daemon stop
-cd $HOME/Downloads
-if [ ! -e transmission-daemon ]; then
-  mkdir transmission-daemon
-  cd transmission-daemon
-  mkdir downloads
-  mkdir incomplete-downloads
-fi
-mv /etc/transmission-daemon/settings.json /etc/transmission-daemon/settings.json_backup
-cp $RESOURCE/transmission-daemon/settings.json /etc/transmission-daemon/settings.json
+# echo ''
+# echo ''
+# echo ''
+# echo "-- transmission Install ------------------------------------------------------"
+# # transmission
+# # apt-get -y install transmission-daemon
+# service transmission-daemon stop
+# cd $HOME/Downloads
+# if [ ! -e transmission-daemon ]; then
+#   mkdir transmission-daemon
+#   cd transmission-daemon
+#   mkdir downloads
+#   mkdir incomplete-downloads
+# fi
+# mv /etc/transmission-daemon/settings.json /etc/transmission-daemon/settings.json_backup
+# cp $RESOURCE/transmission-daemon/settings.json /etc/transmission-daemon/settings.json
 
-echo ''
-echo ''
-echo ''
-echo "-- xrdp Install ------------------------------------------------------"
-# xrdp
-# apt-get -y install jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy
-# goto http://get.adobe.com/cn/flashplayer/
-cp $RESOURCE/flash.x86_64.tar.gz /tmp
-cd /tmp
-tar -xzvf flash.x86_64.tar.gz > /dev/null
-cp libflashplayer.so /usr/lib/mozilla/plugins/libflashplayer.so
-cp -r usr/* /usr/
-
-
-# mail
-# apt-get -y install mutt msmtp
-if [ -e $SECRET/.muttrc ]; then
-cp $SECRET/.muttrc $SECRET/.msmtprc $HOME
-else
-cp $RESOURCE/.muttrc $RESOURCE/.msmtprc $HOME
-fi
-
-# cron
-crontab /etc/kelu/keluCrontab
-
-service transmission-daemon restart
+# echo ''
+# echo ''
+# echo ''
+# echo "-- xrdp Install ------------------------------------------------------"
+# # xrdp
+# # apt-get -y install jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy
+# # goto http://get.adobe.com/cn/flashplayer/
+# cp $RESOURCE/flash.x86_64.tar.gz /tmp
+# cd /tmp
+# tar -xzvf flash.x86_64.tar.gz > /dev/null
+# cp libflashplayer.so /usr/lib/mozilla/plugins/libflashplayer.so
+# cp -r usr/* /usr/
+# 
+# 
+# # mail
+# # apt-get -y install mutt msmtp
+# if [ -e $SECRET/.muttrc ]; then
+# cp $SECRET/.muttrc $SECRET/.msmtprc $HOME
+# else
+# cp $RESOURCE/.muttrc $RESOURCE/.msmtprc $HOME
+# fi
+# 
+# # cron
+# crontab /etc/kelu/keluCrontab
+# 
+# service transmission-daemon restart
+# service cron restart
 service pptpd restart
-service cron restart
 service ssh restart
 echo ''
 echo ''
