@@ -23,7 +23,7 @@ LONGBIT=`getconf LONG_BIT`
 echo "========================================================================="
 echo "KeluLinuxKit V0.1 for Debian 7.8"
 echo "KeluLinuxKit will install in this path: $KELULINUXKIT"
-echo "A tool to install & config for git, maximum-awesome, etc."
+echo "A tool to install & config for iptables, git, maximum-awesome, etc."
 echo "For more information please visit http://project.kelu.org/kelulinuxkit"
 echo "========================================================================="
 
