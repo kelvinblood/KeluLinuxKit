@@ -21,7 +21,7 @@ LONGBIT=`getconf LONG_BIT`
 # pkill -kill -t pts/1命令踢出第一个用户。
 
 echo "========================================================================="
-echo "KeluLinuxKit V0.1 for Debian 7.8"
+echo "KeluLinuxKit V0.1 for Debian 8"
 echo "KeluLinuxKit will install in this path: $KELULINUXKIT"
 echo "A tool to install & config for iptables, git, maximum-awesome, etc."
 echo "For more information please visit http://project.kelu.org/kelulinuxkit"
@@ -29,25 +29,17 @@ echo "========================================================================="
 
 # Check if user is root
 if [ $(id -u) != "0" ]; then
-  echo "Warning: You should be a root to run this script."
+  echo "Warning: You should run this script as root user."
 fi
 
 
-if [ ! -e Download ]; then
+if [ ! -e $Download ]; then
   mkdir Download
 fi
 
 cd /etc
 if [ ! -e kelu ]; then
   mkdir kelu
-fi
-
-cd $HOME
-if [ ! -e Workspace ]; then
-  mkdir Workspace
-fi
-if [ ! -e Downloads ]; then
-  mkdir Downloads
 fi
 
 cd /var/log
@@ -84,6 +76,7 @@ if [ -s $HOME/.bashrc ]; then
 fi
 cp $RESOURCE/.bashrc $HOME
 cp $RESOURCE/.bash_profile $HOME
+source $HOME/.bashrc
 
 cat >> $HOME/.inputrc << EOF
 # Add by keluLI $CURTIME
@@ -91,128 +84,127 @@ set completion-ignore-case on
 EOF
 
 cp -R $RESOURCE/etckelu/* /etc/kelu
-echo ''
-echo ''
-echo ''
-echo "-- Basic info -----------------------------------------------------"
-apt-get update && apt-get -y upgrade
-apt-get -y install vim tmux git-man ruby zip
-# apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy iftop mutt msmtp pptpd transmission-daemon git-man less liberror-perl libruby1.9.1 rsync ruby ruby1.9.1 zip exuberant-ctags
-# apt-get -r remove rpcbind
-
-echo ''
-echo ''
-echo ''
-echo "-- awesome-tmux -----------------------------------------------------"
-# apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev
-# awesome-tmux
-cd $DOWNLOAD
-apt-get -y install git rake
-if [ ! -e maximum-awesome-linux ]; then
-  git clone https://github.com/justaparth/maximum-awesome-linux.git
-fi
-cd maximum-awesome-linux
-rake
-cp $RESOURCE/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome
-cp $RESOURCE/maximum-awesome-linux/.tmux* $HOME
-cp $RESOURCE/maximum-awesome-linux/.vimrc* $HOME
-cp $RESOURCE/maximum-awesome-linux/vimrc.bundles $DOWNLOAD/maximum-awesome-linux/vimrc.bundles
-./fixln.sh
-
-# git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-# rm -r $HOME/.vim/bundle/vim-snipmate
-
-# tmux-powerline
-cd $DOWNLOAD
-if [ ! -e tmux-powerline ]; then
-  git clone https://github.com/erikw/tmux-powerline.git
-fi
-cp $RESOURCE/tmux-powerline/default.sh $DOWNLOAD/tmux-powerline/themes/default.sh
-cat >> $DOWNLOAD/maximum-awesome-linux/tmux.conf<< EOF
-
-set-option -g status-left "#($DOWNLOAD/tmux-powerline/powerline.sh left)"
-set-option -g status-right "#($DOWNLOAD/tmux-powerline/powerline.sh right)"
-source-file ~/.tmux.conf.local
-EOF
-
-echo "-- security ------------------------------------------------------"
-cd $HOME
-# iptables
-cp $RESOURCE/iptables.test.rules /etc
-cp $RESOURCE/iptables /etc/network/if-pre-up.d/iptables
-iptables -F
-
-iptables-restore < /etc/iptables.test.rules
-iptables-save > /etc/iptables.up.rules
-
-# PPTP
-PPTP="$RESOURCE/PPTP"
-# apt-get -y install pptpd
-mv /etc/ppp /etc/ppp_backup
-cp $PPTP/pptpd.conf /etc/pptpd.conf
-cp -r $PPTP/ppp /etc
-# cp $KELULINUXKIT/secret/chap-secrets /etc/ppp/chap-secrets
-echo 'net.ipv4.ip_forward=1' >> /etc/sysctl.conf
-sysctl -p
-
-#echo "-- Dropbox Install ------------------------------------------------------"
-## dropbox
-#cd $HOME
-#if [ 32 == $LONGBIT ];then
-#  wget -O - "https://www.dropbox.com/download?plat=lnx.x86" | tar xzf -
-#else
-#  wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
-#fi
-# ~/.dropbox-dist/dropboxd
-# /etc/kelu/dropbox.py
-
 # echo ''
 # echo ''
 # echo ''
-# echo "-- transmission Install ------------------------------------------------------"
-# # transmission
-# # apt-get -y install transmission-daemon
-# service transmission-daemon stop
-# cd $HOME/Downloads
-# if [ ! -e transmission-daemon ]; then
-#   mkdir transmission-daemon
-#   cd transmission-daemon
-#   mkdir downloads
-#   mkdir incomplete-downloads
+# echo "-- Basic info -----------------------------------------------------"
+# apt-get update && apt-get -y upgrade
+# apt-get -y install vim tmux git-man ruby zip
+# # apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy iftop mutt msmtp pptpd transmission-daemon git-man less liberror-perl libruby1.9.1 rsync ruby ruby1.9.1 zip exuberant-ctags
+# # apt-get -r remove rpcbind
+# 
+# echo ''
+# echo ''
+# echo ''
+# echo "-- awesome-tmux -----------------------------------------------------"
+# # apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev
+# # awesome-tmux
+# cd $DOWNLOAD
+# apt-get -y install git rake
+# if [ ! -e maximum-awesome-linux ]; then
+#   git clone https://github.com/justaparth/maximum-awesome-linux.git
 # fi
-# mv /etc/transmission-daemon/settings.json /etc/transmission-daemon/settings.json_backup
-# cp $RESOURCE/transmission-daemon/settings.json /etc/transmission-daemon/settings.json
-
-# echo ''
-# echo ''
-# echo ''
-# echo "-- xrdp Install ------------------------------------------------------"
-# # xrdp
-# # apt-get -y install jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy
-# # goto http://get.adobe.com/cn/flashplayer/
-# cp $RESOURCE/flash.x86_64.tar.gz /tmp
-# cd /tmp
-# tar -xzvf flash.x86_64.tar.gz > /dev/null
-# cp libflashplayer.so /usr/lib/mozilla/plugins/libflashplayer.so
-# cp -r usr/* /usr/
+# cd maximum-awesome-linux
+# rake
+# cp $RESOURCE/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome
+# cp $RESOURCE/maximum-awesome-linux/.tmux* $HOME
+# cp $RESOURCE/maximum-awesome-linux/.vimrc* $HOME
+# cp $RESOURCE/maximum-awesome-linux/vimrc.bundles $DOWNLOAD/maximum-awesome-linux/vimrc.bundles
+# ./fixln.sh
 # 
+# # git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+# # rm -r $HOME/.vim/bundle/vim-snipmate
 # 
-# # mail
-# # apt-get -y install mutt msmtp
-# if [ -e $SECRET/.muttrc ]; then
-# cp $SECRET/.muttrc $SECRET/.msmtprc $HOME
-# else
-# cp $RESOURCE/.muttrc $RESOURCE/.msmtprc $HOME
+# # tmux-powerline
+# cd $DOWNLOAD
+# if [ ! -e tmux-powerline ]; then
+#   git clone https://github.com/erikw/tmux-powerline.git
 # fi
+# cp $RESOURCE/tmux-powerline/default.sh $DOWNLOAD/tmux-powerline/themes/default.sh
+# cat >> $DOWNLOAD/maximum-awesome-linux/tmux.conf<< EOF
 # 
-# # cron
-# crontab /etc/kelu/keluCrontab
+# set-option -g status-left "#($DOWNLOAD/tmux-powerline/powerline.sh left)"
+# set-option -g status-right "#($DOWNLOAD/tmux-powerline/powerline.sh right)"
+# source-file ~/.tmux.conf.local
+# EOF
 # 
-# service transmission-daemon restart
-# service cron restart
-source $HOME/.bashrc
-service pptpd restart
-service ssh restart
+# echo "-- security ------------------------------------------------------"
+# cd $HOME
+# # iptables
+# cp $RESOURCE/iptables.test.rules /etc
+# cp $RESOURCE/iptables /etc/network/if-pre-up.d/iptables
+# iptables -F
+# 
+# iptables-restore < /etc/iptables.test.rules
+# iptables-save > /etc/iptables.up.rules
+# 
+# # PPTP
+# PPTP="$RESOURCE/PPTP"
+# # apt-get -y install pptpd
+# mv /etc/ppp /etc/ppp_backup
+# cp $PPTP/pptpd.conf /etc/pptpd.conf
+# cp -r $PPTP/ppp /etc
+# # cp $KELULINUXKIT/secret/chap-secrets /etc/ppp/chap-secrets
+# echo 'net.ipv4.ip_forward=1' >> /etc/sysctl.conf
+# sysctl -p
+# 
+# #echo "-- Dropbox Install ------------------------------------------------------"
+# ## dropbox
+# #cd $HOME
+# #if [ 32 == $LONGBIT ];then
+# #  wget -O - "https://www.dropbox.com/download?plat=lnx.x86" | tar xzf -
+# #else
+# #  wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
+# #fi
+# # ~/.dropbox-dist/dropboxd
+# # /etc/kelu/dropbox.py
+# 
+# # echo ''
+# # echo ''
+# # echo ''
+# # echo "-- transmission Install ------------------------------------------------------"
+# # # transmission
+# # # apt-get -y install transmission-daemon
+# # service transmission-daemon stop
+# # cd $HOME/Downloads
+# # if [ ! -e transmission-daemon ]; then
+# #   mkdir transmission-daemon
+# #   cd transmission-daemon
+# #   mkdir downloads
+# #   mkdir incomplete-downloads
+# # fi
+# # mv /etc/transmission-daemon/settings.json /etc/transmission-daemon/settings.json_backup
+# # cp $RESOURCE/transmission-daemon/settings.json /etc/transmission-daemon/settings.json
+# 
+# # echo ''
+# # echo ''
+# # echo ''
+# # echo "-- xrdp Install ------------------------------------------------------"
+# # # xrdp
+# # # apt-get -y install jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy
+# # # goto http://get.adobe.com/cn/flashplayer/
+# # cp $RESOURCE/flash.x86_64.tar.gz /tmp
+# # cd /tmp
+# # tar -xzvf flash.x86_64.tar.gz > /dev/null
+# # cp libflashplayer.so /usr/lib/mozilla/plugins/libflashplayer.so
+# # cp -r usr/* /usr/
+# # 
+# # 
+# # # mail
+# # # apt-get -y install mutt msmtp
+# # if [ -e $SECRET/.muttrc ]; then
+# # cp $SECRET/.muttrc $SECRET/.msmtprc $HOME
+# # else
+# # cp $RESOURCE/.muttrc $RESOURCE/.msmtprc $HOME
+# # fi
+# # 
+# # # cron
+# # crontab /etc/kelu/keluCrontab
+# # 
+# # service transmission-daemon restart
+# # service cron restart
+# service pptpd restart
+# service ssh restart
 echo ''
 echo ''
 echo ''
