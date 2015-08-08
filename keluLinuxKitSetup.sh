@@ -37,11 +37,6 @@ if [ ! -e $Download ]; then
   mkdir Download
 fi
 
-cd /etc
-if [ ! -e kelu ]; then
-  mkdir kelu
-fi
-
 cd /var/log
 if [ ! -e daily-report ]; then
   mkdir daily-report
@@ -71,25 +66,28 @@ dpkg-reconfigure locales
 # fi
 
 # .bashrc .input.rc
-if [ -s $HOME/.bashrc ]; then
-  mv $HOME/.bashrc $HOME/.bashrc.backup
-fi
-cp $RESOURCE/.bashrc $HOME
-cp $RESOURCE/.bash_profile $HOME
-source $HOME/.bashrc
+
+touch $HOME/.bashrc 
+echo $RESOURCE/home/.bashrc >> $HOME/.bashrc
 
 cat >> $HOME/.inputrc << EOF
 # Add by keluLI $CURTIME
 set completion-ignore-case on
 EOF
 
-cp -R $RESOURCE/etckelu/* /etc/kelu
-# echo ''
-# echo ''
-# echo ''
-# echo "-- Basic info -----------------------------------------------------"
-# apt-get update && apt-get -y upgrade
-# apt-get -y install vim tmux git-man ruby zip
+
+cd /etc
+if [ ! -e kelu ]; then
+  mkdir kelu
+fi
+
+echo ''
+echo ''
+echo ''
+echo "-- Basic info -----------------------------------------------------"
+apt-get update && apt-get -y autoremove && apt-get -y upgrade
+apt-get -y install vim git ruby zip tmux sudo git
+# gem install rake
 # # apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy iftop mutt msmtp pptpd transmission-daemon git-man less liberror-perl libruby1.9.1 rsync ruby ruby1.9.1 zip exuberant-ctags
 # # apt-get -r remove rpcbind
 # 
@@ -210,10 +208,8 @@ echo ''
 echo ''
 echo "-- Almost done ------------------------------------------------------"
 echo "Install KeluLinuxKit 0.1 completed! enjoy it."
-echo "You have install those things: .bashrc .input.rc tmux iptables PPTP iftop"
-echo " dropbox transmission xrdp mutt&msmtp cron github"
 echo "But still, you need to follow these steps with manual work."
-echo "1. dropbox authorized, by running ~/.dropbox-dist/dropboxd and then running /etc/kelu/dropbox.py start to sync"
+echo "1. # source ~/.bashrc"
 echo "2. adding plugin: Supertab neocomplcache. seeing more about how to manage plugin by Bundle."
 echo "3. edit your email account on $HOME/.msmtprc and $HOME/.muttrc if you havent add secret foler."
 echo "4. check your github account by: ssh -T git@github.com"
