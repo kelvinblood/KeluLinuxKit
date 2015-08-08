@@ -96,8 +96,9 @@ echo ''
 echo ''
 echo "-- Basic info -----------------------------------------------------"
 apt-get update && apt-get -y upgrade
-apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy iftop mutt msmtp pptpd transmission-daemon git-man less liberror-perl libruby1.9.1 rsync ruby ruby1.9.1 zip exuberant-ctags
-apt-get -r remove rpcbind
+apt-get -y install vim tmux git-man ruby zip
+# apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy iftop mutt msmtp pptpd transmission-daemon git-man less liberror-perl libruby1.9.1 rsync ruby ruby1.9.1 zip exuberant-ctags
+# apt-get -r remove rpcbind
 
 echo ''
 echo ''
@@ -150,7 +151,7 @@ PPTP="$RESOURCE/PPTP"
 mv /etc/ppp /etc/ppp_backup
 cp $PPTP/pptpd.conf /etc/pptpd.conf
 cp -r $PPTP/ppp /etc
-cp $KELULINUXKIT/secret/chap-secrets /etc/ppp/chap-secrets
+# cp $KELULINUXKIT/secret/chap-secrets /etc/ppp/chap-secrets
 echo 'net.ipv4.ip_forward=1' >> /etc/sysctl.conf
 sysctl -p
 
@@ -209,6 +210,7 @@ sysctl -p
 # 
 # service transmission-daemon restart
 # service cron restart
+source $HOME/.bashrc
 service pptpd restart
 service ssh restart
 echo ''
