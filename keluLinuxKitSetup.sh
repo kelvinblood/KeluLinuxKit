@@ -1,6 +1,8 @@
 #!/bin/bash
 
 clear
+set -e
+
 
 KELULINUXKIT=$(pwd)
 NOWTIME=$(date)
@@ -32,99 +34,72 @@ if [ $(id -u) != "0" ]; then
   echo "Warning: You should run this script as root user."
 fi
 
-
-if [ ! -e $Download ]; then
-  mkdir Download
-fi
-
 cd /var/log
 if [ ! -e daily-report ]; then
   mkdir daily-report
 fi
 
-cd $HOME
-# hostname
-# echo "kelu.org" > /etc/hostname
-# hostname -F /etc/hostname
+cd $KELULINUXKIT
+if [ ! -e Download ]; then
+  mkdir Download
+fi
 
 # time zone
 dpkg-reconfigure tzdata
 
-cp $RESOURCE/locale /etc/default/locale
+# cp $RESOURCE/locale /etc/default/locale
 dpkg-reconfigure locales
 
-# ssh
-# cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
-# if [ ! -e .ssh ]; then
-#   mkdir .ssh
-# else
-#   mv .ssh .ssh_backup
-# fi
-# 
-# if [ -e $SECRET ]; then
-#   cp -r $SECRET/.ssh $HOME
-# fi
-
 # .bashrc .input.rc
-
 touch $HOME/.bashrc 
-echo $RESOURCE/home/.bashrc >> $HOME/.bashrc
+cat $RESOURCE/Home/.bashrc >> $HOME/.bashrc
 
 cat >> $HOME/.inputrc << EOF
 # Add by keluLI $CURTIME
 set completion-ignore-case on
 EOF
 
-
-cd /etc
-if [ ! -e kelu ]; then
-  mkdir kelu
-fi
-
 echo ''
 echo ''
 echo ''
 echo "-- Basic info -----------------------------------------------------"
 apt-get update && apt-get -y autoremove && apt-get -y upgrade
-apt-get -y install vim git ruby zip tmux sudo git
-# gem install rake
+apt-get -y install vim git ruby zip tmux sudo git rake
 # # apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy iftop mutt msmtp pptpd transmission-daemon git-man less liberror-perl libruby1.9.1 rsync ruby ruby1.9.1 zip exuberant-ctags
-# # apt-get -r remove rpcbind
 # 
-# echo ''
-# echo ''
-# echo ''
-# echo "-- awesome-tmux -----------------------------------------------------"
-# # apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev
-# # awesome-tmux
-# cd $DOWNLOAD
-# apt-get -y install git rake
-# if [ ! -e maximum-awesome-linux ]; then
-#   git clone https://github.com/justaparth/maximum-awesome-linux.git
-# fi
-# cd maximum-awesome-linux
-# rake
-# cp $RESOURCE/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome
-# cp $RESOURCE/maximum-awesome-linux/.tmux* $HOME
-# cp $RESOURCE/maximum-awesome-linux/.vimrc* $HOME
-# cp $RESOURCE/maximum-awesome-linux/vimrc.bundles $DOWNLOAD/maximum-awesome-linux/vimrc.bundles
-# ./fixln.sh
-# 
-# # git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
-# # rm -r $HOME/.vim/bundle/vim-snipmate
-# 
-# # tmux-powerline
-# cd $DOWNLOAD
-# if [ ! -e tmux-powerline ]; then
-#   git clone https://github.com/erikw/tmux-powerline.git
-# fi
-# cp $RESOURCE/tmux-powerline/default.sh $DOWNLOAD/tmux-powerline/themes/default.sh
-# cat >> $DOWNLOAD/maximum-awesome-linux/tmux.conf<< EOF
-# 
-# set-option -g status-left "#($DOWNLOAD/tmux-powerline/powerline.sh left)"
-# set-option -g status-right "#($DOWNLOAD/tmux-powerline/powerline.sh right)"
-# source-file ~/.tmux.conf.local
-# EOF
+echo ''
+echo ''
+echo ''
+echo "-- awesome-tmux -----------------------------------------------------"
+# pass the_silver_searcher install 
+apt-get -y install build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev
+# awesome-tmux
+cd $DOWNLOAD
+if [ ! -e maximum-awesome-linux ]; then
+  git clone https://github.com/justaparth/maximum-awesome-linux.git
+fi
+cd maximum-awesome-linux
+rake
+cp $RESOURCE/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome
+cp $RESOURCE/maximum-awesome-linux/.tmux* $HOME
+cp $RESOURCE/maximum-awesome-linux/.vimrc* $HOME
+cp $RESOURCE/maximum-awesome-linux/vimrc.bundles $DOWNLOAD/maximum-awesome-linux/vimrc.bundles
+
+# git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+# rm -r $HOME/.vim/bundle/vim-snipmate
+
+# tmux-powerline
+cd $DOWNLOAD
+if [ ! -e tmux-powerline ]; then
+  git clone https://github.com/erikw/tmux-powerline.git
+fi
+cp $RESOURCE/tmux-powerline/default.sh $DOWNLOAD/tmux-powerline/themes/default.sh
+cat >> $DOWNLOAD/maximum-awesome-linux/tmux.conf<< EOF
+
+set-option -g status-left "#($DOWNLOAD/tmux-powerline/powerline.sh left)"
+set-option -g status-right "#($DOWNLOAD/tmux-powerline/powerline.sh right)"
+source-file ~/.tmux.conf.local
+EOF
 # 
 # echo "-- security ------------------------------------------------------"
 # cd $HOME
