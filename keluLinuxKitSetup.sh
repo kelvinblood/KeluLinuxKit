@@ -64,7 +64,7 @@ echo ''
 echo ''
 echo "-- Basic info -----------------------------------------------------"
 apt-get update && apt-get -y autoremove && apt-get -y upgrade
-apt-get -y install vim git ruby zip tmux sudo git rake
+apt-get -y install vim git ruby zip tmux sudo git rake curl
 # # apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy iftop mutt msmtp pptpd transmission-daemon git-man less liberror-perl libruby1.9.1 rsync ruby ruby1.9.1 zip exuberant-ctags
 # 
 echo ''
@@ -108,6 +108,12 @@ set-option -g status-left "#($DOWNLOAD/tmux-powerline/powerline.sh left)"
 set-option -g status-right "#($DOWNLOAD/tmux-powerline/powerline.sh right)"
 source-file ~/.tmux.conf.local
 EOF
+
+
+# git autocompletion
+wget https://raw.github.com/git/git/master/contrib/completion/git-completion.bash
+mv git-completion.bash /etc/bash_completion.d/
+
 # 
 # echo "-- security ------------------------------------------------------"
 # cd $HOME
