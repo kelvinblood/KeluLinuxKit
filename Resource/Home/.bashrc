@@ -1,4 +1,4 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
+# ~/.bashrc: add by KeluLinuxKit
 export EDITOR="/usr/bin/vim" # crontab 编辑器
 export CLICOLOR=1 # for color
 PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
