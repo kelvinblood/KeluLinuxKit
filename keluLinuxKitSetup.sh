@@ -80,22 +80,30 @@ if [ ! -e maximum-awesome-linux ]; then
 fi
 cd maximum-awesome-linux
 rake
-cp $RESOURCE/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome
-cp $RESOURCE/maximum-awesome-linux/.tmux* $HOME
-cp $RESOURCE/maximum-awesome-linux/.vimrc* $HOME
-cp $RESOURCE/maximum-awesome-linux/vimrc.bundles $DOWNLOAD/maximum-awesome-linux/vimrc.bundles
+
+cp $DOWNLOAD/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome-linux/tmux.conf_backup
+cp $RESOURCE/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome-linux/tmux.conf
+
+# cp $RESOURCE/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome
+# cp $RESOURCE/maximum-awesome-linux/.tmux* $HOME
+# cp $RESOURCE/maximum-awesome-linux/.vimrc* $HOME
+# cp $RESOURCE/maximum-awesome-linux/vimrc.bundles $DOWNLOAD/maximum-awesome-linux/vimrc.bundles
 
 # git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
 # rm -r $HOME/.vim/bundle/vim-snipmate
 
 # tmux-powerline
+cd $HOME
+touch .tmux.conf.local
+
 cd $DOWNLOAD
 if [ ! -e tmux-powerline ]; then
   git clone https://github.com/erikw/tmux-powerline.git
 fi
+cp $DOWNLOAD/tmux-powerline/themes/default.sh $DOWNLOAD/tmux-powerline/themes/default.sh_backup
 cp $RESOURCE/tmux-powerline/default.sh $DOWNLOAD/tmux-powerline/themes/default.sh
 cat >> $DOWNLOAD/maximum-awesome-linux/tmux.conf<< EOF
-
+# add by KeluLi
 set-option -g status-left "#($DOWNLOAD/tmux-powerline/powerline.sh left)"
 set-option -g status-right "#($DOWNLOAD/tmux-powerline/powerline.sh right)"
 source-file ~/.tmux.conf.local
