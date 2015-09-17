@@ -11,17 +11,6 @@ RESOURCE="$KELULINUXKIT/Resource"
 SECRET="$RESOURCE/secret"
 LONGBIT=`getconf LONG_BIT`
 
-# # apt-get update
-# sudo passwd root
-# su -
-# apt-get -y install zip
-# wget https://github.com/kelvinblood/KeluLinuxKit/archive/master.zip
-# unzip master.zip
-# mv KeluLinuxKit-master/ KeluLinuxKit
-# cd KeluLinuxKit
-
-# pkill -kill -t pts/1命令踢出第一个用户。
-
 echo "========================================================================="
 echo "KeluLinuxKit V0.1 for Debian 8"
 echo "KeluLinuxKit will install in this path: $KELULINUXKIT"
@@ -32,11 +21,6 @@ echo "========================================================================="
 # Check if user is root
 if [ $(id -u) != "0" ]; then
   echo "Warning: You should run this script as root user."
-fi
-
-cd /var/log
-if [ ! -e daily-report ]; then
-  mkdir daily-report
 fi
 
 cd $KELULINUXKIT
@@ -50,10 +34,6 @@ dpkg-reconfigure tzdata
 # cp $RESOURCE/locale /etc/default/locale
 dpkg-reconfigure locales
 
-# .bashrc .input.rc
-touch $HOME/.bashrc 
-cat $RESOURCE/Home/.bashrc >> $HOME/.bashrc
-
 cat >> $HOME/.inputrc << EOF
 # Add by keluLI $CURTIME
 set completion-ignore-case on
@@ -65,8 +45,7 @@ echo ''
 echo "-- Basic info -----------------------------------------------------"
 apt-get update && apt-get -y autoremove && apt-get -y upgrade
 apt-get -y install vim git ruby zip tmux sudo git rake
-# # apt-get -y install vim tmux build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev jwm xterm vnc4server iceweasel xrdp ttf-arphic-uming  xfonts-intl-chinese xfonts-wqy iftop mutt msmtp pptpd transmission-daemon git-man less liberror-perl libruby1.9.1 rsync ruby ruby1.9.1 zip exuberant-ctags
-# 
+
 echo ''
 echo ''
 echo ''
