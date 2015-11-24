@@ -16,6 +16,7 @@ echo "KeluLinuxKit V0.1 for Debian 8"
 echo "KeluLinuxKit will install in this path: $KELULINUXKIT"
 echo "A tool to install & config for iptables, git, maximum-awesome, etc."
 echo "For more information please visit http://project.kelu.org/kelulinuxkit"
+echo "==========>>>>>>This script will reboot your server<<<<<================="
 echo "========================================================================="
 
 # Check if user is root
@@ -56,4 +57,10 @@ EOF
 
 locale-gen zh_CN.UTF-8
 locale-gen
-locale-gen
+
+apt-get -y install zsh
+chsh -s /bin/zsh
+
+echo "install successfully, reboot now"
+reboot
+

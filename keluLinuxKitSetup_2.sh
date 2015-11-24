@@ -16,7 +16,7 @@ echo ''
 echo ''
 echo "-- Basic info -----------------------------------------------------"
 apt-get update && apt-get -y autoremove && apt-get -y upgrade
-apt-get -y install zsh vim git ruby zip tmux sudo git rake
+apt-get -y install vim git ruby zip tmux sudo git rake
 
 # zsh重启生效引入zsh增强插件,支持git,rails等补全，可选多种外观皮肤
 wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh
@@ -34,6 +34,8 @@ if [ ! -e maximum-awesome-linux ]; then
 fi
 cd maximum-awesome-linux
 rake
+
+# rake install:solarized['dark']
 
 cp $DOWNLOAD/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome-linux/tmux.conf_backup
 cp $RESOURCE/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome-linux/tmux.conf
@@ -62,6 +64,44 @@ set-option -g status-left "#($DOWNLOAD/tmux-powerline/powerline.sh left)"
 set-option -g status-right "#($DOWNLOAD/tmux-powerline/powerline.sh right)"
 source-file ~/.tmux.conf.local
 EOF
+
+cat >> $HOME/.zshrc<< EOF
+export LANG="en_US.UTF-8"
+export LC_COLLATE="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+export LC_MESSAGES="en_US.UTF-8"
+export LC_MONETARY="en_US.UTF-8"
+export LC_NUMERIC="en_US.UTF-8"
+export LC_TIME="en_US.UTF-8"
+export LC_ALL=
+
+
+alias vi='vim'
+alias dd='df -h'
+alias dudir='du --max-depth=1 -ah 2> /dev/null | sort -hr | head '
+alias p='netstat -antp'
+alias pp='pstree -a'
+alias ta='tail -f /var/log/syslog'
+alias cdlog='cd /var/log'
+alias ss='ssserver -c /etc/kelu/shadowsocksConfig.json -d'
+alias k='/etc/kelu/keluReal.sh'
+alias rm0='find / -type f -name "0" | xargs -i  rm -fr "{}"'
+alias grepall='grep -D skip -nRe'
+alias sour='source ~/.zshrc'
+
+ip() {
+  iptables -F;
+  iptables-restore < /etc/iptables.test.rules;
+  iptables-save > /etc/iptables.up.rules;
+  iptables -L;
+}
+
+alias tn='tmux new -s'
+alias tll='tmux ls'
+alias tt='tmux attach -t'
+alias tk='tmux kill-session -t'
+EOF
+
 #
 # echo "-- security ------------------------------------------------------"
 # cd $HOME
@@ -148,7 +188,7 @@ echo ''
 echo "-- Almost done ------------------------------------------------------"
 echo "Install KeluLinuxKit 0.1 completed! enjoy it."
 echo "But still, you need to follow these steps with manual work."
-# echo "1. # source ~/.bashrc"
+echo "1.  rake install:solarized['dark']"
 echo "2. adding plugin: Supertab neocomplcache. seeing more about how to manage plugin by Bundle."
 # echo "3. edit your email account on $HOME/.msmtprc and $HOME/.muttrc if you havent add secret foler."
 # echo "4. check your github account by: ssh -T git@github.com"
