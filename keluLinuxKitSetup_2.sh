@@ -16,7 +16,7 @@ echo ''
 echo ''
 echo "-- Basic info -----------------------------------------------------"
 apt-get update && apt-get -y autoremove && apt-get -y upgrade
-apt-get -y install vim git ruby zip tmux sudo git rake
+apt-get -y install vim git ruby zip tmux sudo git rake htop iftop
 
 # zsh重启生效引入zsh增强插件,支持git,rails等补全，可选多种外观皮肤
 wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh
@@ -60,6 +60,7 @@ cp $DOWNLOAD/tmux-powerline/themes/default.sh $DOWNLOAD/tmux-powerline/themes/de
 cp $RESOURCE/tmux-powerline/default.sh $DOWNLOAD/tmux-powerline/themes/default.sh
 cat >> $DOWNLOAD/maximum-awesome-linux/tmux.conf<< EOF
 # add by KeluLi
+set-window-option -g display-panes-time 1500
 set-option -g status-left "#($DOWNLOAD/tmux-powerline/powerline.sh left)"
 set-option -g status-right "#($DOWNLOAD/tmux-powerline/powerline.sh right)"
 source-file ~/.tmux.conf.local
@@ -188,9 +189,9 @@ echo ''
 echo "-- Almost done ------------------------------------------------------"
 echo "Install KeluLinuxKit 0.1 completed! enjoy it."
 echo "But still, you need to follow these steps with manual work."
-echo "1.  rake install:solarized['dark']"
+echo "1. cd tmux folder & rake install:solarized['dark']"
 echo "2. adding plugin: Supertab neocomplcache. seeing more about how to manage plugin by Bundle."
-# echo "3. edit your email account on $HOME/.msmtprc and $HOME/.muttrc if you havent add secret foler."
+echo "3. edit your .tmux.conf file and set 'display-panes-time' with 'set-window-option -g display-panes-time 1500'. maybe on line 52"
 # echo "4. check your github account by: ssh -T git@github.com"
 echo "5. start tmux by running tn XXX, and attach by tt XXX, kill by tk XXX"
 echo "6. edit your own iptables on /etc/iptables.test.rules and then running ip"

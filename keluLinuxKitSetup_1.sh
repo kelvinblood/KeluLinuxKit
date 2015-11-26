@@ -61,6 +61,9 @@ locale-gen
 apt-get -y install zsh
 chsh -s /bin/zsh
 
+echo "\n\n\n========================================================================="
+echo "KeluLinuxKit V0.1 for Debian 8"
 echo "install successfully, reboot now"
+echo "=========================================================================\n\n\n"
 reboot
 
