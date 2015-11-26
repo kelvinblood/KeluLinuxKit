@@ -60,7 +60,6 @@ cp $DOWNLOAD/tmux-powerline/themes/default.sh $DOWNLOAD/tmux-powerline/themes/de
 cp $RESOURCE/tmux-powerline/default.sh $DOWNLOAD/tmux-powerline/themes/default.sh
 cat >> $DOWNLOAD/maximum-awesome-linux/tmux.conf<< EOF
 # add by KeluLi
-set-window-option -g display-panes-time 1500
 set-option -g status-left "#($DOWNLOAD/tmux-powerline/powerline.sh left)"
 set-option -g status-right "#($DOWNLOAD/tmux-powerline/powerline.sh right)"
 source-file ~/.tmux.conf.local
@@ -191,7 +190,7 @@ echo "Install KeluLinuxKit 0.1 completed! enjoy it."
 echo "But still, you need to follow these steps with manual work."
 echo "1. cd tmux folder & rake install:solarized['dark']"
 echo "2. adding plugin: Supertab neocomplcache. seeing more about how to manage plugin by Bundle."
-echo "3. edit your .tmux.conf file and set 'display-panes-time' with 'set-window-option -g display-panes-time 1500'. maybe on line 52"
+# echo "3. edit your .tmux.conf file and set 'display-panes-time' with 'set-window-option -g display-panes-time 1500'. maybe on line 52"
 # echo "4. check your github account by: ssh -T git@github.com"
 echo "5. start tmux by running tn XXX, and attach by tt XXX, kill by tk XXX"
 echo "6. edit your own iptables on /etc/iptables.test.rules and then running ip"

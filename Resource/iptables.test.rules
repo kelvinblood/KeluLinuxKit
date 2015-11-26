@@ -1,6 +1,6 @@
 *nat
 
-# ssh; 1444 ftp; 11344 openvpn; 21344 ut:61344
+# ssh; 22 ftp; 11344 openvpn; 21344 ut:61344
 #          49100:49600              59999-61000
 
 # VPN postrouting
@@ -22,6 +22,11 @@ COMMIT
 # Allows all outbound traffic
 # You could modify this to only allow certain traffic
 -A OUTPUT -j ACCEPT
+
+# Allows SSH connections
+-A INPUT -p tcp -m state --state NEW --dport 1344 -j ACCEPT
+# sshd
+-A INPUT -p tcp --dport 7070 -j ACCEPT
 
 # Allows HTTP and HTTPS connections from anywhere (the normal ports for websites)
 -A INPUT -p tcp --dport 80 -j ACCEPT
@@ -61,12 +66,11 @@ COMMIT
 -A INPUT -p tcp --dport 3389 -j ACCEPT
 -A INPUT -p tcp --dport 5900 -j ACCEPT
 
-
 # rsync
 # -A INPUT -p tcp -m state --state NEW  -m tcp --dport 873 -j ACCEPT
 
 # Allows SSH connections
--A INPUT -p tcp -m state --state NEW --dport 1444 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW --dport 22 -j ACCEPT
 # sshd
 -A INPUT -p tcp --dport 7070 -j ACCEPT
 
