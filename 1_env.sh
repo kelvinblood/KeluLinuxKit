@@ -58,8 +58,8 @@ EOF
 locale-gen zh_CN.UTF-8
 locale-gen
 
-apt-get -y install zsh
-chsh -s /bin/zsh
+# apt-get -y install zsh
+# chsh -s /bin/zsh
 
 echo "\n\n\n========================================================================="
 echo "KeluLinuxKit V0.1 for Debian 8"

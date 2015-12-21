@@ -33,5 +33,5 @@ cd /tmp
 tar -xzvf flash.x86_64.tar.gz > /dev/null
 cp libflashplayer.so /usr/lib/mozilla/plugins/libflashplayer.so
 cp -r usr/* /usr/
-service transmission-daemon restart
+# service transmission-daemon restart
 service ssh restart
