@@ -155,6 +155,10 @@ EOF
 
 }
 
+install_() {
+    cat $DIR/install_help.md
+}
+
 ##############################################################
 if [ "$#" -eq 0 ]; then
     usage
@@ -182,7 +186,7 @@ case $1 in
         ;;
     install )
         shift
-        install_zsh
+        install_$1 $2 $3
         ;;
     * )
         usage
