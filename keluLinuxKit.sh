@@ -64,7 +64,11 @@ EOF
     locale-gen zh_CN.UTF-8
     locale-gen
     apt-get update && apt-get -y autoremove && apt-get -y upgrade
-    apt-get -y install vim git ruby zip sudo git rake htop iftop
+    apt-get -y install vim git ruby zip sudo git rake htop iftop wget
+
+    cp /etc/sysctl.conf /etc/sysctl.conf_backup
+    cp $RESOURCE/sysctl.conf /etc
+    sysctl -p
 }
 
 install_zsh() {
@@ -169,6 +173,13 @@ install_iptable() {
 
     iptables-restore < /etc/iptables.test.rules
     iptables-save > /etc/iptables.up.rules
+}
+
+install_ss() {
+    cd "/var/local" && git clone https://github.com/shadowsocks/shadowsocks.git && cd shadowsocks && git checkout master;
+    apt-get install python-pip && pip install shadowsocks;
+    cd "/var/local" && git clone https://github.com/hellofwy/ss-bash && cd ss-bash;
+    echo '12345 123456 10737418240' > ssusers
 }
 
 ##############################################################
