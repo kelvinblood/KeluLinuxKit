@@ -159,6 +159,18 @@ install_() {
     cat $DIR/install_help.md
 }
 
+
+install_iptable() {
+    cd $HOME
+    # iptables
+    cp $RESOURCE/iptables.test.rules /etc
+    cp $RESOURCE/iptables /etc/network/if-pre-up.d/iptables
+    iptables -F
+
+    iptables-restore < /etc/iptables.test.rules
+    iptables-save > /etc/iptables.up.rules
+}
+
 ##############################################################
 if [ "$#" -eq 0 ]; then
     usage
