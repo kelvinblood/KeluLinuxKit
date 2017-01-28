@@ -1,0 +1,80 @@
+#!/bin/sh
+#
+# This script is run by the pppd _after_ the link is brought down.
+# It uses run-parts to run scripts in /etc/ppp/ip-down.d, so to delete
+# routes, unset IP addresses etc. you should create script(s) there.
+#
+# Be aware that other packages may include /etc/ppp/ip-down.d scripts (named
+# after that package), so choose local script names with that in mind.
+#
+# This script is called with the following arguments:
+#    Arg  Name                          Example
+#    $1   Interface name                ppp0
+#    $2   The tty                       ttyS1
+#    $3   The link speed                38400
+#    $4   Local IP number               12.34.56.78
+#    $5   Peer  IP number               12.34.56.99
+#    $6   Optional ``ipparam'' value    foo
+
+# The  environment is cleared before executing this script
+# so the path must be reset
+PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
+export PATH
+
+# These variables are for the use of the scripts run by run-parts
+PPP_IFACE="$1"
+PPP_TTY="$2"
+PPP_SPEED="$3"
+PPP_LOCAL="$4"
+PPP_REMOTE="$5"
+PPP_IPPARAM="$6"
+export PPP_IFACE PPP_TTY PPP_SPEED PPP_LOCAL PPP_REMOTE PPP_IPPARAM
+
+# as an additional convenience, $PPP_TTYNAME is set to the tty name,
+# stripped of /dev/ (if present) for easier matching.
+PPP_TTYNAME=`/usr/bin/basename "$2"`
+export PPP_TTYNAME
+
+# All variables
+logfileExtraLine=2
+loginState=0 # 0 offline; 1 online
+logoutTime=`date +"%F %T"`
+logFile='/var/log/pptpd.log'
+logWarnFile='/var/log/pptpd.warn.log'
+logMatchFile='/tmp/pptp.tmp2'
+logRewriteFile='/tmp/pptp.tmp3'
+logMatchFileMore='/tmp/pptp.tmp4'
+logRewriteFile2='/tmp/pptp.tmp5'
+
+logConnectTime=`echo "scale=2;$CONNECT_TIME / 60"|bc`      # Min
+logData_send=`echo "scale=2;$BYTES_SENT/1024/1024"|bc`   # KB
+logData_rcvd=`echo "scale=2;$BYTES_RCVD/1024/1024"|bc`   # KB
+logDataSumMB=`echo "scale=2;( $BYTES_SENT + $BYTES_RCVD )/1024/1024"|bc` # MB
+logAve=`echo "scale=2;$logDataSumMB * 1024 / $CONNECT_TIME"|bc` # kb/s
+
+STARTTIME=$(date +%Y-%m-%d_%H:%M:%S -d "$CONNECT_TIME seconds ago");
+
+logFile='/var/log/pptpd.warn.log';
+echo "$STARTTIME - $NOWTIME, $PEERNAME,$PPP_IPPARAM,$logDataSumMB MB,$logAve kb/s,$PPP_IFACE,$PPP_TTY,$PPP_LOCAL,$PPP_REMOTE" >> $logFile;
+
+# remote
+REMOTE_CONTENT="type=offline&client=tokyo&username=$PEERNAME&iface=$PPP_IFACE&tty=$PPP_TTY&local=$PPP_LOCAL&remote=$PPP_REMOTE&ipparam=$PPP_IPPARAM&started_at=$STARTTIME&created_at=$NOWTIME&ended_at=$NOWTIME&conn_time=$CONNECT_TIME&data_rev=$BYTES_RCVD&data_send=$BYTES_SENT";
+REMOTERESULT=`curl -d $REMOTE_CONTENT $REMOTEURL`;
+
+#fi
+## 添加其他信息
+
+# If /var/log/ppp-ipupdown.log exists use it for logging.
+if [ -e /var/log/ppp-ipupdown.log ]; then
+  exec >> /var/log/ppp-ipupdown.log 2>&1
+  echo $0 $@
+  echo
+fi
+
+# This script can be used to override the .d files supplied by other packages.
+if [ -x /etc/ppp/ip-down.local ]; then
+  exec /etc/ppp/ip-down.local "$@"
+fi
+
+run-parts /etc/ppp/ip-down.d \
+  --arg="$1" --arg="$2" --arg="$3" --arg="$4" --arg="$5" --arg="$6"

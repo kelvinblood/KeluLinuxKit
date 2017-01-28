@@ -35,30 +35,14 @@ export PPP_IFACE PPP_TTY PPP_SPEED PPP_LOCAL PPP_REMOTE PPP_IPPARAM
 PPP_TTYNAME=`/usr/bin/basename "$2"`
 export PPP_TTYNAME
 
-# All variables
-loginState=1 # 0 offline; 1 online
-loginTime=`date +"%F %T"`
-logFile='/var/log/pptpd.log'
-logWarnFile='/var/log/pptpd.warn.log'
 
-echo "$loginTime $PEERNAME 登陆处理开始" >> $logWarnFile
-if [ ! -e $logFile ]; then
-  echo "$loginTime $logFile 不存在，新建一个" >> $logWarnFile
-    loginSeq=1;
-    onlinePPTP=`last|grep still|grep ppp|wc -l`
-    echo "$onlinePPTP `pptpd -v`" | tee -a $logFile $logWarnFile
-    echo 'Seq OnlineFlag DEVICE IFNAME TTY IPLOCAL IPREMOTE PPP_IPPARAM LOGIN_TIME LOGOUT_TIME DURING_TIME DATASEND DATARECV DATASUM SPEED'| tee -a $logFile $logWarnFile
-  else
-    # loginSeq
-    loginPre=`tail -n1 $logFile | cut -d " " -f 1`;
-    loginSeq=`echo "scale=0;$loginPre+1"|bc`;
-fi
+REMOTEURL="http://wechat.kelu.org/api/pptp"
 
-echo "$loginSeq $loginState $PEERNAME $PPP_IFACE $PPP_TTY $PPP_LOCAL $PPP_REMOTE $PPP_IPPARAM $loginTime " | tee -a $logFile $logWarnFile
-
-echo "$loginTime $PEERNAME 登陆处理结束" >> $logWarnFile
-echo '' >> $logWarnFile
-
+NOWTIME=`date "+%Y-%m-%d_%H:%M:%S"`
+REMOTE_CONTENT="type=online&client=tokyo&username=$PEERNAME&iface=$PPP_IFACE&tty=$PPP_TTY&local=$PPP_LOCAL&remote=$PPP_REMOTE&ipparam=$PPP_IPPARAM&created_at=$NOWTIME&updated_at=$NOWTIME";
+REMOTERESULT=`curl -d $REMOTE_CONTENT $REMOTEURL`;
+echo REMOTE_CONTENT >> '/var/log/kelu.log'
+echo REMOTERESULT >> '/var/log/kelu.log'
 
 # If /var/log/ppp-ipupdown.log exists use it for logging.
 if [ -e /var/log/ppp-ipupdown.log ]; then

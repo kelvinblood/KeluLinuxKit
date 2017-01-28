@@ -145,11 +145,15 @@ install_pptp() {
     mv /etc/ppp /etc/ppp_backup
     cp $PPTP/pptpd.conf /etc/pptpd.conf
     cp -r $PPTP/ppp /etc
+    service pptpd restart
 }
-
 
 install_l2tp() {
+    cd $DOWNLOAD
+    apt-get -y install openswan ppp xl2tpd;
+    wget https://download.openswan.org/openswan/openswan-2.6.49.tar.gz && cd openswan-2.6.49 && make programs && make install;
 }
+
 ##############################################################
 if [ "$#" -eq 0 ]; then
     usage
