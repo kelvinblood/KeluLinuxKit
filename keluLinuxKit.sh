@@ -41,36 +41,22 @@ init() {
     # cp $RESOURCE/locale /etc/default/locale
     dpkg-reconfigure locales
 
-cat >> $HOME/.inputrc << EOF
-# Add by keluLI $CURTIME
-set completion-ignore-case on
-EOF
-
-cat >> $HOME/.bash_profile << EOF
-export LANG="en_US.UTF-8"
-export LC_COLLATE="en_US.UTF-8"
-export LC_CTYPE="en_US.UTF-8"
-export LC_MESSAGES="en_US.UTF-8"
-export LC_MONETARY="en_US.UTF-8"
-export LC_NUMERIC="en_US.UTF-8"
-export LC_TIME="en_US.UTF-8"
-export LC_ALL=
-EOF
-
-cat >> /etc/environment << EOF
-LC_ALL="en_US.utf8"
-EOF
+    cat $RESOURCE/Home/.inputrc >> $HOME/.inputrc
+    cat $RESOURCE/Home/.bash_profile >> $HOME/.bash_profile
+    cat $RESOURCE/Home/environment >> /etc/environment
 
     locale-gen zh_CN.UTF-8
     locale-gen
     apt-get update && apt-get -y autoremove && apt-get -y upgrade
     apt-get -y install vim git ruby zip sudo git rake htop iftop wget
+}
 
+
+init2() {
     cp /etc/sysctl.conf /etc/sysctl.conf_backup
     cp $RESOURCE/sysctl.conf /etc
     sysctl -p
 }
-
 install_zsh() {
     apt-get -y install zsh tmux
     # zsh重启生效引入zsh增强插件,支持git,rails等补全，可选多种外观皮肤
@@ -120,43 +106,7 @@ set-option -g status-right "#($DOWNLOAD/tmux-powerline/powerline.sh right)"
 source-file ~/.tmux.conf.local
 EOF
 
-cat >> $HOME/.zshrc<< EOF
-export LANG="en_US.UTF-8"
-export LC_COLLATE="en_US.UTF-8"
-export LC_CTYPE="en_US.UTF-8"
-export LC_MESSAGES="en_US.UTF-8"
-export LC_MONETARY="en_US.UTF-8"
-export LC_NUMERIC="en_US.UTF-8"
-export LC_TIME="en_US.UTF-8"
-export LC_ALL=
-
-
-alias vi='vim'
-alias dd='df -h'
-alias dudir='du --max-depth=1 -ah 2> /dev/null | sort -hr | head '
-alias p='netstat -antp'
-alias pp='pstree -a'
-alias ta='tail -f /var/log/syslog'
-alias cdlog='cd /var/log'
-alias ss='ssserver -c /etc/kelu/shadowsocksConfig.json -d'
-alias k='/etc/kelu/keluReal.sh'
-alias rm0='find / -type f -name "0" | xargs -i  rm -fr "{}"'
-alias grepall='grep -D skip -nRe'
-alias sour='source ~/.zshrc'
-
-ip() {
-  iptables -F;
-  iptables-restore < /etc/iptables.test.rules;
-  iptables-save > /etc/iptables.up.rules;
-  iptables -L;
-}
-
-alias tn='tmux new -s'
-alias tll='tmux ls'
-alias tt='tmux attach -t'
-alias tk='tmux kill-session -t'
-EOF
-
+    cat $RESOURCE/Home/.zshrc >> $HOME/.zshrc
 }
 
 install_() {
@@ -180,8 +130,26 @@ install_ss() {
     apt-get install python-pip && pip install shadowsocks;
     cd "/var/local" && git clone https://github.com/hellofwy/ss-bash && cd ss-bash;
     echo '12345 123456 10737418240' > ssusers
+
+    # 开启hybla算法
+    /sbin/modprobe tcp_hybla
+    # 增加文件大小限制
+    cat $RESOURCE/Home/limits.conf >> /etc/security/limits.conf
+
+    ulimit -n 51200
 }
 
+install_pptp() {
+    PPTP="$RESOURCE/PPTP"
+    apt-get -y install pptpd
+    mv /etc/ppp /etc/ppp_backup
+    cp $PPTP/pptpd.conf /etc/pptpd.conf
+    cp -r $PPTP/ppp /etc
+}
+
+
+install_l2tp() {
+}
 ##############################################################
 if [ "$#" -eq 0 ]; then
     usage
