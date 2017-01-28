@@ -17,6 +17,7 @@ DOWNLOAD="$KELULINUXKIT/Download"
 RESOURCE="$KELULINUXKIT/Resource"
 SECRET="$RESOURCE/secret"
 LONGBIT=`getconf LONG_BIT`
+IP=`ifconfig eth0 | grep "inet addr" | awk '{ print $2}' | awk -F: '{print $2}'`
 
 while [ -h "$SOURCE" ]; do
       DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
@@ -154,11 +155,33 @@ install_pptp() {
 
 install_l2tp() {
     cd $DOWNLOAD
-    apt-get -y install ppp xl2tpd;
+    apt-get -y install ppp xl2tpd libgmp3-dev gawk flex bison;
     wget https://download.openswan.org/openswan/openswan-2.6.49.tar.gz && tar -xzvf openswan-2.6.49.tar.gz && cd openswan-2.6.49 && make programs && make install;
+    mv "/etc/xl2tpd" "/etc/xl2tpd_backup"
+    cp -r "$RESOURCE/l2tp/xl2tpd" "/etc/xl2tpd"
+    cp "$RESOURCE/l2tp/ppp/options.xl2tpd" "/etc/ppp/options.xl2tpd"
+    touch /etc/ipsec.secrets
+cat >> /etc/ipsec.secrets << EOF
+$IP   %any:  PSK "kelu.org"
+EOF
+
+    echo 1 > /proc/sys/net/ipv4/ip_forward
+    for each in /proc/sys/net/ipv4/conf/*
+    do
+        echo 0 > $each/accept_redirects
+        echo 0 > $each/send_redirects
+    done
+
+    service ipsec restart
+    service pppd-dns restart
+    service xl2tpd restart
+
 }
 
-test() {
+install_test() {
+    mv "/etc/xl2tpd" "/etc/xl2tpd_backup"
+    cp -r "$RESOURCE/l2tp/xl2tpd" "/etc/xl2tpd"
+    cp "$RESOURCE/l2tp/ppp/options.xl2tpd" "/etc/ppp/options.xl2tpd"
 }
 
 ##############################################################
