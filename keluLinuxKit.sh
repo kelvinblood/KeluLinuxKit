@@ -157,7 +157,44 @@ install_l2tp() {
     cd $DOWNLOAD
     apt-get -y install ppp xl2tpd libgmp3-dev gawk flex bison;
     wget https://download.openswan.org/openswan/openswan-2.6.49.tar.gz && tar -xzvf openswan-2.6.49.tar.gz && cd openswan-2.6.49 && make programs && make install;
-    mv "/etc/xl2tpd" "/etc/xl2tpd_backup"
+
+    rm /etc/ipsec.conf;
+cat >> /etc/ipsec.conf << EOF
+version 2.0
+config setup
+    nat_traversal=yes
+    virtual_private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12
+    oe=off
+    protostack=netkey
+
+conn L2TP-PSK-NAT
+    rightsubnet=vhost:%priv
+    also=L2TP-PSK-noNAT
+
+conn L2TP-PSK-noNAT
+    authby=secret
+    pfs=no
+    auto=add
+    keyingtries=3
+    rekey=no
+    ikelifetime=8h
+    keylife=1h
+    type=transport
+    left=$IP
+    leftprotoport=17/1701
+    right=%any
+    rightprotoport=17/%any
+    dpddelay=15
+    dpdtimeout=30
+    dpdaction=clear
+EOF
+
+
+    cd /etc
+    if [ ! -e xl2tpd ]; then
+        mv "/etc/xl2tpd" "/etc/xl2tpd_backup"
+    fi
+
     cp -r "$RESOURCE/l2tp/xl2tpd" "/etc/xl2tpd"
     cp "$RESOURCE/l2tp/ppp/options.xl2tpd" "/etc/ppp/options.xl2tpd"
     touch /etc/ipsec.secrets
@@ -172,13 +209,50 @@ EOF
         echo 0 > $each/send_redirects
     done
 
+    ipsec verify
     service ipsec restart
     service pppd-dns restart
     service xl2tpd restart
 }
 
 install_test() {
-    mv "/etc/xl2tpd" "/etc/xl2tpd_backup"
+    rm /etc/ipsec.conf;
+cat >> /etc/ipsec.conf << EOF
+version 2.0
+config setup
+    nat_traversal=yes
+    virtual_private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12
+    oe=off
+    protostack=netkey
+
+conn L2TP-PSK-NAT
+    rightsubnet=vhost:%priv
+    also=L2TP-PSK-noNAT
+
+conn L2TP-PSK-noNAT
+    authby=secret
+    pfs=no
+    auto=add
+    keyingtries=3
+    rekey=no
+    ikelifetime=8h
+    keylife=1h
+    type=transport
+    left=$IP
+    leftprotoport=17/1701
+    right=%any
+    rightprotoport=17/%any
+    dpddelay=15
+    dpdtimeout=30
+    dpdaction=clear
+EOF
+
+
+    cd /etc
+    if [ ! -e xl2tpd ]; then
+        mv "/etc/xl2tpd" "/etc/xl2tpd_backup"
+    fi
+
     cp -r "$RESOURCE/l2tp/xl2tpd" "/etc/xl2tpd"
     cp "$RESOURCE/l2tp/ppp/options.xl2tpd" "/etc/ppp/options.xl2tpd"
     touch /etc/ipsec.secrets
@@ -193,6 +267,7 @@ EOF
         echo 0 > $each/send_redirects
     done
 
+    ipsec verify
     service ipsec restart
     service pppd-dns restart
     service xl2tpd restart
