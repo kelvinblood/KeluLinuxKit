@@ -175,13 +175,27 @@ EOF
     service ipsec restart
     service pppd-dns restart
     service xl2tpd restart
-
 }
 
 install_test() {
     mv "/etc/xl2tpd" "/etc/xl2tpd_backup"
     cp -r "$RESOURCE/l2tp/xl2tpd" "/etc/xl2tpd"
     cp "$RESOURCE/l2tp/ppp/options.xl2tpd" "/etc/ppp/options.xl2tpd"
+    touch /etc/ipsec.secrets
+cat >> /etc/ipsec.secrets << EOF
+$IP   %any:  PSK "kelu.org"
+EOF
+
+    echo 1 > /proc/sys/net/ipv4/ip_forward
+    for each in /proc/sys/net/ipv4/conf/*
+    do
+        echo 0 > $each/accept_redirects
+        echo 0 > $each/send_redirects
+    done
+
+    service ipsec restart
+    service pppd-dns restart
+    service xl2tpd restart
 }
 
 ##############################################################
