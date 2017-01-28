@@ -25,15 +25,17 @@ while [ -h "$SOURCE" ]; do
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
+cd $KELULINUXKIT
+if [ ! -e Download ]; then
+  mkdir Download
+fi
+
 usage () {
     cat $DIR/help
 }
 
 init() {
     cd $KELULINUXKIT
-    if [ ! -e Download ]; then
-      mkdir Download
-    fi
 
     # time zone
     dpkg-reconfigure tzdata
@@ -52,11 +54,7 @@ init() {
 }
 
 
-init2() {
-    cp /etc/sysctl.conf /etc/sysctl.conf_backup
-    cp $RESOURCE/sysctl.conf /etc
-    sysctl -p
-}
+
 install_zsh() {
     apt-get -y install zsh tmux
     # zsh重启生效引入zsh增强插件,支持git,rails等补全，可选多种外观皮肤
@@ -125,6 +123,12 @@ install_iptable() {
     iptables-save > /etc/iptables.up.rules
 }
 
+init2() {
+    cp /etc/sysctl.conf /etc/sysctl.conf_backup
+    cp $RESOURCE/sysctl.conf /etc
+    sysctl -p
+}
+
 install_ss() {
     cd "/var/local" && git clone https://github.com/shadowsocks/shadowsocks.git && cd shadowsocks && git checkout master;
     apt-get install python-pip && pip install shadowsocks;
@@ -140,7 +144,7 @@ install_ss() {
 }
 
 install_pptp() {
-    PPTP="$RESOURCE/PPTP"
+    PPTP="$RESOURCE/pptp"
     apt-get -y install pptpd
     mv /etc/ppp /etc/ppp_backup
     cp $PPTP/pptpd.conf /etc/pptpd.conf
@@ -150,8 +154,11 @@ install_pptp() {
 
 install_l2tp() {
     cd $DOWNLOAD
-    apt-get -y install openswan ppp xl2tpd;
-    wget https://download.openswan.org/openswan/openswan-2.6.49.tar.gz && cd openswan-2.6.49 && make programs && make install;
+    apt-get -y install ppp xl2tpd;
+    wget https://download.openswan.org/openswan/openswan-2.6.49.tar.gz && tar -xzvf openswan-2.6.49.tar.gz && cd openswan-2.6.49 && make programs && make install;
+}
+
+test() {
 }
 
 ##############################################################
