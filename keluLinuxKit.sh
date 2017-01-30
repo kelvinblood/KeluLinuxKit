@@ -191,7 +191,7 @@ EOF
 
 
     cd /etc
-    if [ ! -e xl2tpd ]; then
+    if [ -e xl2tpd ]; then
         mv "/etc/xl2tpd" "/etc/xl2tpd_backup"
     fi
 
@@ -249,7 +249,7 @@ EOF
 
 
     cd /etc
-    if [ ! -e xl2tpd ]; then
+    if [ -e xl2tpd ]; then
         mv "/etc/xl2tpd" "/etc/xl2tpd_backup"
     fi
 
