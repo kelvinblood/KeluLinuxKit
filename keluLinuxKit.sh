@@ -74,6 +74,7 @@ install_all() {
     install_zsh
     install_iptable
     install_lnmp
+    install_docker
 }
 install_zsh() {
     apt-get -y install zsh tmux
@@ -177,6 +178,13 @@ install_lnmp() {
     install_php
     install_pgsql
     install_composer
+    install_docker
+}
+
+run_lnmp(){
+    run_nginx
+    run_php
+    run_docker
 }
 
 install_openresty(){
@@ -194,11 +202,13 @@ install_openresty(){
     mkdir conf/vhost
 
     cp $RESOURCE/nginx/* /var/local/nginx/
-    cd $NGINX_HOME_RUNTIME
+}
+
+run_nginx(){
+    cd /var/local/nginx
     ./test.sh
     ./start.sh
 }
-
 install_php(){
     cd $DOWNLOAD
     aptitude -y install libssl-dev libcurl4-openssl-dev libbz2-dev libjpeg-dev libpng-dev libgmp-dev libicu-dev libmcrypt-dev freetds-dev libxslt-dev
@@ -232,6 +242,9 @@ install_php(){
     ln -s /usr/share/php5.6/sbin/php-fpm /usr/local/bin/php-fpm
     ln -s /usr/share/php5.6/bin/php /usr/local/bin/php
 
+}
+
+run_php(){
     /usr/share/php5.6/sbin/php-fpm
 }
 
@@ -312,10 +325,19 @@ EOF
 }
 
 install_docker(){
+    cd $DOWNLOAD
     curl -sSL https://get.docker.com/ | sh
     sudo usermod -aG docker $USER
     sudo systemctl enable docker
     sudo systemctl start docker
+    docker pull oddrationale/docker-shadowsocks;
+    mkdir /var/local/ss-bash/
+    cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash/ssmlt.json
+    cp $RESOURCE/docker/shadowsocks/ssmlt.json /tmp/ssmlt.json
+}
+
+run_docker(){
+   docker run -d --name=ss --net=host -v /tmp/ssmlt.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
 }
 
 install_test() {
@@ -404,6 +426,10 @@ case $1 in
     install )
         shift
         install_$1 $2 $3
+        ;;
+    run )
+        shift
+        run_$1 $2 $3
         ;;
     * )
         usage
