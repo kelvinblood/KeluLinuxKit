@@ -24,7 +24,7 @@ PHP_HOME=/usr/share/php5.6
 FPM_POOL_HOME=/var/local/fpm-pools
 OPENRESTY_HOME=/usr/share/openresty
 NGINX_HOME=/usr/share/openresty/nginx
-NGINX_HOME_RUNTIME=/usr/share/openresty/nginx
+NGINX_HOME_RUNTIME=/var/local/nginx
 LD_LIBRARY_PATH=/usr/share/lib
 
 
@@ -69,8 +69,11 @@ init() {
     apt-get -y install vim git ruby zip sudo git rake htop iftop wget
 }
 
-
-
+install_all() {
+    init
+    install_zsh
+    install_lnmp
+}
 install_zsh() {
     apt-get -y install zsh tmux
     # zsh重启生效引入zsh增强插件,支持git,rails等补全，可选多种外观皮肤
@@ -114,7 +117,7 @@ install_zsh() {
     cp $DOWNLOAD/tmux-powerline/themes/default.sh $DOWNLOAD/tmux-powerline/themes/default.sh_backup
     cp $RESOURCE/tmux-powerline/default.sh $DOWNLOAD/tmux-powerline/themes/default.sh
 cat >> $DOWNLOAD/maximum-awesome-linux/tmux.conf<< EOF
-# add by KeluLi
+# add by Kelu
 set-option -g status-left "#($DOWNLOAD/tmux-powerline/powerline.sh left)"
 set-option -g status-right "#($DOWNLOAD/tmux-powerline/powerline.sh right)"
 source-file ~/.tmux.conf.local
@@ -186,6 +189,7 @@ install_openresty(){
 
     mkdir /var/local/nginx
     cp -R $NGINX_HOME /var/local
+    cd /var/local/nginx
     mkdir conf/vhost
 
     cp $RESOURCE/nginx/* /var/local/nginx/
@@ -395,13 +399,6 @@ case $1 in
     init )
         shift
         init
-        ;;
-    installall )
-        init
-        install_iptable
-        install_ss
-        install_l2tp
-        install_docker
         ;;
     install )
         shift
