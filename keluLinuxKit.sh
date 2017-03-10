@@ -72,6 +72,7 @@ init() {
 install_all() {
     init
     install_zsh
+    install_iptable
     install_lnmp
 }
 install_zsh() {
@@ -194,8 +195,8 @@ install_openresty(){
 
     cp $RESOURCE/nginx/* /var/local/nginx/
     cd $NGINX_HOME_RUNTIME
-    sh ./test.sh
-    sh ./start.sh
+    ./test.sh
+    ./start.sh
 }
 
 install_php(){
@@ -215,10 +216,10 @@ install_php(){
     make test
 
     cp $RESOURCE/php/lib_php.ini /usr/share/php5.6/lib/php.ini
-    cp $RESOURCE/php/etc_php-fpm.ini /usr/share/php5.6/etc/php-fpm.conf
+    cp $RESOURCE/php/etc_php-fpm.conf /usr/share/php5.6/etc/php-fpm.conf
     cp sapi/fpm/php-fpm /usr/share/php5.6/sbin/php-fpm
 
-    mkdir /usr/share/php/etc/pool
+    mkdir /usr/share/php5.6/etc/pool
     mkdir /var/local/log
     mkdir /var/local/log/fpm-pools/
     mkdir /var/local/fpm-pools/
