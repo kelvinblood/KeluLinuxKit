@@ -189,7 +189,6 @@ conn L2TP-PSK-noNAT
     dpdaction=clear
 EOF
 
-
     cd /etc
     if [ -e xl2tpd ]; then
         mv "/etc/xl2tpd" "/etc/xl2tpd_backup"
@@ -213,6 +212,13 @@ EOF
     service ipsec restart
     service pppd-dns restart
     service xl2tpd restart
+}
+
+install_docker(){
+    curl -sSL https://get.docker.com/ | sh
+    sudo usermod -aG docker $USER
+    sudo systemctl enable docker
+    sudo systemctl start docker
 }
 
 install_test() {
@@ -297,6 +303,13 @@ case $1 in
     init )
         shift
         init
+        ;;
+    installall )
+        init
+        install_iptable
+        install_ss
+        install_l2tp
+        install_docker
         ;;
     install )
         shift
