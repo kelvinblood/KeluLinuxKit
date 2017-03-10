@@ -13,10 +13,25 @@ VERSION=' Version 0.0.1, 2017-1-26, Copyright (c) 2017 kelvinblood';
 SOURCE="${BASH_SOURCE[0]}"
 KELULINUXKIT=$(pwd)
 NOWTIME=$(date)
+
 DOWNLOAD="$KELULINUXKIT/Download"
 RESOURCE="$KELULINUXKIT/Resource"
 SECRET="$RESOURCE/secret"
+LOG_HOME=/var/local/log
+DATA_HOME=/var/local/data
+UPLOAD_HOME=/var/local/upload
+PHP_HOME=/usr/share/php5.6
+FPM_POOL_HOME=/var/local/fpm-pools
+OPENRESTY_HOME=/usr/share/openresty
+NGINX_HOME=/usr/share/openresty/nginx
+NGINX_HOME_RUNTIME=/usr/share/openresty/nginx
+LD_LIBRARY_PATH=/usr/share/lib
+
+
+
 LONGBIT=`getconf LONG_BIT`
+
+
 IP=`ifconfig eth0 | grep "inet addr" | awk '{ print $2}' | awk -F: '{print $2}'`
 
 while [ -h "$SOURCE" ]; do
@@ -151,6 +166,83 @@ install_pptp() {
     cp $PPTP/pptpd.conf /etc/pptpd.conf
     cp -r $PPTP/ppp /etc
     service pptpd restart
+}
+
+install_lnmp() {
+    install_openresty
+    install_php
+    install_pgsql
+    install_composer
+}
+
+install_openresty(){
+    cd $DOWNLOAD
+    aptitude -y install libreadline-dev libpcre3-dev libssl-dev libcloog-ppl0 libpq-dev
+    wget https://openresty.org/download/ngx_openresty-1.9.7.1.tar.gz
+    tar -xzvf ngx_openresty-1.9.7.1.tar.gz
+    cd ngx_openresty-1.9.7.1/
+    ./configure --prefix=/usr/share/openresty --with-pcre-jit --with-http_postgres_module --with-http_iconv_module
+    make && make install
+
+    mkdir /var/local/nginx
+    cp -R $NGINX_HOME /var/local
+    mkdir conf/vhost
+
+    cp $RESOURCE/nginx/* /var/local/nginx/
+    cd $NGINX_HOME_RUNTIME
+    sh ./test.sh
+    sh ./start.sh
+}
+
+install_php(){
+    cd $DOWNLOAD
+    aptitude -y install libssl-dev libcurl4-openssl-dev libbz2-dev libjpeg-dev libpng-dev libgmp-dev libicu-dev libmcrypt-dev freetds-dev libxslt-dev
+    ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/libsybdb.a
+    ln -s /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/libsybdb.so
+    ln -s /usr/lib/x86_64-linux-gnu/libct.a /usr/lib/libct.a
+    ln -s /usr/lib/x86_64-linux-gnu/libct.so /usr/lib/libct.so
+    ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h
+
+    wget http://php.net/distributions/php-5.6.16.tar.gz
+    tar -xzvf php-5.6.16.tar.gz
+    cd php-5.6.16
+    ./configure --prefix /usr/share/php5.6 --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --with-pcre-regex --with-openssl=shared --with-kerberos --with-zlib=shared --enable-bcmath=shared --with-bz2=shared --enable-calendar=shared --with-curl=shared --enable-exif=shared --with-gd=shared --with-jpeg-dir=/usr/include/jpeg8 --with-png-dir=/usr/include/libpng12 --with-gettext=shared --with-gmp=shared --with-mhash=shared --enable-intl=shared --enable-mbstring=shared --with-mcrypt=shared --enable-opcache --with-pdo-pgsql=shared --with-pgsql=shared --enable-shmop=shared --enable-soap=shared --enable-sockets=shared --with-xsl=shared --enable-zip=shared
+    make clean && make && make install
+    make test
+
+    cp $RESOURCE/php/lib_php.ini /usr/share/php5.6/lib/php.ini
+    cp $RESOURCE/php/etc_php-fpm.ini /usr/share/php5.6/etc/php-fpm.conf
+    cp sapi/fpm/php-fpm /usr/share/php5.6/sbin/php-fpm
+
+    mkdir /usr/share/php/etc/pool
+    mkdir /var/local/log
+    mkdir /var/local/log/fpm-pools/
+    mkdir /var/local/fpm-pools/
+    mkdir /var/local/fpm-pools/www
+    mkdir /var/local/fpm-pools/www/public
+
+    cd /var/local/fpm-pools/www/public
+    echo "<?php phpinfo(); ?>" >> index.php
+
+    ln -s /usr/share/php5.6/sbin/php-fpm /usr/local/bin/php-fpm
+    ln -s /usr/share/php5.6/bin/php /usr/local/bin/php
+
+    /usr/share/php5.6/sbin/php-fpm
+}
+
+install_pgsql(){
+    cd $DOWNLOAD
+    sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+    apt-get -y install wget ca-certificates
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+    apt-get update
+    apt-get -y upgrade
+    apt-get -y install postgresql-9.4 pgadmin3
+}
+
+install_composer(){
+    cd $DOWNLOAD
+    curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 }
 
 install_l2tp() {
