@@ -4,10 +4,9 @@
 #          49100:49600              59999-61000
 
 # VPN postrouting
+-A POSTROUTING -s 10.99.99.0/24 -o eth0 -j MASQUERADE
 -A POSTROUTING -s 10.152.1.0/24 -o eth0 -j MASQUERADE
--A POSTROUTING -s 10.152.2.0/24 -o eth0 -j MASQUERADE
 -A POSTROUTING -s 10.8.1.0/24 -o eth0 -j MASQUERADE
--A POSTROUTING -s 10.8.2.0/24 -o eth0 -j MASQUERADE
 
 COMMIT
 
@@ -86,12 +85,12 @@ COMMIT
 -A INPUT -p tcp --dport 61344 -j ACCEPT
 -A INPUT -p tcp --dport 59999:61000 -j ACCEPT
 -A INPUT -p udp --dport 59999:61000 -j ACCEPT
+
 # PPTP
 -A INPUT -p tcp --dport 1723 -j ACCEPT
 -A INPUT -p gre -j ACCEPT
--A INPUT -i eth0 -s 10.152.1.0/24 -j ACCEPT
--A FORWARD -i eth0 -d 10.152.1.0/24 -j ACCEPT
--A FORWARD -o eth0 -s 10.152.1.0/24 -j ACCEPT
+-A FORWARD -d 10.99.99.0/24 -j ACCEPT
+-A FORWARD -s 10.99.99.0/24 -j ACCEPT
 
 # L2TP
 -A INPUT -p udp --dport 1701 -j ACCEPT

@@ -78,6 +78,15 @@ install_all() {
     install_iptable
     install_lnmp
     install_docker
+    install_docker_ss
+    install_docker_pptp
+}
+
+run_all(){
+    run_nginx
+    run_php
+    run_docker_ss
+    run_docker_pptp
 }
 install_zsh() {
     apt-get -y install zsh tmux
@@ -150,12 +159,6 @@ install_iptable() {
     sysctl -p
 }
 
-init2() {
-    cp /etc/sysctl.conf /etc/sysctl.conf_backup
-    cp $RESOURCE/sysctl.conf /etc
-    sysctl -p
-}
-
 install_ss() {
     cd "/var/local" && git clone https://github.com/shadowsocks/shadowsocks.git && cd shadowsocks && git checkout master;
     apt-get install python-pip && pip install shadowsocks;
@@ -188,11 +191,6 @@ install_lnmp() {
     reboot
 }
 
-run_lnmp(){
-    run_nginx
-    run_php
-    run_docker
-}
 
 install_openresty(){
     cd $DOWNLOAD
@@ -342,6 +340,12 @@ install_docker(){
     usermod -aG docker $USER
     systemctl enable docker
     systemctl start docker
+}
+
+install_docker_ss(){
+    if hash docker 2>/dev/null; then
+        install_docker
+    fi
     docker pull oddrationale/docker-shadowsocks;
     if [ ! -e "/var/local/ss-bash"  ]; then
         mkdir /var/local/ss-bash/
@@ -350,10 +354,20 @@ install_docker(){
     mv /var/local/ss-bash/ssmlt.json /tmp
     cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash;
 }
-
-run_docker(){
-   docker run -d --name=ss --net=host -v /tmp/ssmlt.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
+run_docker_ss(){
+   docker run -d --name=ss --net=host -v /var/local/ss-bash/ssmlt.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
 }
+
+install_docker_pptp(){
+    docker pull mobtitude/vpn-pptp;
+    cp $RESOURCE/ppp/chap-secrets /etc/ppp
+    cp /etc/ppp/chap-secrets /tmp
+}
+
+run_docker_pptp(){
+   docker run -d --name=pptp --privileged --net=host -v /etc/ppp/chap-secrets:/etc/ppp/chap-secrets:rw mobtitude/vpn-pptp
+}
+
 
 install_test() {
     rm /etc/ipsec.conf;
