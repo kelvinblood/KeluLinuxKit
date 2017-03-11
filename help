@@ -3,7 +3,7 @@
         KeluLinuxKit.sh -v|v|version
     显示帮助：
         KeluLinuxKit.sh [-h|h|help]
-     初始化安装:
-        KeluLinuxKit.sh init
      安装:
-        KeluLinuxKit.sh install
+        KeluLinuxKit.sh install xxx
+     全部安装:
+        KeluLinuxKit.sh install all

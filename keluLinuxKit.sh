@@ -67,6 +67,8 @@ init() {
     locale-gen
     apt-get update && apt-get -y autoremove && apt-get -y upgrade
     apt-get -y install vim git ruby zip sudo git rake htop iftop wget
+
+    mkdir /var/local/log
 }
 
 install_all() {
@@ -200,6 +202,7 @@ install_openresty(){
     make && make install
 
     mkdir /var/local/nginx
+    mkdir /var/local/log/nginx
     cp -R $NGINX_HOME /var/local
     cd /var/local/nginx
     mkdir conf/vhost
@@ -235,11 +238,11 @@ install_php(){
     mkdir /usr/share/php5.6/etc/pool
     cp $RESOURCE/php/etc_pool_www.conf /usr/share/php5.6/etc/pool/www.conf
 
-    mkdir /var/local/log
     mkdir /var/local/log/fpm-pools/
     mkdir /var/local/fpm-pools/
-    mkdir /var/local/fpm-pools/www
-    mkdir /var/local/fpm-pools/www/public
+    mkdir /var/local/fpm-pools/www/
+    mkdir /var/local/fpm-pools/www/www
+    mkdir /var/local/fpm-pools/www/wwwpublic
 
     cd /var/local/fpm-pools/www/public
     echo "<?php phpinfo(); ?>" >> index.php
