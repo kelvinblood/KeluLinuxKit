@@ -185,6 +185,7 @@ install_lnmp() {
     install_pgsql
     install_composer
     install_docker
+    reboot
 }
 
 run_lnmp(){
@@ -334,6 +335,9 @@ EOF
 
 install_docker(){
     cd $DOWNLOAD
+#    echo "deb http://http.debian.net/debian jessie-backports main" | sudo tee /etc/apt/sources.list.d/backports.list
+#    apt-get update
+#    apt-get -t jessie-backports install linux-image-amd64
     curl -sSL https://get.docker.com/ | sh
     usermod -aG docker $USER
     systemctl enable docker
