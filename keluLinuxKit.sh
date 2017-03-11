@@ -230,6 +230,8 @@ install_php(){
     cp sapi/fpm/php-fpm /usr/share/php5.6/sbin/php-fpm
 
     mkdir /usr/share/php5.6/etc/pool
+    cp $RESOURCE/php/etc_pool_www.conf /usr/share/php5.6/etc/pool/www.conf
+
     mkdir /var/local/log
     mkdir /var/local/log/fpm-pools/
     mkdir /var/local/fpm-pools/
@@ -331,7 +333,9 @@ install_docker(){
     sudo systemctl enable docker
     sudo systemctl start docker
     docker pull oddrationale/docker-shadowsocks;
-    mkdir /var/local/ss-bash/
+    if [ ! -e "/var/local/ss-bash"  ]; then
+        mkdir /var/local/ss-bash/
+    fi
     cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash/ssmlt.json
     cp $RESOURCE/docker/shadowsocks/ssmlt.json /tmp/ssmlt.json
 }
