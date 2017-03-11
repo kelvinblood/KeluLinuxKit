@@ -46,6 +46,7 @@ if [ ! -e Download ]; then
   mkdir Download
 fi
 
+
 usage () {
     cat $DIR/help
 }
@@ -242,10 +243,9 @@ install_php(){
     mkdir /var/local/fpm-pools/
     mkdir /var/local/fpm-pools/www/
     mkdir /var/local/fpm-pools/www/www
-    mkdir /var/local/fpm-pools/www/wwwpublic
+    mkdir /var/local/fpm-pools/www/www/public
 
-    cd /var/local/fpm-pools/www/public
-    echo "<?php phpinfo(); ?>" >> index.php
+    cp /var/local/nginx/html/index.html /var/local/fpm-pools/www/www/public/index.php
 
     ln -s /usr/share/php5.6/sbin/php-fpm /usr/local/bin/php-fpm
     ln -s /usr/share/php5.6/bin/php /usr/local/bin/php
@@ -335,15 +335,16 @@ EOF
 install_docker(){
     cd $DOWNLOAD
     curl -sSL https://get.docker.com/ | sh
-    sudo usermod -aG docker $USER
-    sudo systemctl enable docker
-    sudo systemctl start docker
+    usermod -aG docker $USER
+    systemctl enable docker
+    systemctl start docker
     docker pull oddrationale/docker-shadowsocks;
     if [ ! -e "/var/local/ss-bash"  ]; then
         mkdir /var/local/ss-bash/
     fi
-    cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash
-    cp /var/local/ss-bash/ssmlt.json /tmp
+    cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash;
+    mv /var/local/ss-bash/ssmlt.json /tmp
+    cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash;
 }
 
 run_docker(){
