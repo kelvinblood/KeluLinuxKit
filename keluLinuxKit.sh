@@ -142,6 +142,9 @@ install_iptable() {
 
     iptables-restore < /etc/iptables.test.rules
     iptables-save > /etc/iptables.up.rules
+
+    cp $RESOURCE/etc/sysctl.conf /etc
+    sysctl -p
 }
 
 init2() {
@@ -336,8 +339,8 @@ install_docker(){
     if [ ! -e "/var/local/ss-bash"  ]; then
         mkdir /var/local/ss-bash/
     fi
-    cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash/ssmlt.json
-    cp $RESOURCE/docker/shadowsocks/ssmlt.json /tmp/ssmlt.json
+    cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash
+    cp /var/local/ss-bash/ssmlt.json /tmp
 }
 
 run_docker(){
