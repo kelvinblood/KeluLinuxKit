@@ -16,6 +16,11 @@ COMMIT
 -A INPUT -i lo -j ACCEPT
 -A INPUT ! -i lo -d 127.0.0.0/8 -j REJECT
 
+# docker
+# -A INPUT -i docker -j ACCEPT
+# -A FORWARD -i eth0 -o docker0 -j ACCEPT
+# -A FORWARD -o eth0 -i docker0 -j ACCEPT
+
 # Accepts all established inbound connections
 -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 

@@ -273,7 +273,7 @@ install_composer(){
 install_l2tp() {
     cd $DOWNLOAD
     apt-get -y install ppp xl2tpd libgmp3-dev gawk flex bison;
-    wget https://download.openswan.org/openswan/openswan-2.6.49.tar.gz && tar -xzvf openswan-2.6.49.tar.gz && cd openswan-2.6.49 && make programs && make install;
+    wget https://download.openswan.org/openswan/openswan-2.6.49.1.tar.gz && tar -xzvf openswan-2.6.49.1.tar.gz && cd openswan-2.6.49.1 && make programs && make install;
 
     rm /etc/ipsec.conf;
 cat >> /etc/ipsec.conf << EOF
@@ -367,6 +367,14 @@ install_docker_pptp(){
 run_docker_pptp(){
    docker run -d --name=pptp --privileged --net=host -v /etc/ppp/chap-secrets:/etc/ppp/chap-secrets:rw mobtitude/vpn-pptp
 }
+
+#install_docker_l2tp(){
+#    docker pull fcojean/l2tp-ipsec-vpn-server
+#    modprobe af_key
+#    docker run --name l2tp --env-file /etc/ppp/l2tp.env -p 500:500/udp -p 4500:4500/udp -v /lib/modules:/lib/modules:ro -d --privileged fcojean/l2tp-ipsec-vpn-server
+#
+#    docker run --name l2tp --env-file /etc/ppp/l2tp.env --net=host -v /lib/modules:/lib/modules:ro -d --privileged fcojean/l2tp-ipsec-vpn-server
+#}
 
 
 install_test() {
