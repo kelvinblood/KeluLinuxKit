@@ -325,6 +325,7 @@ EOF
         echo 0 > $each/send_redirects
     done
 
+    ipsec setup start
     ipsec verify
     service ipsec restart
     service pppd-dns restart
@@ -354,7 +355,11 @@ install_docker_ss(){
     mv /var/local/ss-bash/ssmlt.json /tmp
     cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash;
 }
+
 run_docker_ss(){
+    cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash;
+    mv /var/local/ss-bash/ssmlt.json /tmp
+    cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash;
    docker run -d --name=ss --net=host -v /var/local/ss-bash/ssmlt.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
 }
 
@@ -365,6 +370,8 @@ install_docker_pptp(){
 }
 
 run_docker_pptp(){
+    cp $RESOURCE/ppp/chap-secrets /etc/ppp
+    cp /etc/ppp/chap-secrets /tmp
    docker run -d --name=pptp --privileged --net=host -v /etc/ppp/chap-secrets:/etc/ppp/chap-secrets:rw mobtitude/vpn-pptp
 }
 
@@ -408,7 +415,6 @@ conn L2TP-PSK-noNAT
     dpdtimeout=30
     dpdaction=clear
 EOF
-
 
     cd /etc
     if [ -e xl2tpd ]; then
