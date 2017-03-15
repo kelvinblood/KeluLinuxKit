@@ -77,7 +77,6 @@ PPPD="/etc/ppp/chap-secrets";
 
 FLAG=`cmp_file $PPP $PPPD`;
 if [ $FLAG -eq 1 ]; then
-  echo "1 $PPPDH $PPPDM $PPPH $PPPM "
   cp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets /etc/ppp/chap-secrets;
   cp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets /tmp/restart_ppp.tmp;
 
@@ -115,7 +114,6 @@ SSD="/var/local/ss-bash/ssusers";
 
 FLAG=`cmp_file $PPP $PPPD`;
 if [ $FLAG -eq 1 ]; then
-  echo "2 $PPPDH $PPPDM $PPPH $PPPM "
   cp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/ssusers $USER_FILE;
   create_json
   scp $JSON_FILE tokyo2:/var/local/ss-bash/ssmlt.json;
@@ -140,7 +138,7 @@ REMOTE_CONTENT="type=$type&client=$client&ifconfig=$ifconfig";
 # REMOTERESULT=`curl -d "$REMOTE_CONTENT" $REMOTEURL`;
 }
 
-if [ `hostname` = $SERVERNAME ]; then
+if [ `hostname` = 'tokyo' ]; then
 ppp_to_client
 ss_to_client
 heartbeat

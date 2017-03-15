@@ -72,6 +72,13 @@ init() {
     mkdir /var/local/log
 }
 
+ssh_sync(){
+    scp $HOME/.ssh/config tokyo3:/root/.ssh/config
+    scp $HOME/.ssh/admin@kelu.org tokyo3:/root/.ssh/admin@kelu.org
+    scp $HOME/.ssh/admin@kelu.org.pub tokyo3:/root/.ssh/admin@kelu.org.pub
+    scp $HOME/.ssh/authorized_keys tokyo3:/root/.ssh/authorized_keys
+}
+
 install_all() {
     init
     install_zsh
@@ -428,6 +435,10 @@ case $1 in
     run )
         shift
         run_$1 $2 $3
+        ;;
+    ssh-sync )
+        shift
+        ssh-sync
         ;;
     * )
         usage
