@@ -78,6 +78,11 @@ install_all() {
     install_iptable
     install_lnmp
     install_docker
+    install_l2tp
+    reboot
+}
+
+install_docker_sub() {
     install_docker_ss
     install_docker_pptp
 }
@@ -187,8 +192,6 @@ install_lnmp() {
     install_php
     install_pgsql
     install_composer
-    install_docker
-    reboot
 }
 
 
@@ -313,6 +316,7 @@ EOF
 
     cp -r "$RESOURCE/l2tp/xl2tpd" "/etc/xl2tpd"
     cp "$RESOURCE/l2tp/ppp/options.xl2tpd" "/etc/ppp/options.xl2tpd"
+    cp "$RESOURCE/ppp/chap-secrets /etc/ppp"
     touch /etc/ipsec.secrets
 cat >> /etc/ipsec.secrets << EOF
 $IP   %any:  PSK "kelu.org"
