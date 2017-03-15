@@ -3,10 +3,10 @@
 
 . /etc/profile
 
-REMOTEURL="$MASTER_API/pptp"
+REMOTEURL="http://wechat.kelu.org/api/pptp"
 ifconfig=`ifconfig`;
 type='heartbeat';
-client='$CLIENT_NAME';
+client='tokyo';
 
 REMOTE_CONTENT="type=$type&client=$client&ifconfig=$ifconfig";
 REMOTERESULT=`curl -d "$REMOTE_CONTENT" $REMOTEURL`;
