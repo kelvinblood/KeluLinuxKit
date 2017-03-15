@@ -5,6 +5,7 @@
 JSON_FILE=/var/local/ss-bash/ssmlt.json
 USER_FILE=/var/local/ss-bash/ssusers
 TMPL_FILE=/var/local/ss-bash/ssmlt.template
+SERVERNAME="tokyo"
 IS_LOG=1
 
 create_json () {
@@ -78,9 +79,29 @@ FLAG=`cmp_file $PPP $PPPD`;
 if [ $FLAG -eq 1 ]; then
   echo "1 $PPPDH $PPPDM $PPPH $PPPM "
   cp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets /etc/ppp/chap-secrets;
+  cp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets /tmp/restart_ppp.tmp;
+
   scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo2:/etc/ppp/chap-secrets;
+  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo2:/tmp/restart_ppp.tmp;
+
+  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo3:/etc/ppp/chap-secrets;
+  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo3:/tmp/restart_ppp.tmp;
+
   scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets aliyun:/etc/ppp/chap-secrets;
+  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets aliyun:/tmp/restart_ppp.tmp;
 fi
+}
+
+check_if_update(){
+    if [ -e /tmp/restart_ppp.tmp ]; then
+        echo 'restart ppp';
+        rm /tmp/restart_ppp.tmp;
+    fi
+
+    if [ -e /tmp/restart_ss.tmp ]; then
+        echo 'restart ss';
+        rm /tmp/restart_ss.tmp;
+    fi
 }
 
 ss_to_client(){
@@ -93,7 +114,13 @@ if [ $FLAG -eq 1 ]; then
   cp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/ssusers $USER_FILE;
   create_json
   scp $JSON_FILE tokyo2:/var/local/ss-bash/ssmlt.json;
+  scp $JSON_FILE tokyo2:/tmp/restart_ss.tmp;
+
+  scp $JSON_FILE tokyo3:/var/local/ss-bash/ssmlt.json;
+  scp $JSON_FILE tokyo3:/tmp/restart_ss.tmp;
+
   scp $JSON_FILE aliyun:/var/local/ss-bash/ssmlt.json;
+  scp $JSON_FILE aliyun:/tmp/restart_ss.tmp;
 fi
 }
 
@@ -108,9 +135,11 @@ REMOTE_CONTENT="type=$type&client=$client&ifconfig=$ifconfig";
 # REMOTERESULT=`curl -d "$REMOTE_CONTENT" $REMOTEURL`;
 }
 
-if [ `hostname` = "tokyo" ]; then
+if [ `hostname` = $SERVERNAME ]; then
 ppp_to_client
 ss_to_client
 heartbeat
 # cmp_file /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets /etc/ppp/chap-secrets
 fi
+
+check_if_update
