@@ -92,6 +92,7 @@ run_all(){
     run_php
     run_docker_ss
     run_docker_pptp
+    run_cron
 }
 install_zsh() {
     apt-get -y install zsh tmux
@@ -387,64 +388,14 @@ run_docker_pptp(){
 #    docker run --name l2tp --env-file /etc/ppp/l2tp.env --net=host -v /lib/modules:/lib/modules:ro -d --privileged fcojean/l2tp-ipsec-vpn-server
 #}
 
-
-install_test() {
-    rm /etc/ipsec.conf;
-cat >> /etc/ipsec.conf << EOF
-version 2.0
-config setup
-    nat_traversal=yes
-    virtual_private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12
-    oe=off
-    protostack=netkey
-
-conn L2TP-PSK-NAT
-    rightsubnet=vhost:%priv
-    also=L2TP-PSK-noNAT
-
-conn L2TP-PSK-noNAT
-    authby=secret
-    pfs=no
-    auto=add
-    keyingtries=3
-    rekey=no
-    ikelifetime=8h
-    keylife=1h
-    type=transport
-    left=$IP
-    leftprotoport=17/1701
-    right=%any
-    rightprotoport=17/%any
-    dpddelay=15
-    dpdtimeout=30
-    dpdaction=clear
-EOF
-
-    cd /etc
-    if [ -e xl2tpd ]; then
-        mv "/etc/xl2tpd" "/etc/xl2tpd_backup"
-    fi
-
-    cp -r "$RESOURCE/l2tp/xl2tpd" "/etc/xl2tpd"
-    cp "$RESOURCE/l2tp/ppp/options.xl2tpd" "/etc/ppp/options.xl2tpd"
-    touch /etc/ipsec.secrets
-cat >> /etc/ipsec.secrets << EOF
-$IP   %any:  PSK "kelu.org"
-EOF
-
-    echo 1 > /proc/sys/net/ipv4/ip_forward
-    for each in /proc/sys/net/ipv4/conf/*
-    do
-        echo 0 > $each/accept_redirects
-        echo 0 > $each/send_redirects
-    done
-
-    ipsec verify
-    service ipsec restart
-    service pppd-dns restart
-    service xl2tpd restart
+run_cron(){
+    cp -R $RESOURCE/cron /var/local
+    # crontab -e
+    # * * * * * /var/local/cron/every_minute.sh >> /var/local/cron/every_minute.log 2>&1
+    # 0 * * * * /var/local/cron/every_hour.sh >> /var/local/cron/every_hour.log 2>&1
+    # 1 * * * * /var/local/cron/every_hour.www-data.sh >> /var/local/cron/every_hour.log 2>&1
+    # * * * * * /var/local/cron/every_minute.www-data.sh >> /var/local/cron/every_minute.log 2>&1
 }
-
 ##############################################################
 if [ "$#" -eq 0 ]; then
     usage
