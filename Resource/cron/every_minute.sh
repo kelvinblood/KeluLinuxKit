@@ -112,7 +112,7 @@ ss_to_client(){
 SS="/var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/ssusers";
 SSD="/var/local/ss-bash/ssusers";
 
-FLAG=`cmp_file $PPP $PPPD`;
+FLAG=`cmp_file $SS $SSD`;
 if [ $FLAG -eq 1 ]; then
   cp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/ssusers $USER_FILE;
   create_json
