@@ -7,7 +7,11 @@ USER_FILE=/var/local/ss-bash/ssusers
 TMPL_FILE=/var/local/ss-bash/ssmlt.template
 IS_LOG=1
 
-
+debug_log(){
+    if [ $IS_LOG -eq 1 ]; then
+        echo $1
+    fi
+}
 create_json () {
     echo '{' > $JSON_FILE.tmp
     sed -E 's/(.*)/    \1/' $TMPL_FILE >> $JSON_FILE.tmp
@@ -50,22 +54,27 @@ cmp_file(){
 FILE1=$1
 FILE2=$2
 
-PPPH=`get_file_h $FILE1`;
-PPPM=`get_file_m $FILE1`;
-PPPDH=`get_file_h $FILE2`;
-PPPDM=`get_file_m $FILE2`;
+H=`get_file_h $FILE1`;
+M=`get_file_m $FILE1`;
+DH=`get_file_h $FILE2`;
+DM=`get_file_m $FILE2`;
 
 FLAG=1;
 # 目标文件更新时间 大于 源文件
-if [ $PPPDH -gt $PPPH ]; then
+if [ $DH -gt $H ]; then
     FLAG=0;
     # 文件更新小时相等，目标文件更新分钟大于源文件，还是不需要改
-  elif [ $PPPDH -eq $PPPH ]; then
-    if [ $PPPDM -gt $PPPM ]; then
+  elif [ $DH -eq $H ]; then
+    if [ $DM -gt $M ]; then
     FLAG=0;
     fi
 fi
 
+debug_log $H
+debug_log $M
+debug_log $DH
+debug_log $DM
+debug_log $FLAG
 return $FLAG;
 }
 
@@ -107,7 +116,8 @@ REMOTE_CONTENT="type=$type&client=$client&ifconfig=$ifconfig";
 # REMOTERESULT=`curl -d "$REMOTE_CONTENT" $REMOTEURL`;
 }
 
-if [ `hostname` =eq "tokyo" ]; then
+if [ `hostname` = "tokyo" ]; then
 ppp_to_client
 ss_to_client
+heartbeat
 fi
