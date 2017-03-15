@@ -95,11 +95,16 @@ fi
 check_if_update(){
     if [ -e /tmp/restart_ppp.tmp ]; then
         echo 'restart ppp';
+        docker restart pptp;
+        service pppd-dns restart
+        service ipsec restart
+        service xl2tpd restart
         rm /tmp/restart_ppp.tmp;
     fi
 
     if [ -e /tmp/restart_ss.tmp ]; then
         echo 'restart ss';
+        docker restart ss;
         rm /tmp/restart_ss.tmp;
     fi
 }
