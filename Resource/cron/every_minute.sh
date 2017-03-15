@@ -37,13 +37,13 @@ create_json () {
 
 get_file_h(){
 FILE=$1
-NUM=`ls -l '$FILE' | awk '{print $(NF-1)}' | cut -d ':' -f 1`;
+NUM=`ls -l $FILE | awk '{print $(NF-1)}' | cut -d ':' -f 1`;
 echo $NUM
 }
 
 get_file_m(){
 FILE=$1
-NUM=`ls -l '$FILE' | awk '{print $(NF-1)}' | cut -d ':' -f 2`;
+NUM=`ls -l $FILE | awk '{print $(NF-1)}' | cut -d ':' -f 2`;
 echo $NUM
 }
 
