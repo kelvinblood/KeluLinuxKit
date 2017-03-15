@@ -7,11 +7,6 @@ USER_FILE=/var/local/ss-bash/ssusers
 TMPL_FILE=/var/local/ss-bash/ssmlt.template
 IS_LOG=1
 
-debug_log(){
-    if [ $IS_LOG -eq 1 ]; then
-        echo $1
-    fi
-}
 create_json () {
     echo '{' > $JSON_FILE.tmp
     sed -E 's/(.*)/    \1/' $TMPL_FILE >> $JSON_FILE.tmp
@@ -42,12 +37,14 @@ create_json () {
 
 get_file_h(){
 FILE=$1
-return `ls -l "$FILE" | awk '{print $(NF-1)}' | cut -d ':' -f 1`;
+NUM=`ls -l '$FILE' | awk '{print $(NF-1)}' | cut -d ':' -f 1`;
+echo $NUM
 }
 
 get_file_m(){
 FILE=$1
-return `ls -l "$FILE" | awk '{print $(NF-1)}' | cut -d ':' -f 2`;
+NUM=`ls -l '$FILE' | awk '{print $(NF-1)}' | cut -d ':' -f 2`;
+echo $NUM
 }
 
 cmp_file(){
@@ -70,12 +67,7 @@ if [ $DH -gt $H ]; then
     fi
 fi
 
-debug_log $H
-debug_log $M
-debug_log $DH
-debug_log $DM
-debug_log $FLAG
-return $FLAG;
+echo $FLAG;
 }
 
 ppp_to_client(){
@@ -120,4 +112,5 @@ if [ `hostname` = "tokyo" ]; then
 ppp_to_client
 ss_to_client
 heartbeat
+# cmp_file /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets /etc/ppp/chap-secrets
 fi
