@@ -72,13 +72,27 @@ init() {
     mkdir /var/local/log
 }
 
-ssh_sync(){
-    scp $HOME/.ssh/config tokyo3:/root/.ssh/config
-    scp $HOME/.ssh/admin@kelu.org tokyo3:/root/.ssh/admin@kelu.org
-    scp $HOME/.ssh/admin@kelu.org.pub tokyo3:/root/.ssh/admin@kelu.org.pub
-    scp $HOME/.ssh/authorized_keys tokyo3:/root/.ssh/authorized_keys
+sync(){
+#    scp $HOME/.ssh/config tokyo3:/root/.ssh/config
+#    scp $HOME/.ssh/admin@kelu.org tokyo3:/root/.ssh/admin@kelu.org
+#    scp $HOME/.ssh/admin@kelu.org.pub tokyo3:/root/.ssh/admin@kelu.org.pub
+#    scp $HOME/.ssh/authorized_keys tokyo3:/root/.ssh/authorized_keys
+
+#    scp $HOME/.ssh/_ssh.tgz tokyo2:/root
+#    scp $HOME/.ssh/config tokyo2:/root/.ssh/config
+#    scp $HOME/.ssh/admin@kelu.org tokyo2:/root/.ssh/admin@kelu.org
+#    scp $HOME/.ssh/admin@kelu.org.pub tokyo2:/root/.ssh/admin@kelu.org.pub
+#    scp $HOME/.ssh/authorized_keys tokyo2:/root/.ssh/authorized_keys
+
+    scp /var/local/cron/every_minute.sh tokyo2:/var/local/cron/every_minute.sh
+    scp /var/local/cron/every_minute.sh tokyo3:/var/local/cron/every_minute.sh
+    scp /var/local/cron/every_minute.sh aliyun:/var/local/cron/every_minute.sh
 }
 
+hostrenme(){
+
+
+}
 install_all() {
     init
     install_zsh
@@ -324,7 +338,7 @@ EOF
 
     cp -r "$RESOURCE/l2tp/xl2tpd" "/etc/xl2tpd"
     cp "$RESOURCE/l2tp/ppp/options.xl2tpd" "/etc/ppp/options.xl2tpd"
-    cp "$RESOURCE/ppp/chap-secrets /etc/ppp"
+    cp $RESOURCE/ppp/chap-secrets /etc/ppp/chap-secrets
     touch /etc/ipsec.secrets
 cat >> /etc/ipsec.secrets << EOF
 $IP   %any:  PSK "kelu.org"
@@ -338,10 +352,10 @@ EOF
     done
 
     ipsec setup start
-    ipsec verify
-    service ipsec restart
-    service pppd-dns restart
-    service xl2tpd restart
+#    ipsec verify
+#    service ipsec restart
+#    service pppd-dns restart
+#    service xl2tpd restart
 }
 
 install_docker(){
@@ -363,12 +377,15 @@ install_docker_ss(){
     if [ ! -e "/var/local/ss-bash"  ]; then
         mkdir /var/local/ss-bash/
     fi
-    cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash;
-    mv /var/local/ss-bash/ssmlt.json /tmp
-    cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash;
+    cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash/ssmlt.json;
+    mv /var/local/ss-bash/ssmlt.json /tmp/ssmlt.json
+    cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash/ssmlt.json;
 }
 
 run_docker_ss(){
+    if [ ! -e "/var/local/ss-bash"  ]; then
+        mkdir /var/local/ss-bash/
+    fi
     cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash;
     mv /var/local/ss-bash/ssmlt.json /tmp
     cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash;
@@ -436,9 +453,9 @@ case $1 in
         shift
         run_$1 $2 $3
         ;;
-    ssh-sync )
+    sync )
         shift
-        ssh-sync
+        sync
         ;;
     * )
         usage
