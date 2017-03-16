@@ -27,6 +27,10 @@ NGINX_HOME=/usr/share/openresty/nginx
 NGINX_HOME_RUNTIME=/var/local/nginx
 LD_LIBRARY_PATH=/usr/share/lib
 
+JSON_FILE=/var/local/ss-bash/ssmlt.json
+USER_FILE=/var/local/ss-bash/ssusers
+TMPL_FILE=/var/local/ss-bash/ssmlt.template
+
 
 
 LONGBIT=`getconf LONG_BIT`
@@ -73,25 +77,19 @@ init() {
 }
 
 sync(){
-#    scp $HOME/.ssh/config tokyo3:/root/.ssh/config
-#    scp $HOME/.ssh/admin@kelu.org tokyo3:/root/.ssh/admin@kelu.org
-#    scp $HOME/.ssh/admin@kelu.org.pub tokyo3:/root/.ssh/admin@kelu.org.pub
-#    scp $HOME/.ssh/authorized_keys tokyo3:/root/.ssh/authorized_keys
-
-#    scp $HOME/.ssh/_ssh.tgz tokyo2:/root
-#    scp $HOME/.ssh/config tokyo2:/root/.ssh/config
-#    scp $HOME/.ssh/admin@kelu.org tokyo2:/root/.ssh/admin@kelu.org
-#    scp $HOME/.ssh/admin@kelu.org.pub tokyo2:/root/.ssh/admin@kelu.org.pub
-#    scp $HOME/.ssh/authorized_keys tokyo2:/root/.ssh/authorized_keys
+    scp $HOME/.ssh/_ssh.tgz aliyun:/root
+    scp $HOME/.ssh/_ssh.tgz tokyo2:/root
+    scp $HOME/.ssh/_ssh.tgz tokyo3:/root
 
     scp /var/local/cron/every_minute.sh tokyo2:/var/local/cron/every_minute.sh
     scp /var/local/cron/every_minute.sh tokyo3:/var/local/cron/every_minute.sh
     scp /var/local/cron/every_minute.sh aliyun:/var/local/cron/every_minute.sh
+
+
 }
 
 hostrenme(){
-
-
+hostnamectl set-hostname tokyo2
 }
 install_all() {
     init
@@ -420,6 +418,85 @@ run_cron(){
     # 1 * * * * /var/local/cron/every_hour.www-data.sh >> /var/local/cron/every_hour.log 2>&1
     # * * * * * /var/local/cron/every_minute.www-data.sh >> /var/local/cron/every_minute.log 2>&1
 }
+
+ppp_to_client(){
+PPP="/var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets";
+PPPD="/etc/ppp/chap-secrets";
+
+  cp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets /etc/ppp/chap-secrets;
+  cp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets /tmp/restart_ppp.tmp;
+
+  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo2:/etc/ppp/chap-secrets;
+  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo2:/tmp/restart_ppp.tmp;
+
+  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo3:/etc/ppp/chap-secrets;
+  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo3:/tmp/restart_ppp.tmp;
+
+  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets aliyun:/etc/ppp/chap-secrets;
+  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets aliyun:/tmp/restart_ppp.tmp;
+}
+
+check_if_update(){
+    if [ -e /tmp/restart_ppp.tmp ]; then
+        echo 'restart ppp';
+        docker restart pptp;
+        service pppd-dns restart
+        service ipsec restart
+        service xl2tpd restart
+        rm /tmp/restart_ppp.tmp;
+    fi
+
+    if [ -e /tmp/restart_ss.tmp ]; then
+        echo 'restart ss';
+        docker restart ss;
+        rm /tmp/restart_ss.tmp;
+    fi
+}
+
+ss_to_client(){
+SS="/var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/ssusers";
+SSD="/var/local/ss-bash/ssusers";
+
+  cp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/ssusers $USER_FILE;
+  create_json
+  scp $JSON_FILE tokyo2:/var/local/ss-bash/ssmlt.json;
+  scp $JSON_FILE tokyo2:/tmp/restart_ss.tmp;
+
+  scp $JSON_FILE tokyo3:/var/local/ss-bash/ssmlt.json;
+  scp $JSON_FILE tokyo3:/tmp/restart_ss.tmp;
+
+  scp $JSON_FILE aliyun:/var/local/ss-bash/ssmlt.json;
+  scp $JSON_FILE aliyun:/tmp/restart_ss.tmp;
+}
+
+create_json () {
+    echo '{' > $JSON_FILE.tmp
+    sed -E 's/(.*)/    \1/' $TMPL_FILE >> $JSON_FILE.tmp
+    awk '
+    BEGIN {
+        i=1;
+        printf("    \"port_password\": {\n");
+    }
+    ! /^#|^\s*$/ {
+        port=$1;
+        pw=$2;
+        ports[i++] = port;
+        pass[port]=pw;
+    }
+    END {
+        for(j=1;j<i;j++) {
+            port=ports[j];
+            printf("        \"%s\": \"%s\"", port, pass[port]);
+            if(j<i-1) printf(",");
+            printf("\n");
+        }
+        printf("    }\n");
+    }
+    ' $USER_FILE >> $JSON_FILE.tmp
+    echo '}' >> $JSON_FILE.tmp
+    mv $JSON_FILE.tmp $JSON_FILE
+}
+
 ##############################################################
 if [ "$#" -eq 0 ]; then
     usage
@@ -452,6 +529,11 @@ case $1 in
     run )
         shift
         run_$1 $2 $3
+        ;;
+    master_run )
+        shift
+        ss_to_client
+        ppp_to_client
         ;;
     sync )
         shift
