@@ -76,17 +76,6 @@ init() {
     mkdir /var/local/log
 }
 
-sync(){
-    scp $HOME/.ssh/_ssh.tgz aliyun:/root
-    scp $HOME/.ssh/_ssh.tgz tokyo2:/root
-    scp $HOME/.ssh/_ssh.tgz tokyo3:/root
-
-    scp /var/local/cron/every_minute.sh tokyo2:/var/local/cron/every_minute.sh
-    scp /var/local/cron/every_minute.sh tokyo3:/var/local/cron/every_minute.sh
-    scp /var/local/cron/every_minute.sh aliyun:/var/local/cron/every_minute.sh
-
-
-}
 
 hostrenme(){
 hostnamectl set-hostname tokyo2
@@ -419,6 +408,15 @@ run_cron(){
     # * * * * * /var/local/cron/every_minute.www-data.sh >> /var/local/cron/every_minute.log 2>&1
 }
 
+sync(){
+    scp $HOME/.ssh/_ssh.tgz aliyun:/root
+    scp $HOME/.ssh/_ssh.tgz tokyo2:/root
+    scp $HOME/.ssh/_ssh.tgz tokyo3:/root
+
+    scp /var/local/cron/every_minute.sh tokyo2:/var/local/cron/every_minute.sh
+    scp /var/local/cron/every_minute.sh tokyo3:/var/local/cron/every_minute.sh
+    scp /var/local/cron/every_minute.sh aliyun:/var/local/cron/every_minute.sh
+}
 ppp_to_client(){
 PPP="/var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets";
 PPPD="/etc/ppp/chap-secrets";
@@ -532,6 +530,7 @@ case $1 in
         ;;
     master_run )
         shift
+        sync
         ss_to_client
         ppp_to_client
         ;;
