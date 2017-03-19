@@ -83,8 +83,8 @@ if [ $FLAG -eq 1 ]; then
   scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo2:/etc/ppp/chap-secrets;
   scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo2:/tmp/restart_ppp.tmp;
 
-  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo3:/etc/ppp/chap-secrets;
-  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo3:/tmp/restart_ppp.tmp;
+#  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo3:/etc/ppp/chap-secrets;
+#  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo3:/tmp/restart_ppp.tmp;
 
   scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets aliyun:/etc/ppp/chap-secrets;
   scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets aliyun:/tmp/restart_ppp.tmp;
@@ -119,8 +119,8 @@ if [ $FLAG -eq 1 ]; then
   scp $JSON_FILE tokyo2:/var/local/ss-bash/ssmlt.json;
   scp $JSON_FILE tokyo2:/tmp/restart_ss.tmp;
 
-  scp $JSON_FILE tokyo3:/var/local/ss-bash/ssmlt.json;
-  scp $JSON_FILE tokyo3:/tmp/restart_ss.tmp;
+#  scp $JSON_FILE tokyo3:/var/local/ss-bash/ssmlt.json;
+#  scp $JSON_FILE tokyo3:/tmp/restart_ss.tmp;
 
   scp $JSON_FILE aliyun:/var/local/ss-bash/ssmlt.json;
   scp $JSON_FILE aliyun:/tmp/restart_ss.tmp;

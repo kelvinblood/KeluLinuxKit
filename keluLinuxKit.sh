@@ -337,7 +337,7 @@ EOF
     cp $RESOURCE/ppp/chap-secrets /etc/ppp/chap-secrets
     touch /etc/ipsec.secrets
 cat >> /etc/ipsec.secrets << EOF
-$IP   %any:  PSK "kelu.org"
+$IP   %any:  PSK "jp.kelu.org"
 EOF
 
     echo 1 > /proc/sys/net/ipv4/ip_forward
