@@ -452,8 +452,6 @@ echo 'check ppp'
 PPP="/var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets";
 PPPD="/etc/ppp/chap-secrets";
 
-FLAG=`cmp_file $PPP $PPPD`;
-if [ $FLAG -eq 1 ]; then
   touch $PPP
   cp $PPP $PPPD;
   cp $PPP /tmp/restart_ppp.tmp;
@@ -463,7 +461,6 @@ if [ $FLAG -eq 1 ]; then
 
   scp $PPP aliyun:/etc/ppp/chap-secrets;
   scp $PPP aliyun:/tmp/restart_ppp.tmp;
-fi
 }
 
 ss_to_client(){
@@ -471,8 +468,6 @@ echo 'check ss'
 SS="/var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/ssusers";
 SSD="/var/local/ss-bash/ssusers";
 
-FLAG=`cmp_file $SS $SSD`;
-if [ $FLAG -eq 1 ]; then
   touch $SS
   cp $SS $USER_FILE;
   create_json
@@ -481,7 +476,6 @@ if [ $FLAG -eq 1 ]; then
 
   scp $JSON_FILE aliyun:/var/local/ss-bash/ssmlt.json;
   scp $JSON_FILE aliyun:/tmp/restart_ss.tmp;
-fi
 }
 create_json () {
     echo '{' > $JSON_FILE.tmp
