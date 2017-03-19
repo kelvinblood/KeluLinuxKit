@@ -470,8 +470,8 @@ SSD="/var/local/ss-bash/ssusers";
   scp $JSON_FILE tokyo2:/var/local/ss-bash/ssmlt.json;
   scp $JSON_FILE tokyo2:/tmp/restart_ss.tmp;
 
-  scp $JSON_FILE tokyo3:/var/local/ss-bash/ssmlt.json;
-  scp $JSON_FILE tokyo3:/tmp/restart_ss.tmp;
+#  scp $JSON_FILE tokyo3:/var/local/ss-bash/ssmlt.json;
+#  scp $JSON_FILE tokyo3:/tmp/restart_ss.tmp;
 
   scp $JSON_FILE aliyun:/var/local/ss-bash/ssmlt.json;
   scp $JSON_FILE aliyun:/tmp/restart_ss.tmp;
