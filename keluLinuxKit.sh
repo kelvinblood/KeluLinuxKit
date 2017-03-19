@@ -158,7 +158,6 @@ install_() {
     cat $DIR/install_help.md
 }
 
-
 install_iptable() {
     cd $HOME
     # iptables
@@ -275,6 +274,16 @@ install_pgsql(){
     apt-get update
     apt-get -y upgrade
     apt-get -y install postgresql-9.4 pgadmin3
+
+    cd /var/local
+    if [ ! -e '/var/local/pg_dump' ]; then
+        mkdir '/var/local/pg_dump'
+        chown postgres pg_dump
+    fi
+
+    cd pg_dump
+    cp $RESOURCE/pg/pg_backup.sh ./
+    cp $RESOURCE/pg/pg_restore.sh ./
 }
 
 install_composer(){
@@ -412,8 +421,8 @@ sync(){
     scp $HOME/.ssh/_ssh.tgz tokyo2:/root
     scp /var/local/cron/every_minute.sh tokyo2:/var/local/cron/every_minute.sh
 
-    scp $HOME/.ssh/_ssh.tgz tokyo3:/root
-    scp /var/local/cron/every_minute.sh tokyo3:/var/local/cron/every_minute.sh
+#    scp $HOME/.ssh/_ssh.tgz tokyo3:/root
+#    scp /var/local/cron/every_minute.sh tokyo3:/var/local/cron/every_minute.sh
 
     scp $HOME/.ssh/_ssh.tgz aliyun:/root
     scp /var/local/cron/every_minute.sh aliyun:/var/local/cron/every_minute.sh
@@ -428,8 +437,8 @@ PPPD="/etc/ppp/chap-secrets";
   scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo2:/etc/ppp/chap-secrets;
   scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo2:/tmp/restart_ppp.tmp;
 
-  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo3:/etc/ppp/chap-secrets;
-  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo3:/tmp/restart_ppp.tmp;
+#  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo3:/etc/ppp/chap-secrets;
+#  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo3:/tmp/restart_ppp.tmp;
 
   scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets aliyun:/etc/ppp/chap-secrets;
   scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets aliyun:/tmp/restart_ppp.tmp;
@@ -496,6 +505,7 @@ create_json () {
     mv $JSON_FILE.tmp $JSON_FILE
 }
 
+
 ##############################################################
 if [ "$#" -eq 0 ]; then
     usage
@@ -529,15 +539,11 @@ case $1 in
         shift
         run_$1 $2 $3
         ;;
-    master_run )
+    sync )
         shift
         sync
         ss_to_client
         ppp_to_client
-        ;;
-    sync )
-        shift
-        sync
         ;;
     * )
         usage
