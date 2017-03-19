@@ -102,6 +102,7 @@ FLAG=`cmp_file $SS $SSD`;
 if [ $FLAG -eq 1 ]; then
   touch $SS
   cp $SS $USER_FILE;
+  cp $SS /tmp/restart_ss.tmp;
   create_json
   scp $JSON_FILE tokyo2:/var/local/ss-bash/ssmlt.json;
   scp $JSON_FILE tokyo2:/tmp/restart_ss.tmp;
