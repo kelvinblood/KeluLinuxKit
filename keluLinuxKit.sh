@@ -418,6 +418,8 @@ run_cron(){
 }
 
 sync(){
+    cp $RESOURCE/cron/every_minute.sh /var/local/cron/every_minute.sh
+
     scp $HOME/.ssh/_ssh.tgz tokyo2:/root
     scp /var/local/cron/every_minute.sh tokyo2:/var/local/cron/every_minute.sh
 
@@ -427,23 +429,6 @@ sync(){
     scp $HOME/.ssh/_ssh.tgz aliyun:/root
     scp /var/local/cron/every_minute.sh aliyun:/var/local/cron/every_minute.sh
 }
-ppp_to_client(){
-PPP="/var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets";
-PPPD="/etc/ppp/chap-secrets";
-
-  cp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets /etc/ppp/chap-secrets;
-  cp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets /tmp/restart_ppp.tmp;
-
-  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo2:/etc/ppp/chap-secrets;
-  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo2:/tmp/restart_ppp.tmp;
-
-#  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo3:/etc/ppp/chap-secrets;
-#  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo3:/tmp/restart_ppp.tmp;
-
-  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets aliyun:/etc/ppp/chap-secrets;
-  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets aliyun:/tmp/restart_ppp.tmp;
-}
-
 check_if_update(){
     if [ -e /tmp/restart_ppp.tmp ]; then
         echo 'restart ppp';
@@ -461,22 +446,43 @@ check_if_update(){
     fi
 }
 
+
+ppp_to_client(){
+echo 'check ppp'
+PPP="/var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets";
+PPPD="/etc/ppp/chap-secrets";
+
+FLAG=`cmp_file $PPP $PPPD`;
+if [ $FLAG -eq 1 ]; then
+  touch $PPP
+  cp $PPP $PPPD;
+  cp $PPP /tmp/restart_ppp.tmp;
+
+  scp $PPP tokyo2:/etc/ppp/chap-secrets;
+  scp $PPP tokyo2:/tmp/restart_ppp.tmp;
+
+  scp $PPP aliyun:/etc/ppp/chap-secrets;
+  scp $PPP aliyun:/tmp/restart_ppp.tmp;
+fi
+}
+
 ss_to_client(){
+echo 'check ss'
 SS="/var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/ssusers";
 SSD="/var/local/ss-bash/ssusers";
 
-  cp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/ssusers $USER_FILE;
+FLAG=`cmp_file $SS $SSD`;
+if [ $FLAG -eq 1 ]; then
+  touch $SS
+  cp $SS $USER_FILE;
   create_json
   scp $JSON_FILE tokyo2:/var/local/ss-bash/ssmlt.json;
   scp $JSON_FILE tokyo2:/tmp/restart_ss.tmp;
 
-#  scp $JSON_FILE tokyo3:/var/local/ss-bash/ssmlt.json;
-#  scp $JSON_FILE tokyo3:/tmp/restart_ss.tmp;
-
   scp $JSON_FILE aliyun:/var/local/ss-bash/ssmlt.json;
   scp $JSON_FILE aliyun:/tmp/restart_ss.tmp;
+fi
 }
-
 create_json () {
     echo '{' > $JSON_FILE.tmp
     sed -E 's/(.*)/    \1/' $TMPL_FILE >> $JSON_FILE.tmp
