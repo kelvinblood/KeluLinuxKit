@@ -57,8 +57,11 @@ M=`get_file_m $FILE1`;
 DH=`get_file_h $FILE2`;
 DM=`get_file_m $FILE2`;
 
+# 默认需要更新
 FLAG=1;
-# 目标文件更新时间 大于 源文件
+# 目标文件更新时间 大于 源文件,则不需要更新了。
+
+# 目标文件小时大于源文件，则不更新
 if [ $DH -gt $H ]; then
     FLAG=0;
     # 文件更新小时相等，目标文件更新分钟大于源文件，还是不需要改
@@ -78,14 +81,15 @@ PPPD="/etc/ppp/chap-secrets";
 
 FLAG=`cmp_file $PPP $PPPD`;
 if [ $FLAG -eq 1 ]; then
-  cp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets /etc/ppp/chap-secrets;
-  cp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets /tmp/restart_ppp.tmp;
+  touch $PPP
+  cp $PPP $PPPD;
+  cp $PPP /tmp/restart_ppp.tmp;
 
-  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo2:/etc/ppp/chap-secrets;
-  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets tokyo2:/tmp/restart_ppp.tmp;
+  scp $PPP tokyo2:/etc/ppp/chap-secrets;
+  scp $PPP tokyo2:/tmp/restart_ppp.tmp;
 
-  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets aliyun:/etc/ppp/chap-secrets;
-  scp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets aliyun:/tmp/restart_ppp.tmp;
+  scp $PPP aliyun:/etc/ppp/chap-secrets;
+  scp $PPP aliyun:/tmp/restart_ppp.tmp;
 fi
 }
 
@@ -113,7 +117,8 @@ SSD="/var/local/ss-bash/ssusers";
 
 FLAG=`cmp_file $SS $SSD`;
 if [ $FLAG -eq 1 ]; then
-  cp /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/ssusers $USER_FILE;
+  touch $SS
+  cp $SS $USER_FILE;
   create_json
   scp $JSON_FILE tokyo2:/var/local/ss-bash/ssmlt.json;
   scp $JSON_FILE tokyo2:/tmp/restart_ss.tmp;
@@ -135,9 +140,10 @@ REMOTE_CONTENT="type=$type&client=$client&ifconfig=$ifconfig";
 }
 
 if [ `hostname` = 'tokyo' ]; then
+echo 'i am host';
 ppp_to_client
 ss_to_client
-heartbeat
+#heartbeat
 # cmp_file /var/local/fpm-pools/wechat/www/storage/app/vpn/ppp/chap-secrets /etc/ppp/chap-secrets
 fi
 
