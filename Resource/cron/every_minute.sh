@@ -58,16 +58,16 @@ DH=`get_file_h $FILE2`;
 DM=`get_file_m $FILE2`;
 
 # 默认需要更新
-FLAG=1;
+FLAG=0;
 # 目标文件更新时间 大于 源文件,则不需要更新了。
 
-# 目标文件小时大于源文件，则不更新
-if [ $DH -gt $H ]; then
-    FLAG=0;
-    # 文件更新小时相等，目标文件更新分钟大于源文件，还是不需要改
+# 目标文件小时小于源文件，则更新
+if [ $H -gt $DH ]; then
+    FLAG=1;
+    # 文件更新小时相等，目标文件更新分钟小于源文件，需要改
   elif [ $DH -eq $H ]; then
-    if [ $DM -gt $M ]; then
-    FLAG=0;
+    if [ $M -gt $DM ]; then
+    FLAG=1;
     fi
 fi
 
