@@ -409,12 +409,13 @@ run_cron(){
 }
 
 sync(){
-    scp $HOME/.ssh/_ssh.tgz aliyun:/root
     scp $HOME/.ssh/_ssh.tgz tokyo2:/root
-    scp $HOME/.ssh/_ssh.tgz tokyo3:/root
-
     scp /var/local/cron/every_minute.sh tokyo2:/var/local/cron/every_minute.sh
+
+    scp $HOME/.ssh/_ssh.tgz tokyo3:/root
     scp /var/local/cron/every_minute.sh tokyo3:/var/local/cron/every_minute.sh
+
+    scp $HOME/.ssh/_ssh.tgz aliyun:/root
     scp /var/local/cron/every_minute.sh aliyun:/var/local/cron/every_minute.sh
 }
 ppp_to_client(){
