@@ -15,6 +15,9 @@ a tools to setup your dev environment on Debian. Now we are developing on the wa
 * lnmp(optional)
 
 ## Install
+
+    KeluLinuxKit.sh init
+
 ## Customize
 ## Uninstall
 ## Contribute

@@ -1,0 +1,15 @@
+require-mschap-v2
+ms-dns 8.8.8.8
+ms-dns 8.8.4.4
+auth
+# mtu 1200
+# mru 1000
+mtu 1410
+mru 1410
+crtscts
+hide-password
+modem
+name l2tpd
+proxyarp
+lcp-echo-interval 30
+lcp-echo-failure 4

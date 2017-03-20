@@ -1,0 +1,9 @@
+用法：
+    显示版本：
+        KeluLinuxKit.sh -v|v|version
+    显示帮助：
+        KeluLinuxKit.sh [-h|h|help]
+     安装:
+        KeluLinuxKit.sh install xxx
+     全部安装:
+        KeluLinuxKit.sh install all

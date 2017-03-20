@@ -4,9 +4,9 @@
 #          49100:49600              59999-61000
 
 # VPN postrouting
--A POSTROUTING -s 10.152.1.0/24 -o eth0 -j MASQUERADE
+-A POSTROUTING -s 10.99.99.0/24 -o eth0 -j MASQUERADE
+-A POSTROUTING -s 10.152.2.0/24 -o eth0 -j MASQUERADE
 -A POSTROUTING -s 10.8.1.0/24 -o eth0 -j MASQUERADE
--A POSTROUTING -s 10.8.2.0/24 -o eth0 -j MASQUERADE
 
 COMMIT
 
@@ -16,6 +16,11 @@ COMMIT
 -A INPUT -i lo -j ACCEPT
 -A INPUT ! -i lo -d 127.0.0.0/8 -j REJECT
 
+# docker
+# -A INPUT -i docker -j ACCEPT
+# -A FORWARD -i eth0 -o docker0 -j ACCEPT
+# -A FORWARD -o eth0 -i docker0 -j ACCEPT
+
 # Accepts all established inbound connections
 -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
@@ -24,7 +29,7 @@ COMMIT
 -A OUTPUT -j ACCEPT
 
 # Allows SSH connections
--A INPUT -p tcp -m state --state NEW --dport 1344 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW --dport 22 -j ACCEPT
 # sshd
 -A INPUT -p tcp --dport 7070 -j ACCEPT
 
@@ -39,6 +44,7 @@ COMMIT
 -A INPUT -p tcp --dport 21 -j ACCEPT
 -A INPUT -p tcp --dport 11344 -j ACCEPT
 -A INPUT -p tcp --dport 49100:49600 -j ACCEPT
+-A INPUT -p udp --dport 49100:49600 -j ACCEPT
 
 # Allows DNS connection
 -A INPUT -p tcp --dport 53 -j ACCEPT
@@ -57,6 +63,11 @@ COMMIT
 -A INPUT -p tcp --dport 587 -j ACCEPT
 -A INPUT -p udp --dport 587 -j ACCEPT
 
+# Allows IMAP connection
+-A INPUT -p tcp --dport 5432 -j ACCEPT
+-A INPUT -p udp --dport 5432 -j ACCEPT
+
+
 # allow VNC
 # -A INPUT -p tcp --dport 31344:31347 -j ACCEPT
 # -A INPUT -p tcp --dport 5901:5905 -j ACCEPT
@@ -71,26 +82,31 @@ COMMIT
 
 # Allows SSH connections
 -A INPUT -p tcp -m state --state NEW --dport 22 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW --dport 1344 -j ACCEPT
 # sshd
 -A INPUT -p tcp --dport 7070 -j ACCEPT
 
 # ut
 -A INPUT -p tcp --dport 61344 -j ACCEPT
 -A INPUT -p tcp --dport 59999:61000 -j ACCEPT
+-A INPUT -p udp --dport 59999:61000 -j ACCEPT
+
 # PPTP
 -A INPUT -p tcp --dport 1723 -j ACCEPT
 -A INPUT -p gre -j ACCEPT
--A INPUT -i eth0 -s 10.152.1.0/24 -j ACCEPT
--A FORWARD -i eth0 -d 10.152.1.0/24 -j ACCEPT
--A FORWARD -o eth0 -s 10.152.1.0/24 -j ACCEPT
+-A FORWARD -d 10.99.99.0/24 -j ACCEPT
+-A FORWARD -s 10.99.99.0/24 -j ACCEPT
 
 # L2TP
 -A INPUT -p udp --dport 1701 -j ACCEPT
 # IPSec
-# -A INPUT -p udp --dport 500 -j ACCEPT
-# -A INPUT -p udp --dport 4500 -j ACCEPT
-# -A FORWARD -i eth0 -d 10.152.2.0/24 -j ACCEPT
-# -A FORWARD -o eth0 -s 10.152.2.0/24 -j ACCEPT
+-A INPUT -p udp --dport 500 -j ACCEPT
+-A INPUT -p tcp --dport 500 -j ACCEPT
+-A INPUT -p udp --dport 4500 -j ACCEPT
+-A INPUT -p tcp --dport 4500 -j ACCEPT
+-A INPUT -i eth0 -s 10.152.2.0/24 -j ACCEPT
+-A FORWARD -i eth0 -d 10.152.2.0/24 -j ACCEPT
+-A FORWARD -o eth0 -s 10.152.2.0/24 -j ACCEPT
 
 #OpenVPN
 -A INPUT -p udp --dport 21344 -j ACCEPT
@@ -99,6 +115,16 @@ COMMIT
 -A FORWARD -o eth0 -s 10.8.1.0/24 -j ACCEPT
 -A FORWARD -i eth0 -d 10.8.2.0/24 -j ACCEPT
 -A FORWARD -o eth0 -s 10.8.2.0/24 -j ACCEPT
+
+# ShadowSocks
+-A INPUT -p tcp --dport 21346 -j ACCEPT
+-A INPUT -p udp --dport 21346 -j ACCEPT
+#-A INPUT -p tcp --dport 49100:49600 -j ACCEPT
+
+# kcptun
+-A INPUT -p udp --dport 29900 -j ACCEPT
+-A INPUT -p udp --dport 29901 -j ACCEPT
+
 
 # Squid3
 

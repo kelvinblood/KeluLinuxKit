@@ -1,0 +1,15 @@
+LC_ALL="en_US.utf8"
+LOG_HOME=/var/local/log
+DATA_HOME=/var/local/data
+UPLOAD_HOME=/var/local/upload
+
+PHP_HOME=/usr/share/php5.6
+FPM_POOL_HOME=/var/local/fpm-pools
+
+OPENRESTY_HOME=/usr/share/openresty
+NGINX_HOME=/usr/share/openresty/nginx
+LD_LIBRARY_PATH=/usr/share/lib
+
+JAVA_HOME=/usr/share/jdk1.8
+CLASSPATH=.:/usr/share/jdk1.8/lib
+JETTY_HOME=/usr/share/jetty9.3
