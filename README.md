@@ -20,3 +20,7 @@ a tools to setup your dev environment on Debian.
 
     ./keluLinuxKit.sh install all
     ./keluLinuxKit.sh run all
+
+## screenshot
+
+![](http://7vigrt.com1.z0.glb.clouddn.com/blog/pic/201703/20170320215121.jpg)
