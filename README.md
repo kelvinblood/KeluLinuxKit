@@ -14,7 +14,7 @@ a tools to setup your dev environment on Debian.
 * docker_pptp
 * docker_shadowsocks
 * l2tp
-* server-client pptp & shadowsocks
+* Clusters pptp & shadowsocks
 
 ## Install
 
