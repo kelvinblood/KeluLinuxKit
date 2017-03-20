@@ -1,23 +1,22 @@
 # KeluLinuxKit
-a tools to setup your dev environment on Debian. Now we are developing on the way, be careful and don't try it for your working environment.
+a tools to setup your dev environment on Debian. 
 
 ## Waht's in it
-* personal .bashrc
-* Maximum Awesome for Linux
+* oh my zsh
+* Maximum Awesome 
 * tmux-powerline
 * iptables
-* mutt & msmtp
-* PPTP
-* dropbox
-* transmission
-* xrdp
-* github
-* lnmp(optional)
+* openresty
+* php5.6
+* postgresql9.4
+* composer
+* docker
+* docker_pptp
+* docker_shadowsocks
+* l2tp
+* server-client pptp & shadowsocks
 
 ## Install
 
-    KeluLinuxKit.sh init
-
-## Customize
-## Uninstall
-## Contribute
+    ./keluLinuxKit.sh install all
+    ./keluLinuxKit.sh run all
