@@ -455,7 +455,7 @@ sync(){
         rm $HOME/.ssh/_ssh.tgz
     fi
 
-    tar -czvf $HOME/.ssh/_ssh.tgz *
+    tar -czvf $HOME/.ssh/_ssh.tgz $HOME/.ssh/*
 
     scp $HOME/.ssh/_ssh.tgz tokyo2:/root
     scp /var/local/cron/every_minute.sh tokyo2:/var/local/cron/every_minute.sh
