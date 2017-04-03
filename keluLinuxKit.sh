@@ -451,14 +451,23 @@ run_cron(){
 sync(){
     cp $RESOURCE/cron/every_minute.sh /var/local/cron/every_minute.sh
 
+    if [ -e $HOME/.ssh/_ssh.tgz ]; then
+        rm $HOME/.ssh/_ssh.tgz
+    fi
+
+    tar -czvf $HOME/.ssh/_ssh.tgz *
+
     scp $HOME/.ssh/_ssh.tgz tokyo2:/root
     scp /var/local/cron/every_minute.sh tokyo2:/var/local/cron/every_minute.sh
+    scp /etc/hosts tokyo2:/etc/hosts
 
     scp $HOME/.ssh/_ssh.tgz hk1:/root
     scp /var/local/cron/every_minute.sh hk1:/var/local/cron/every_minute.sh
+    scp /etc/hosts hk1:/etc/hosts
 
     scp $HOME/.ssh/_ssh.tgz aliyun:/root
     scp /var/local/cron/every_minute.sh aliyun:/var/local/cron/every_minute.sh
+    scp /etc/hosts aliyun:/etc/hosts
 }
 check_if_update(){
     if [ -e /tmp/restart_ppp.tmp ]; then
@@ -492,6 +501,9 @@ PPPD="/etc/ppp/chap-secrets";
 
   scp $PPP aliyun:/etc/ppp/chap-secrets;
   scp $PPP aliyun:/tmp/restart_ppp.tmp;
+
+  scp $PPP hk1:/etc/ppp/chap-secrets;
+  scp $PPP hk1:/tmp/restart_ppp.tmp;
 }
 
 ss_to_client(){
@@ -507,6 +519,9 @@ SSD="/var/local/ss-bash/ssusers";
 
   scp $JSON_FILE aliyun:/var/local/ss-bash/ssmlt.json;
   scp $JSON_FILE aliyun:/tmp/restart_ss.tmp;
+
+  scp $JSON_FILE hk1:/var/local/ss-bash/ssmlt.json;
+  scp $JSON_FILE hk1:/tmp/restart_ss.tmp;
 }
 create_json () {
     echo '{' > $JSON_FILE.tmp
