@@ -90,6 +90,9 @@ if [ $FLAG -eq 1 ]; then
 
   scp $PPP aliyun:/etc/ppp/chap-secrets;
   scp $PPP aliyun:/tmp/restart_ppp.tmp;
+
+  scp $PPP hk1:/etc/ppp/chap-secrets;
+  scp $PPP hk1:/tmp/restart_ppp.tmp;
 fi
 }
 
@@ -109,6 +112,9 @@ if [ $FLAG -eq 1 ]; then
 
   scp $JSON_FILE aliyun:/var/local/ss-bash/ssmlt.json;
   scp $JSON_FILE aliyun:/tmp/restart_ss.tmp;
+
+  scp $JSON_FILE hk1:/var/local/ss-bash/ssmlt.json;
+  scp $JSON_FILE hk1:/tmp/restart_ss.tmp;
 fi
 }
 
