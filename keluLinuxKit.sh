@@ -87,6 +87,7 @@ install_all() {
     install_lnmp
     install_docker
     install_l2tp
+    install_snmp
     reboot
 }
 
@@ -100,6 +101,7 @@ run_all(){
     run_php
     run_docker_ss
     run_docker_pptp
+    run_snmp
     run_cron
 }
 install_zsh() {
@@ -365,6 +367,35 @@ install_docker(){
     systemctl start docker
 }
 
+install_snmp(){
+    cd $DOWNLOAD
+    apt-get -y install libperl-dev
+    wget https://jaist.dl.sourceforge.net/project/net-snmp/net-snmp/5.7.3/net-snmp-5.7.3.tar.gz
+    tar -xzvf net-snmp-5.7.3.tar.gz
+    cd net-snmp-5.7.3
+    ./configure --prefix=/usr/local/snmp --with-mib-modules=ucd-snmp/diskio
+    make
+    make install
+cat >> /usr/local/snmp/share/snmp/snmpd.conf << EOF
+rouser kelu auth
+EOF
+
+    if [ ! -e '/var/net-snmp' ]; then
+        mkdir '/var/net-snmp'
+        chown postgres pg_dump
+    fi
+
+    touch '/var/net-snmp/snmpd.conf'
+cat >> /var/net-snmp/snmpd.conf << EOF
+createUser snmpdjkb MD5 snmpdjkb
+EOF
+}
+
+run_snmp(){
+    killall -9 snmpd
+    /usr/local/snmp/sbin/snmpd
+}
+
 install_docker_ss(){
     if hash docker 2>/dev/null; then
         install_docker
@@ -423,8 +454,8 @@ sync(){
     scp $HOME/.ssh/_ssh.tgz tokyo2:/root
     scp /var/local/cron/every_minute.sh tokyo2:/var/local/cron/every_minute.sh
 
-#    scp $HOME/.ssh/_ssh.tgz tokyo3:/root
-#    scp /var/local/cron/every_minute.sh tokyo3:/var/local/cron/every_minute.sh
+    scp $HOME/.ssh/_ssh.tgz hk1:/root
+    scp /var/local/cron/every_minute.sh hk1:/var/local/cron/every_minute.sh
 
     scp $HOME/.ssh/_ssh.tgz aliyun:/root
     scp /var/local/cron/every_minute.sh aliyun:/var/local/cron/every_minute.sh
