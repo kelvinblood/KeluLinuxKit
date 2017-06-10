@@ -31,10 +31,7 @@ JSON_FILE=/var/local/ss-bash/ssmlt.json
 USER_FILE=/var/local/ss-bash/ssusers
 TMPL_FILE=/var/local/ss-bash/ssmlt.template
 
-
-
 LONGBIT=`getconf LONG_BIT`
-
 
 IP=`ifconfig eth0 | grep "inet addr" | awk '{ print $2}' | awk -F: '{print $2}'`
 
@@ -211,7 +208,7 @@ install_openresty(){
     wget https://openresty.org/download/ngx_openresty-1.9.7.1.tar.gz
     tar -xzvf ngx_openresty-1.9.7.1.tar.gz
     cd ngx_openresty-1.9.7.1/
-    ./configure --prefix=/usr/share/openresty --with-pcre-jit --with-http_postgres_module --with-http_iconv_module
+    ./configure --prefix=/usr/share/openresty --with-pcre-jit --with-http_postgres_module --with-http_iconv_module --with-http_stub_status_module
     make && make install
 
     mkdir /var/local/nginx
