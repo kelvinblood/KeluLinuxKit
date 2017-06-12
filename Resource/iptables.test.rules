@@ -43,8 +43,8 @@ COMMIT
 -A INPUT -p tcp --dport 20 -j ACCEPT
 -A INPUT -p tcp --dport 21 -j ACCEPT
 -A INPUT -p tcp --dport 11344 -j ACCEPT
--A INPUT -p tcp --dport 49100:49600 -j ACCEPT
--A INPUT -p udp --dport 49100:49600 -j ACCEPT
+-A INPUT -p tcp --dport 49099:59900 -j ACCEPT
+-A INPUT -p udp --dport 49099:59900 -j ACCEPT
 
 # Allows DNS connection
 -A INPUT -p tcp --dport 53 -j ACCEPT
@@ -63,10 +63,13 @@ COMMIT
 -A INPUT -p tcp --dport 587 -j ACCEPT
 -A INPUT -p udp --dport 587 -j ACCEPT
 
-# Allows IMAP connection
+# Allows postgres connection
 -A INPUT -p tcp --dport 5432 -j ACCEPT
 -A INPUT -p udp --dport 5432 -j ACCEPT
 
+# snmp
+-A INPUT -i eth0 -p udp -s 60.195.252.107 --dport 161 -j ACCEPT
+-A INPUT -i eth0 -p udp -s 60.195.252.110 --dport 161 -j ACCEPT
 
 # allow VNC
 # -A INPUT -p tcp --dport 31344:31347 -j ACCEPT
@@ -90,6 +93,10 @@ COMMIT
 -A INPUT -p tcp --dport 61344 -j ACCEPT
 -A INPUT -p tcp --dport 59999:61000 -j ACCEPT
 -A INPUT -p udp --dport 59999:61000 -j ACCEPT
+
+# disqus
+-A INPUT -p tcp --dport 2345 -j ACCEPT
+-A INPUT -p udp --dport 2345 -j ACCEPT
 
 # PPTP
 -A INPUT -p tcp --dport 1723 -j ACCEPT
@@ -125,10 +132,6 @@ COMMIT
 -A INPUT -p udp --dport 29900 -j ACCEPT
 -A INPUT -p udp --dport 29901 -j ACCEPT
 
-# snmp
--A INPUT -i eth0 -p udp -s 60.195.252.107 --dport 161 -j ACCEPT
--A INPUT -i eth0 -p udp -s 60.195.252.110 --dport 161 -j ACCEPT
-
 
 # Squid3
 
@@ -145,5 +148,7 @@ COMMIT
 # Reject all other inbound - default deny unless explicitly allowed policy:
 -A INPUT -j REJECT
 -A FORWARD -j REJECT
+# -A INPUT -j ACCEPT
+# -A FORWARD -j ACCEPT
 
 COMMIT
