@@ -68,15 +68,16 @@ init() {
     locale-gen zh_CN.UTF-8
     locale-gen
     apt-get update && apt-get -y autoremove && apt-get -y upgrade
-    apt-get -y install vim git ruby zip sudo git rake htop iftop wget
+    apt-get -y install vim git ruby zip sudo git rake htop iftop wget curl aptitude
 
     mkdir /var/local/log
 }
 
 
 hostrenme(){
-hostnamectl set-hostname tokyo2
+    hostnamectl set-hostname tokyo2
 }
+
 install_all() {
     init
     install_zsh
@@ -101,6 +102,7 @@ run_all(){
     run_snmp
     run_cron
 }
+
 install_zsh() {
     apt-get -y install zsh tmux
     # zsh重启生效引入zsh增强插件,支持git,rails等补全，可选多种外观皮肤
@@ -237,7 +239,8 @@ install_php(){
     wget http://php.net/distributions/php-5.6.16.tar.gz
     tar -xzvf php-5.6.16.tar.gz
     cd php-5.6.16
-    ./configure --prefix /usr/share/php5.6 --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --with-pcre-regex --with-openssl=shared --with-kerberos --with-zlib=shared --enable-bcmath=shared --with-bz2=shared --enable-calendar=shared --with-curl=shared --enable-exif=shared --with-gd=shared --with-jpeg-dir=/usr/include/jpeg8 --with-png-dir=/usr/include/libpng12 --with-gettext=shared --with-gmp=shared --with-mhash=shared --enable-intl=shared --enable-mbstring=shared --with-mcrypt=shared --enable-opcache --with-pdo-pgsql=shared --with-pgsql=shared --enable-shmop=shared --enable-soap=shared --enable-sockets=shared --with-xsl=shared --enable-zip=shared
+    ./configure --prefix /usr/share/php7 --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --with-pcre-regex --with-openssl=shared --with-kerberos --with-zlib=shared --enable-bcmath=shared --with-bz2=shared --enable-calendar=shared --with-curl=shared --enable-exif=shared --with-gd=shared --with-jpeg-dir=/usr/include/jpeg8 --with-png-dir=/usr/include/libpng12 --with-gettext=shared --with-gmp=shared --with-mhash=shared --enable-intl=shared --enable-mbstring=shared --with-mcrypt=shared --enable-opcache --with-pdo-pgsql=shared --with-pgsql=shared --enable-shmop=shared --enable-soap=shared --enable-sockets=shared --with-xsl=shared --enable-zip=shared
+#    ./configure --prefix /usr/share/php5.6 --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --with-pcre-regex --with-openssl=shared --with-kerberos --with-zlib=shared --enable-bcmath=shared --with-bz2=shared --enable-calendar=shared --with-curl=shared --enable-exif=shared --with-gd=shared --with-jpeg-dir=/usr/include/jpeg8 --with-png-dir=/usr/include/libpng12 --with-gettext=shared --with-gmp=shared --with-mhash=shared --enable-intl=shared --enable-mbstring=shared --with-mcrypt=shared --enable-opcache --with-pdo-pgsql=shared --with-pgsql=shared --enable-shmop=shared --enable-soap=shared --enable-sockets=shared --with-xsl=shared --enable-zip=shared
     make clean && make && make install
     make test
 

@@ -51,14 +51,15 @@ logData_send=`echo "scale=2;$BYTES_SENT/1024/1024"|bc`   # KB
 logData_rcvd=`echo "scale=2;$BYTES_RCVD/1024/1024"|bc`   # KB
 logDataSumMB=`echo "scale=2;( $BYTES_SENT + $BYTES_RCVD )/1024/1024"|bc` # MB
 logAve=`echo "scale=2;$logDataSumMB * 1024 / $CONNECT_TIME"|bc` # kb/s
+client=`$HOST`;
 
 STARTTIME=$(date +%Y-%m-%d_%H:%M:%S -d "$CONNECT_TIME seconds ago");
 
 logFile='/var/log/pptpd.warn.log';
-echo "$STARTTIME - $NOWTIME, $PEERNAME,$PPP_IPPARAM,$logDataSumMB MB,$logAve kb/s,$PPP_IFACE,$PPP_TTY,$PPP_LOCAL,$PPP_REMOTE" >> $logFile;
+echo "$client $STARTTIME - $NOWTIME, $PEERNAME,$PPP_IPPARAM,$logDataSumMB MB,$logAve kb/s,$PPP_IFACE,$PPP_TTY,$PPP_LOCAL,$PPP_REMOTE" >> $logFile;
 
 # remote
-REMOTE_CONTENT="type=offline&client=tokyo&username=$PEERNAME&iface=$PPP_IFACE&tty=$PPP_TTY&local=$PPP_LOCAL&remote=$PPP_REMOTE&ipparam=$PPP_IPPARAM&started_at=$STARTTIME&created_at=$NOWTIME&ended_at=$NOWTIME&conn_time=$CONNECT_TIME&data_rev=$BYTES_RCVD&data_send=$BYTES_SENT";
+REMOTE_CONTENT="type=offline&client=$client&username=$PEERNAME&iface=$PPP_IFACE&tty=$PPP_TTY&local=$PPP_LOCAL&remote=$PPP_REMOTE&ipparam=$PPP_IPPARAM&started_at=$STARTTIME&created_at=$NOWTIME&ended_at=$NOWTIME&conn_time=$CONNECT_TIME&data_rev=$BYTES_RCVD&data_send=$BYTES_SENT";
 REMOTERESULT=`curl -d $REMOTE_CONTENT $REMOTEURL`;
 
 #fi

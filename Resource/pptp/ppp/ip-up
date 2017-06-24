@@ -37,9 +37,10 @@ export PPP_TTYNAME
 
 
 REMOTEURL="http://wechat.kelu.org/api/pptp"
+client=`$HOST`;
 
 NOWTIME=`date "+%Y-%m-%d_%H:%M:%S"`
-REMOTE_CONTENT="type=online&client=tokyo&username=$PEERNAME&iface=$PPP_IFACE&tty=$PPP_TTY&local=$PPP_LOCAL&remote=$PPP_REMOTE&ipparam=$PPP_IPPARAM&created_at=$NOWTIME&updated_at=$NOWTIME";
+REMOTE_CONTENT="type=online&client=$client&username=$PEERNAME&iface=$PPP_IFACE&tty=$PPP_TTY&local=$PPP_LOCAL&remote=$PPP_REMOTE&ipparam=$PPP_IPPARAM&created_at=$NOWTIME&updated_at=$NOWTIME";
 REMOTERESULT=`curl -d $REMOTE_CONTENT $REMOTEURL`;
 echo REMOTE_CONTENT >> '/var/log/kelu.log'
 echo REMOTERESULT >> '/var/log/kelu.log'
