@@ -86,6 +86,8 @@ install_all() {
     install_docker
     install_l2tp
     install_snmp
+    install_bbr
+#    install_oneapm
     reboot
 }
 
@@ -367,6 +369,16 @@ install_docker(){
     systemctl start docker
 }
 
+
+install_bbr(){
+    cd $DOWNLOAD
+    wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.10/linux-image-4.10.0-041000-generic_4.10.0-041000.201702191831_amd64.deb
+    dpkg -i linux-image-4.9.6-040906-generic_4.9.6-040906.201701260330_amd64.deb
+
+    echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
+    echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
+}
+
 install_snmp(){
     cd $DOWNLOAD
     apt-get -y install libperl-dev
@@ -550,6 +562,10 @@ create_json () {
     mv $JSON_FILE.tmp $JSON_FILE
 }
 
+install_oneapm(){
+    cd $DOWNLOAD
+    CI_LICENSE_KEY=KEY bash -c "$(curl -L https://download.oneapm.com/oneapm_ci_agent/install_agent.sh)";
+}
 
 ##############################################################
 if [ "$#" -eq 0 ]; then

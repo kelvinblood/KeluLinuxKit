@@ -1,40 +1,4 @@
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 export SSH_KEY_PATH="~/.ssh/admin@kelu.org"
-export LANG="en_US.UTF-8"
-export LC_COLLATE="en_US.UTF-8"
-export LC_CTYPE="en_US.UTF-8"
-export LC_MESSAGES="en_US.UTF-8"
-export LC_MONETARY="en_US.UTF-8"
-export LC_NUMERIC="en_US.UTF-8"
-export LC_TIME="en_US.UTF-8"
-export LC_ALL=
-
-
-alias vi='vim'
-alias dd='df -h'
-alias dudir='du --max-depth=1 -ah 2> /dev/null | sort -hr | head '
-alias p='netstat -antp'
-alias pp='pstree -a'
-alias ta='tail -f /var/log/syslog'
-alias cdlog='cd /var/log'
-alias ss='ssserver -c /etc/kelu/shadowsocksConfig.json -d'
-alias k='/etc/kelu/keluReal.sh'
-alias rm0='find / -type f -name "0" | xargs -i  rm -fr "{}"'
-alias grepall='grep -D skip -nRe'
-alias sour='source ~/.zshrc'
-
-ip() {
-  iptables -F;
-  iptables-restore < /etc/iptables.test.rules;
-  iptables-save > /etc/iptables.up.rules;
-  iptables -L;
-}
-
-alias tn='tmux new -s'
-alias tll='tmux ls'
-alias tt='tmux attach -t'
-alias tk='tmux kill-session -t'
-
 
 function collapse_pwd {
   echo $(pwd | sed -e "s,^$HOME,~,")
@@ -93,32 +57,7 @@ export LC_TIME="en_US.UTF-8"
 export LC_ALL=""
 HOSTNAME=$(hostname)
 
-
-
-
-export LOG_HOME=/var/local/log
-export DATA_HOME=/var/local/data
-export UPLOAD_HOME=/var/local/upload
-
-export PHP_HOME=/usr/share/php5.6
-export FPM_POOL_HOME=/var/local/fpm-pools
-
-export OPENRESTY_HOME=/usr/share/openresty
-export NGINX_HOME=/usr/share/openresty/nginx
-export LD_LIBRARY_PATH=/usr/share/lib
-
-export JAVA_HOME=/usr/share/jdk1.8
-export CLASSPATH=.:/usr/share/jdk1.8/lib
-
-export JETTY_HOME=/usr/share/jetty9.3
-
-export SSADMIN_HOME=/var/local/ss-bash
-
-
-
-
 alias vi='vim'
-alias dd='df -h'
 alias bot='cd /var/local/hubot/slack && HUBOT_SLACK_TOKEN=xoxb-127727276277-zvowbS9yPxisxvrr5EArFs2F ./bin/hubot --adapter slack --name slack 2>&1'
 alias wx='cd /var/local/hubot/wechat && ./bin/hubot --adapter weixin --name weixin 2>&1'
 alias dudir='du --max-depth=1 -ah 2> /dev/null | sort -hr | head '
@@ -127,20 +66,15 @@ alias ppp='netstat -antp'
 alias pp='pstree -a'
 alias pk='pkill -kill -t'
 alias ta='tail -f /var/log/syslog'
-alias tw='tail -f /var/local/fpm-pools/wechat/www/storage/logs/laravel.log'
-alias cdlog='cd /var/log'
-alias cdwww='cd /home/wwwroot/kelu.org'
-alias s='/etc/kelu/keluStatics.sh'
-alias k='/etc/kelu/keluReal.sh'
 alias rm0='find / -type f -name "0" | xargs -i  rm -fr "{}"'
 alias grepall='grep -D skip -nRe'
 alias dr='python /root/Dropbox/bin/dropbox.py'
 alias baidu='/root/bpcs_uploader/bpcs_uploader.php upload'
 alias bb='/root/bpcs_uploader/bpcs_uploader.php uploadbig'
 alias drstart='dropbox start -i'
-#alias ss='/var/local/ss-bash/ssadmin.sh'
 alias sour='source ~/.zshrc'
 alias ssip='iptables -nvx -L ssinput | cat -A - | grep'
+alias super='supervisord -c /etc/supervisord.conf'
 
 ipt() {
   iptables -F;
@@ -149,16 +83,25 @@ ipt() {
   iptables -L;
 }
 
+qu() {
+  php artisan queue:restart >> /dev/null
+  (php artisan queue:work --daemon --tries=3>> /var/local/log/wechat.queue.log 2>&1 &)
+}
+
+px() {
+  if [ "$1"x = x ]; then
+    ps aux
+  else
+    echo "USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND";
+    ps aux | grep "$1" | grep -v 'grep'
+  fi
+}
+
 alias tn='tmux new -s'
 alias tll='tmux ls'
 alias tt='tmux attach -t'
 alias tk='tmux kill-session -t'
 
-gitInit() {
-ssh-agent zsh;
-ssh-agent -s;
-ssh-add ~/.ssh/admin@kelu.org;
-}
 # Some useful commands to use docker.
 # Author: yeasy@github
 # Created:2014-09-25
