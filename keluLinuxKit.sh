@@ -76,6 +76,7 @@ init() {
 
 hostrenme(){
     hostnamectl set-hostname tokyo2
+#    hostnamectl set-hostname tokyo2
 }
 
 install_all() {
