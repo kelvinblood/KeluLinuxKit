@@ -377,12 +377,11 @@ install_snmp(){
     make
     make install
 cat >> /usr/local/snmp/share/snmp/snmpd.conf << EOF
-rouser kelu auth
+rouser snmpdjkb auth
 EOF
 
     if [ ! -e '/var/net-snmp' ]; then
         mkdir '/var/net-snmp'
-        chown postgres pg_dump
     fi
 
     touch '/var/net-snmp/snmpd.conf'
