@@ -20,7 +20,7 @@ SECRET="$RESOURCE/secret"
 LOG_HOME=/var/local/log
 DATA_HOME=/var/local/data
 UPLOAD_HOME=/var/local/upload
-PHP_HOME=/usr/share/php5.6
+PHP_HOME=/usr/share/php7
 FPM_POOL_HOME=/var/local/fpm-pools
 OPENRESTY_HOME=/usr/share/openresty
 NGINX_HOME=/usr/share/openresty/nginx
@@ -236,20 +236,20 @@ install_php(){
     ln -s /usr/lib/x86_64-linux-gnu/libct.so /usr/lib/libct.so
     ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h
 
-    wget http://php.net/distributions/php-5.6.16.tar.gz
-    tar -xzvf php-5.6.16.tar.gz
-    cd php-5.6.16
+    wget http://am1.php.net/distributions/php-7.1.5.tar.gz
+    tar -xzvf php-7.1.5.tar.gz
+    cd php-7.1.5
     ./configure --prefix /usr/share/php7 --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --with-pcre-regex --with-openssl=shared --with-kerberos --with-zlib=shared --enable-bcmath=shared --with-bz2=shared --enable-calendar=shared --with-curl=shared --enable-exif=shared --with-gd=shared --with-jpeg-dir=/usr/include/jpeg8 --with-png-dir=/usr/include/libpng12 --with-gettext=shared --with-gmp=shared --with-mhash=shared --enable-intl=shared --enable-mbstring=shared --with-mcrypt=shared --enable-opcache --with-pdo-pgsql=shared --with-pgsql=shared --enable-shmop=shared --enable-soap=shared --enable-sockets=shared --with-xsl=shared --enable-zip=shared
 #    ./configure --prefix /usr/share/php5.6 --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --with-pcre-regex --with-openssl=shared --with-kerberos --with-zlib=shared --enable-bcmath=shared --with-bz2=shared --enable-calendar=shared --with-curl=shared --enable-exif=shared --with-gd=shared --with-jpeg-dir=/usr/include/jpeg8 --with-png-dir=/usr/include/libpng12 --with-gettext=shared --with-gmp=shared --with-mhash=shared --enable-intl=shared --enable-mbstring=shared --with-mcrypt=shared --enable-opcache --with-pdo-pgsql=shared --with-pgsql=shared --enable-shmop=shared --enable-soap=shared --enable-sockets=shared --with-xsl=shared --enable-zip=shared
     make clean && make && make install
     make test
 
-    cp $RESOURCE/php/lib_php.ini /usr/share/php5.6/lib/php.ini
-    cp $RESOURCE/php/etc_php-fpm.conf /usr/share/php5.6/etc/php-fpm.conf
-    cp sapi/fpm/php-fpm /usr/share/php5.6/sbin/php-fpm
+    cp $RESOURCE/php/lib_php.ini /usr/share/php7/lib/php.ini
+    cp $RESOURCE/php/etc_php-fpm.conf /usr/share/php7/etc/php-fpm.conf
+    cp sapi/fpm/php-fpm /usr/share/php7/sbin/php-fpm
 
-    mkdir /usr/share/php5.6/etc/pool
-    cp $RESOURCE/php/etc_pool_www.conf /usr/share/php5.6/etc/pool/www.conf
+    mkdir /usr/share/php7/etc/pool
+    cp $RESOURCE/php/etc_pool_www.conf /usr/share/php7/etc/pool/www.conf
 
     mkdir /var/local/log/fpm-pools/
     mkdir /var/local/fpm-pools/
@@ -259,13 +259,13 @@ install_php(){
 
     cp /var/local/nginx/html/index.html /var/local/fpm-pools/www/www/public/index.php
 
-    ln -s /usr/share/php5.6/sbin/php-fpm /usr/local/bin/php-fpm
-    ln -s /usr/share/php5.6/bin/php /usr/local/bin/php
+    ln -s /usr/share/php7/sbin/php-fpm /usr/local/bin/php-fpm
+    ln -s /usr/share/php7/bin/php /usr/local/bin/php
 
 }
 
 run_php(){
-    /usr/share/php5.6/sbin/php-fpm
+    /usr/share/php7/sbin/php-fpm
 }
 
 install_pgsql(){
