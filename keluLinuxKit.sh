@@ -83,18 +83,13 @@ install_all() {
     init
     install_zsh
     install_iptable
-    install_lnmp
+#    install_lnmp
 #    install_docker
 #    install_l2tp
 #    install_snmp
     install_bbr
 #    install_oneapm
     reboot
-}
-
-install_docker_sub() {
-    install_docker_ss
-    install_docker_pptp
 }
 
 run_all(){
@@ -371,6 +366,25 @@ install_docker(){
 }
 
 
+install_keluwechat(){
+
+    if [ ! -e '/var/local/log/cron' ]; then
+        mkdir '/var/local/log/cron'
+    fi
+
+    if [ ! -e '/var/local/log/cron/wechat' ]; then
+        mkdir '/var/local/log/cron/wechat'
+    fi
+
+    if [ ! -e '/var/local/log/cron/wechat/ss' ]; then
+        mkdir '/var/local/log/cron/wechat/ss'
+    fi
+
+    install_docker
+    install_docker_ss
+    run_docker_ss
+}
+
 install_bbr(){
     cd $DOWNLOAD
     wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.10/linux-image-4.10.0-041000-generic_4.10.0-041000.201702191831_amd64.deb
@@ -409,9 +423,6 @@ run_snmp(){
 }
 
 install_docker_ss(){
-    if hash docker 2>/dev/null; then
-        install_docker
-    fi
     docker pull oddrationale/docker-shadowsocks;
     if [ ! -e "/var/local/ss-bash"  ]; then
         mkdir /var/local/ss-bash/
@@ -422,12 +433,6 @@ install_docker_ss(){
 }
 
 run_docker_ss(){
-    if [ ! -e "/var/local/ss-bash"  ]; then
-        mkdir /var/local/ss-bash/
-    fi
-    cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash;
-    mv /var/local/ss-bash/ssmlt.json /tmp
-    cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash;
    docker run -d --name=ss --net=host -v /var/local/ss-bash/ssmlt.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
 }
 
