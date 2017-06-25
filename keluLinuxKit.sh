@@ -178,7 +178,7 @@ install_ss() {
     echo '12345 123456 10737418240' > ssusers
 
     # 开启hybla算法
-    /sbin/modprobe tcp_hybla
+#    /sbin/modprobe tcp_hybla
     # 增加文件大小限制
     cat $RESOURCE/Home/limits.conf >> /etc/security/limits.conf
 
