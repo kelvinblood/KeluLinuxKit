@@ -84,9 +84,9 @@ install_all() {
     install_zsh
     install_iptable
     install_lnmp
-    install_docker
-    install_l2tp
-    install_snmp
+#    install_docker
+#    install_l2tp
+#    install_snmp
     install_bbr
 #    install_oneapm
     reboot
@@ -374,7 +374,7 @@ install_docker(){
 install_bbr(){
     cd $DOWNLOAD
     wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.10/linux-image-4.10.0-041000-generic_4.10.0-041000.201702191831_amd64.deb
-    dpkg -i linux-image-4.9.6-040906-generic_4.9.6-040906.201701260330_amd64.deb
+    dpkg -i linux-image-4.10.0-041000-generic_4.10.0-041000.201702191831_amd64.deb
 
     echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
     echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
@@ -421,7 +421,7 @@ install_docker_ss(){
     cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash/ssmlt.json;
 }
 
-run_docker_ss(){
+run_docker_ss()
     if [ ! -e "/var/local/ss-bash"  ]; then
         mkdir /var/local/ss-bash/
     fi
