@@ -421,7 +421,7 @@ install_docker_ss(){
     cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash/ssmlt.json;
 }
 
-run_docker_ss()
+run_docker_ss(){
     if [ ! -e "/var/local/ss-bash"  ]; then
         mkdir /var/local/ss-bash/
     fi
