@@ -179,7 +179,7 @@ install_ss() {
 
     # 开启hybla算法
 #    /sbin/modprobe tcp_hybla
-    # 增加文件大小限制
+    # 增加文件大小限制s
     cat $RESOURCE/Home/limits.conf >> /etc/security/limits.conf
 
     ulimit -n 51200
@@ -356,6 +356,7 @@ EOF
 
 install_docker(){
     cd $DOWNLOAD
+    apt-get -y install tcpdump
 #    echo "deb http://http.debian.net/debian jessie-backports main" | sudo tee /etc/apt/sources.list.d/backports.list
 #    apt-get update
 #    apt-get -t jessie-backports install linux-image-amd64
