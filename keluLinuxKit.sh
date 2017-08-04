@@ -102,7 +102,7 @@ run_all(){
 }
 
 install_zsh() {
-    apt-get -y install zsh tmux
+    apt-get -y install zsh tmux git
     # zsh重启生效引入zsh增强插件,支持git,rails等补全，可选多种外观皮肤
     wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh
 
@@ -111,7 +111,7 @@ install_zsh() {
     echo ''
     echo "-- awesome-tmux -----------------------------------------------------"
     # pass the_silver_searcher install
-    apt-get -y install build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev
+    apt-get -y install build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev rake
     # awesome-tmux
     cd $DOWNLOAD
     if [ ! -e maximum-awesome-linux ]; then
@@ -196,8 +196,8 @@ install_pptp() {
 
 install_lnmp() {
     install_openresty
-    install_php
     install_pgsql
+    install_php
     install_composer
 }
 
@@ -364,6 +364,8 @@ install_docker(){
     usermod -aG docker $USER
     systemctl enable docker
     systemctl start docker
+#     update-rc.d docker enable
+#     update-rc.d docker start
 }
 
 install_keluwechat(){
@@ -434,6 +436,7 @@ install_docker_ss(){
 
 run_docker_ss(){
    docker run -d --name=ss --net=host -v /var/local/ss-bash/ssmlt.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
+   docker run -d --name=ss --net=host -v /usr/share/bash/ssmlt.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
 }
 
 install_docker_pptp(){
