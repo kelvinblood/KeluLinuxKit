@@ -84,7 +84,7 @@ install_all() {
     install_zsh
     install_iptable
 #    install_lnmp
-    install_docker
+#    install_docker
     install_l2tp
     install_snmp
     install_bbr
@@ -111,12 +111,12 @@ install_log() {
         mkdir '/var/local/log/cron'
     fi
 
-    if [ ! -e '/var/local/log/cron/wechat' ]; then
-        mkdir '/var/local/log/cron/wechat'
+    if [ ! -e '/var/local/log/wechat' ]; then
+        mkdir '/var/local/log/wechat'
     fi
 
-    if [ ! -e '/var/local/log/cron/wechat/ss' ]; then
-        mkdir '/var/local/log/cron/wechat/ss'
+    if [ ! -e '/var/local/log/wechat/ss' ]; then
+        mkdir '/var/local/log/wechat/ss'
     fi
 }
 install_zsh() {
@@ -392,12 +392,12 @@ install_keluwechat(){
         mkdir '/var/local/log/cron'
     fi
 
-    if [ ! -e '/var/local/log/cron/wechat' ]; then
-        mkdir '/var/local/log/cron/wechat'
+    if [ ! -e '/var/local/log/wechat' ]; then
+        mkdir '/var/local/log/wechat'
     fi
 
-    if [ ! -e '/var/local/log/cron/wechat/ss' ]; then
-        mkdir '/var/local/log/cron/wechat/ss'
+    if [ ! -e '/var/local/log/wechat/ss' ]; then
+        mkdir '/var/local/log/wechat/ss'
     fi
 
     install_docker
