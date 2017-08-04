@@ -84,10 +84,11 @@ install_all() {
     install_zsh
     install_iptable
 #    install_lnmp
-#    install_docker
-#    install_l2tp
-#    install_snmp
+    install_docker
+    install_l2tp
+    install_snmp
     install_bbr
+    install_log
 #    install_oneapm
     reboot
 }
@@ -101,6 +102,23 @@ run_all(){
     run_cron
 }
 
+install_log() {
+    if [ ! -e '/var/local/log' ]; then
+        mkdir '/var/local/log'
+    fi
+
+    if [ ! -e '/var/local/log/cron' ]; then
+        mkdir '/var/local/log/cron'
+    fi
+
+    if [ ! -e '/var/local/log/cron/wechat' ]; then
+        mkdir '/var/local/log/cron/wechat'
+    fi
+
+    if [ ! -e '/var/local/log/cron/wechat/ss' ]; then
+        mkdir '/var/local/log/cron/wechat/ss'
+    fi
+}
 install_zsh() {
     apt-get -y install zsh tmux git
     # zsh重启生效引入zsh增强插件,支持git,rails等补全，可选多种外观皮肤
@@ -436,7 +454,7 @@ install_docker_ss(){
 
 run_docker_ss(){
    docker run -d --name=ss --net=host -v /var/local/ss-bash/ssmlt.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
-   docker run -d --name=ss --net=host -v /usr/share/bash/ssmlt.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
+#   docker run -d --name=ss --net=host -v /usr/share/bash/ssmlt.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
 }
 
 install_docker_pptp(){
