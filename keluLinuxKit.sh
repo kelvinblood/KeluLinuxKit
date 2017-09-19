@@ -83,12 +83,12 @@ install_all() {
     init
     install_zsh
     install_iptable
-#    install_lnmp
-#    install_docker
-    install_l2tp
-    install_snmp
-    install_bbr
     install_log
+    install_lnmp
+    install_docker
+    install_bbr
+#    install_l2tp
+#    install_snmp
 #    install_oneapm
     reboot
 }
@@ -97,8 +97,8 @@ run_all(){
     run_nginx
     run_php
     run_docker_ss
-    run_docker_pptp
-    run_snmp
+#    run_docker_pptp
+#    run_snmp
     run_cron
 }
 
@@ -119,6 +119,22 @@ install_log() {
         mkdir '/var/local/log/wechat/ss'
     fi
 }
+
+
+install_supervisor() {
+    cd /tmp
+    wget https://bootstrap.pypa.io/get-pip.py
+    python get-pip.py
+
+    pip install supervisor
+    echo_supervisord_conf > /etc/supervisord.conf
+    mkdir /etc/supervisor
+
+    if [ ! -e '/var/local/log/supervisor' ]; then
+        mkdir '/var/local/log/supervisor'
+#    fi
+}
+
 install_zsh() {
     apt-get -y install zsh tmux git
     # zsh重启生效引入zsh增强插件,支持git,rails等补全，可选多种外观皮肤
@@ -217,8 +233,25 @@ install_lnmp() {
     install_pgsql
     install_php
     install_composer
+    install_personalproject
 }
 
+install_personalproject(){
+    echo 'sshd_conf';
+    echo 'ssh config';
+    echo 'git clone';
+    echo 'cron';
+    echo 'supervisor';
+# 23 * * * * * /var/local/cron/every_minute.sh >> /var/local/log/cron/every_minute.log 2>&1
+# 24 0 * * * * /var/local/cron/every_hour.sh >> /var/local/log/cron/every_hour.log 2>&1
+# 25 2 0 * * * /var/local/cron/every_day.sh >> /var/local/log/cron/every_day.log 2>&1
+    echo 'sshd_conf';
+    echo 'sshd_conf';
+}
+
+install_ssl(){
+    echo ''
+}
 
 install_openresty(){
     cd $DOWNLOAD
@@ -298,6 +331,9 @@ install_pgsql(){
         mkdir '/var/local/pg_dump'
         chown postgres pg_dump
     fi
+
+    cp $RESOURCE/pg/pg_hba.conf /etc/postgresql/9.4/main
+    cp $RESOURCE/pg/postgresql.conf /etc/postgresql/9.4/main
 
     cd pg_dump
     cp $RESOURCE/pg/pg_backup.sh ./
