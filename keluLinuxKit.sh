@@ -84,9 +84,9 @@ install_all() {
     install_zsh
     install_iptable
     install_log
-    install_lnmp
     install_docker
     install_bbr
+    install_lnmp
 #    install_l2tp
 #    install_snmp
 #    install_oneapm
@@ -132,7 +132,7 @@ install_supervisor() {
 
     if [ ! -e '/var/local/log/supervisor' ]; then
         mkdir '/var/local/log/supervisor'
-#    fi
+    fi
 }
 
 install_zsh() {
@@ -242,9 +242,9 @@ install_personalproject(){
     echo 'git clone';
     echo 'cron';
     echo 'supervisor';
-# 23 * * * * * /var/local/cron/every_minute.sh >> /var/local/log/cron/every_minute.log 2>&1
-# 24 0 * * * * /var/local/cron/every_hour.sh >> /var/local/log/cron/every_hour.log 2>&1
-# 25 2 0 * * * /var/local/cron/every_day.sh >> /var/local/log/cron/every_day.log 2>&1
+# * * * * * /var/local/cron/every_minute.sh >> /var/local/log/cron/every_minute.log 2>&1
+# 0 * * * * /var/local/cron/every_hour.sh >> /var/local/log/cron/every_hour.log 2>&1
+# 2 0 * * * /var/local/cron/every_day.sh >> /var/local/log/cron/every_day.log 2>&1
     echo 'sshd_conf';
     echo 'sshd_conf';
 }
