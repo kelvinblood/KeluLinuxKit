@@ -229,6 +229,7 @@ install_pptp() {
 }
 
 install_lnmp() {
+    install_free
     install_openresty
     install_pgsql
     install_php
@@ -236,6 +237,16 @@ install_lnmp() {
     install_personalproject
 }
 
+install_free(){
+    dd  if=/dev/zero of=/swapfile bs=100M count=10;
+    mkswap  /swapfile;
+    swapon /swapfile;
+
+cat >> /etc/rc.local << EOF
+swapon /swapfile
+EOF
+
+}
 install_personalproject(){
     echo 'sshd_conf';
     echo 'ssh config';
