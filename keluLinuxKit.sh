@@ -86,6 +86,7 @@ install_all() {
     install_log
     install_docker
     install_bbr
+    install_snmp
     install_lnmp
 #    install_l2tp
 #    install_snmp
@@ -99,7 +100,7 @@ run_all(){
     run_docker_ss
 #    run_docker_pptp
 #    run_snmp
-    run_cron
+#    run_cron
 }
 
 install_log() {
@@ -245,8 +246,8 @@ install_free(){
 cat >> /etc/rc.local << EOF
 swapon /swapfile
 EOF
-
 }
+
 install_personalproject(){
     echo 'sshd_conf';
     echo 'ssh config';
@@ -431,6 +432,15 @@ install_docker(){
     systemctl start docker
 #     update-rc.d docker enable
 #     update-rc.d docker start
+
+    install_docker_ss
+}
+
+install_haproxy(){
+    apt-get -y install haproxy
+    cp $RESOURCE/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg;
+    service haproxy start
+
 }
 
 install_keluwechat(){
