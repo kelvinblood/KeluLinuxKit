@@ -87,7 +87,7 @@ install_all() {
     install_docker
     install_bbr
     install_snmp
-    install_lnmp
+#    install_lnmp
 #    install_l2tp
 #    install_snmp
 #    install_oneapm
@@ -432,8 +432,6 @@ install_docker(){
     systemctl start docker
 #     update-rc.d docker enable
 #     update-rc.d docker start
-
-    install_docker_ss
 }
 
 install_haproxy(){
@@ -507,6 +505,8 @@ install_docker_ss(){
     cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash/ssmlt.json;
     mv /var/local/ss-bash/ssmlt.json /tmp/ssmlt.json
     cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash/ssmlt.json;
+
+    docker run -d --name=ss --net=host -v /var/local/ss-bash/ssmlt.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
 }
 
 run_docker_ss(){
