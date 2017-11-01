@@ -1,5 +1,6 @@
 *.DS_Store
 *.swp
+*~
 Download/*
 Resource/secret/*
 /.idea

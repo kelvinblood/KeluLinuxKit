@@ -87,6 +87,7 @@ install_all() {
     install_docker
     install_bbr
     install_snmp
+    install_openresty
 #    install_lnmp
 #    install_l2tp
 #    install_snmp
@@ -231,7 +232,6 @@ install_pptp() {
 
 install_lnmp() {
     install_free
-    install_openresty
     install_pgsql
     install_php
     install_composer
@@ -438,7 +438,6 @@ install_haproxy(){
     apt-get -y install haproxy
     cp $RESOURCE/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg;
     service haproxy start
-
 }
 
 install_keluwechat(){
