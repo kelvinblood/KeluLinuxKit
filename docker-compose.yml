@@ -1,0 +1,11 @@
+version: '3'
+services:
+  nginx:
+    build: .
+    ports:
+     - "18080:80"
+    volumes:
+     - /var/local/nginx:/var/local/nginx/conf/vhost
+     - /var/local/log/nginx:/var/local/log/nginx
+  redis:
+    image: "redis:alpine"
