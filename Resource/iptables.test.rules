@@ -43,8 +43,8 @@ COMMIT
 -A INPUT -p tcp --dport 20 -j ACCEPT
 -A INPUT -p tcp --dport 21 -j ACCEPT
 -A INPUT -p tcp --dport 11344 -j ACCEPT
--A INPUT -p tcp --dport 49099:59900 -j ACCEPT
--A INPUT -p udp --dport 49099:59900 -j ACCEPT
+-A INPUT -p tcp --dport 39099:59900 -j ACCEPT
+-A INPUT -p udp --dport 39099:59900 -j ACCEPT
 
 # Allows DNS connection
 -A INPUT -p tcp --dport 53 -j ACCEPT
