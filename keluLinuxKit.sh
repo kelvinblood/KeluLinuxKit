@@ -86,7 +86,6 @@ install_all() {
     install_log
     install_docker
     install_bbr
-    install_snmp
     install_openresty
 #    install_lnmp
 #    install_l2tp
@@ -267,7 +266,8 @@ install_ssl(){
 
 install_openresty(){
     cd $DOWNLOAD
-    aptitude -y install libreadline-dev libpcre3-dev libssl-dev libcloog-ppl0 libpq-dev
+    # aptitude -y install libreadline-dev libpcre3-dev libssl-dev libcloog-ppl0 libpq-dev
+    aptitude -y install libreadline-dev libpcre3-dev libssl-dev libpq-dev
     wget https://openresty.org/download/ngx_openresty-1.9.7.1.tar.gz
     tar -xzvf ngx_openresty-1.9.7.1.tar.gz
     cd ngx_openresty-1.9.7.1/
