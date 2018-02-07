@@ -84,13 +84,14 @@ install_all() {
     install_zsh
     install_iptable
     install_log
-    install_docker
     install_bbr
     install_openresty
+#    install_docker
 #    install_lnmp
 #    install_l2tp
 #    install_snmp
 #    install_oneapm
+    echo "install finish, install docker/crontab later by yourself, reboot"
     reboot
 }
 
