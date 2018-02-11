@@ -68,7 +68,7 @@ init() {
     locale-gen zh_CN.UTF-8
     locale-gen
     apt-get update && apt-get -y autoremove && apt-get -y upgrade
-    apt-get -y install vim git ruby zip sudo git rake htop iftop iotop wget curl aptitude psmisc apt-get dbus
+    apt-get -y install vim git ruby zip sudo git rake htop iftop iotop wget curl aptitude psmisc dbus
 
     mkdir /var/local/log
 }
