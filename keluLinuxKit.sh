@@ -78,13 +78,30 @@ hostrenme(){
 #    hostnamectl set-hostname tokyo2
 }
 
+test_all() {
+    test_net
+    echo -n "continue compute test?"
+    read flag
+    test_compute
+}
+
+test_net(){
+    wget -qO- bench.sh | bash
+}
+
+test_compute(){
+    wget --no-check-certificate https://github.com/teddysun/across/raw/master/unixbench.sh
+    chmod +x unixbench.sh
+    ./unixbench.sh
+}
+
 install_all() {
     init
     install_zsh
     install_iptable
     install_log
     install_bbr
-    install_openresty
+#    install_openresty
 #    install_docker
 #    install_lnmp
 #    install_l2tp
@@ -232,6 +249,7 @@ install_pptp() {
 install_lnmp() {
     install_free
     install_pgsql
+    install_openresty
     install_php
     install_composer
     install_personalproject
@@ -270,9 +288,17 @@ install_openresty(){
     aptitude -y install libreadline-dev libpcre3-dev libssl-dev libpq-dev
     wget https://openresty.org/download/ngx_openresty-1.9.7.1.tar.gz
     tar -xzvf ngx_openresty-1.9.7.1.tar.gz
+    rm -rf ngx_openresty-1.9.7.1.tar.gz
     cd ngx_openresty-1.9.7.1/
-    ./configure --prefix=/usr/share/openresty --with-pcre-jit --with-http_postgres_module --with-http_iconv_module --with-http_stub_status_module --with-ipv6
+    hasIpv6=`ifconfig | grep "Scope:Global" | grep inet6 | wc -l`
+    if [ $hasIpv6 -eq 0 ]; then
+        ./configure --prefix=/usr/share/openresty --with-pcre-jit --with-http_postgres_module --with-http_iconv_module --with-http_stub_status_module
+    else
+        ./configure --prefix=/usr/share/openresty --with-pcre-jit --with-http_postgres_module --with-http_iconv_module --with-http_stub_status_module --with-ipv6
+    fi
+
     make && make install
+    rm -rf ngx_openresty-1.9.7.1
 
     mkdir /var/local/nginx
     mkdir /var/local/log/nginx
@@ -682,6 +708,10 @@ case $1 in
     run )
         shift
         run_$1 $2 $3
+        ;;
+    test )
+        shift
+        test_$1 $2 $3
         ;;
     sync )
         shift
