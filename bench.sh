@@ -86,7 +86,6 @@ disk_size2=($( LANG=C df -hPl | grep -wvE '\-|none|tmpfs|devtmpfs|by-uuid|chroot
 disk_total_size=$( calc_disk ${disk_size1[@]} )
 disk_used_size=$( calc_disk ${disk_size2[@]} )
 
-
 clear
 next
 echo -e "CPU 型号             : ${SKYBLUE}$cname${PLAIN}"
@@ -116,4 +115,3 @@ io2=$( io_test )
 echo -e "硬盘I/O (第二次测试) : ${YELLOW}$io2${PLAIN}"
 io3=$( io_test )
 echo -e "硬盘I/O (第三次测试) : ${YELLOW}$io3${PLAIN}"
-next

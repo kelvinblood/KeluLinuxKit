@@ -448,7 +448,7 @@ EOF
 
 install_docker(){
     cd $DOWNLOAD
-    apt-get -y install tcpdump
+    apt-get -y install tcpdump curl
 #    echo "deb http://http.debian.net/debian jessie-backports main" | sudo tee /etc/apt/sources.list.d/backports.list
 #    apt-get update
 #    apt-get -t jessie-backports install linux-image-amd64
@@ -606,6 +606,11 @@ check_if_update(){
     fi
 }
 
+install_vnc() {
+  apt-get update
+  apt-get install -y xfce4 xfce4-goodies gnome-icon-theme tightvncserver
+  apt-get install -y iceweasel ttf-wqy-zenhei
+}
 
 ppp_to_client(){
 echo 'check ppp'
