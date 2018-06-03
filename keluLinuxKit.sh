@@ -44,7 +44,7 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 cd $KELULINUXKIT
 if [ ! -e Download ]; then
-  mkdir Download
+  mkdir -p Download
 fi
 
 
@@ -70,7 +70,7 @@ init() {
     apt-get update && apt-get -y autoremove && apt-get -y upgrade
     apt-get -y install vim git ruby zip sudo git rake htop iftop iotop wget curl aptitude psmisc dbus
 
-    mkdir /var/local/log
+    mkdir -p /var/local/log
 }
 
 hostrenme(){
@@ -121,21 +121,10 @@ run_all(){
 }
 
 install_log() {
-    if [ ! -e '/var/local/log' ]; then
-        mkdir '/var/local/log'
-    fi
-
-    if [ ! -e '/var/local/log/cron' ]; then
-        mkdir '/var/local/log/cron'
-    fi
-
-    if [ ! -e '/var/local/log/wechat' ]; then
-        mkdir '/var/local/log/wechat'
-    fi
-
-    if [ ! -e '/var/local/log/wechat/ss' ]; then
-        mkdir '/var/local/log/wechat/ss'
-    fi
+        mkdir -p '/var/local/log'
+        mkdir -p '/var/local/log/cron'
+        mkdir -p '/var/local/log/wechat'
+        mkdir -p '/var/local/log/wechat/ss'
 }
 
 
@@ -146,10 +135,10 @@ install_supervisor() {
 
     pip install supervisor
     echo_supervisord_conf > /etc/supervisord.conf
-    mkdir /etc/supervisor
+    mkdir -p /etc/supervisor
 
     if [ ! -e '/var/local/log/supervisor' ]; then
-        mkdir '/var/local/log/supervisor'
+        mkdir -p '/var/local/log/supervisor'
     fi
 }
 
@@ -300,11 +289,11 @@ install_openresty(){
     make && make install
     rm -rf ngx_openresty-1.9.7.1
 
-    mkdir /var/local/nginx
-    mkdir /var/local/log/nginx
+    mkdir -p /var/local/nginx
+    mkdir -p /var/local/log/nginx
     cp -R $NGINX_HOME /var/local
     cd /var/local/nginx
-    mkdir conf/vhost
+    mkdir -p conf/vhost
 
     cp $RESOURCE/nginx/* /var/local/nginx/
 }
@@ -335,14 +324,14 @@ install_php(){
     cp $RESOURCE/php/etc_php-fpm.conf /usr/share/php7/etc/php-fpm.conf
     cp sapi/fpm/php-fpm /usr/share/php7/sbin/php-fpm
 
-    mkdir /usr/share/php7/etc/pool
+    mkdir -p /usr/share/php7/etc/pool
     cp $RESOURCE/php/etc_pool_www.conf /usr/share/php7/etc/pool/www.conf
 
-    mkdir /var/local/log/fpm-pools/
-    mkdir /var/local/fpm-pools/
-    mkdir /var/local/fpm-pools/www/
-    mkdir /var/local/fpm-pools/www/www
-    mkdir /var/local/fpm-pools/www/www/public
+    mkdir -p /var/local/log/fpm-pools/
+    mkdir -p /var/local/fpm-pools/
+    mkdir -p /var/local/fpm-pools/www/
+    mkdir -p /var/local/fpm-pools/www/www
+    mkdir -p /var/local/fpm-pools/www/www/public
 
     cp /var/local/nginx/html/index.html /var/local/fpm-pools/www/www/public/index.php
 
@@ -366,7 +355,7 @@ install_pgsql(){
 
     cd /var/local
     if [ ! -e '/var/local/pg_dump' ]; then
-        mkdir '/var/local/pg_dump'
+        mkdir -p '/var/local/pg_dump'
         chown postgres pg_dump
     fi
 
@@ -469,15 +458,15 @@ install_haproxy(){
 install_keluwechat(){
 
     if [ ! -e '/var/local/log/cron' ]; then
-        mkdir '/var/local/log/cron'
+        mkdir -p '/var/local/log/cron'
     fi
 
     if [ ! -e '/var/local/log/wechat' ]; then
-        mkdir '/var/local/log/wechat'
+        mkdir -p '/var/local/log/wechat'
     fi
 
     if [ ! -e '/var/local/log/wechat/ss' ]; then
-        mkdir '/var/local/log/wechat/ss'
+        mkdir -p '/var/local/log/wechat/ss'
     fi
 
     install_docker
@@ -508,7 +497,7 @@ rouser snmpdjkb auth
 EOF
 
     if [ ! -e '/var/net-snmp' ]; then
-        mkdir '/var/net-snmp'
+        mkdir -p '/var/net-snmp'
     fi
 
     touch '/var/net-snmp/snmpd.conf'
@@ -525,7 +514,7 @@ run_snmp(){
 install_docker_ss(){
     docker pull oddrationale/docker-shadowsocks;
     if [ ! -e "/var/local/ss-bash"  ]; then
-        mkdir /var/local/ss-bash/
+        mkdir -p /var/local/ss-bash/
     fi
     cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash/ssmlt.json;
     mv /var/local/ss-bash/ssmlt.json /tmp/ssmlt.json
