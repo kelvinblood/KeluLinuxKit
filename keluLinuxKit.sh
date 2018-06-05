@@ -597,8 +597,33 @@ check_if_update(){
 
 install_vnc() {
   apt-get update
-  apt-get install -y xfce4 xfce4-goodies gnome-icon-theme tightvncserver
+  apt-get install -y xfce4 xfce4-goodies gnome-icon-theme tightvncserver xrdp
+  apt-get install -y ibus ibus-clutter ibus-gtk ibus-gtk3 ibus-qt4
+  im-config -s ibus
+  apt-get install -y ibus-pinyin
+  systemctl enable xrdp
+
+cat >> /root/.bashrc << EOF
+export PATH=/usr/local/sbin:/usr/sbin:/sbin:$PATH
+EOF
+
+  dpkg-reconfigure locales
+
+  apt-get update
   apt-get install -y iceweasel ttf-wqy-zenhei
+
+#cat >> /etc/apt/source.list << EOF
+#deb http://dl.google.com/linux/chrome/deb/ stable main
+#EOF
+
+#  wget https://dl-ssl.google.com/linux/linux_signing_key.pub
+#  apt-key add linux_signing_key.pub
+
+#  apt-get install -y google-chrome-stable google-chrome-beta google-chrome-unstable chromium chromium-l10n
+#  apt-get install -f
+#  apt-get install -y google-chrome-stable google-chrome-beta google-chrome-unstable chromium chromium-l10n iceweasel ttf-wqy-zenhei
+#  apt-get purge -y --auto-remove google-chrome-stable google-chrome-beta google-chrome-unstable chromium chromium-l10n iceweasel firefox firefox-esr
+
 }
 
 ppp_to_client(){
