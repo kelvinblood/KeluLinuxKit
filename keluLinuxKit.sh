@@ -297,12 +297,6 @@ install_openresty(){
 
     cp $RESOURCE/nginx/* /var/local/nginx/
 }
-
-run_nginx(){
-    cd /var/local/nginx
-    ./test.sh
-    ./start.sh
-}
 install_php(){
     cd $DOWNLOAD
     aptitude -y install libssl-dev libcurl4-openssl-dev libbz2-dev libjpeg-dev libpng-dev libgmp-dev libicu-dev libmcrypt-dev freetds-dev libxslt-dev
@@ -338,10 +332,6 @@ install_php(){
     ln -s /usr/share/php7/sbin/php-fpm /usr/local/bin/php-fpm
     ln -s /usr/share/php7/bin/php /usr/local/bin/php
 
-}
-
-run_php(){
-    /usr/share/php7/sbin/php-fpm
 }
 
 install_pgsql(){
@@ -506,11 +496,6 @@ createUser snmpdjkb MD5 snmpdjkb
 EOF
 }
 
-run_snmp(){
-    killall -9 snmpd
-    /usr/local/snmp/sbin/snmpd
-}
-
 install_docker_ss(){
     docker pull oddrationale/docker-shadowsocks;
     if [ ! -e "/var/local/ss-bash"  ]; then
@@ -523,9 +508,45 @@ install_docker_ss(){
     docker run -d --name=ss --net=host -v /var/local/ss-bash/ssmlt.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
 }
 
+install_vnc() {
+  apt-get update
+#  apt-get install -y xfce4 xfce4-goodies gnome-icon-theme tightvncserver xrdp
+  apt-get install -y jwm xterm
+  apt-get install -y ibus ibus-clutter ibus-gtk ibus-gtk3 ibus-qt4
+  im-config -s ibus
+  apt-get install -y ibus-pinyin
+  systemctl enable xrdp
+
+cat >> /root/.bashrc << EOF
+export PATH=/usr/local/sbin:/usr/sbin:/sbin:$PATH
+EOF
+
+  dpkg-reconfigure locales
+
+  apt-get update
+  apt-get install -y iceweasel ttf-wqy-zenhei
+
+#cat >> /etc/apt/source.list << EOF
+#deb http://dl.google.com/linux/chrome/deb/ stable main
+#EOF
+
+#  wget https://dl-ssl.google.com/linux/linux_signing_key.pub
+#  apt-key add linux_signing_key.pub
+
+#  apt-get install -y google-chrome-stable google-chrome-beta google-chrome-unstable chromium chromium-l10n
+#  apt-get install -f
+#  apt-get install -y google-chrome-stable google-chrome-beta google-chrome-unstable chromium chromium-l10n iceweasel ttf-wqy-zenhei
+#  apt-get purge -y --auto-remove google-chrome-stable google-chrome-beta google-chrome-unstable chromium chromium-l10n iceweasel firefox firefox-esr
+
+}
 run_docker_ss(){
    docker run -d --name=ss --net=host -v /var/local/ss-bash/ssmlt.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
 #   docker run -d --name=ss --net=host -v /usr/share/bash/ssmlt.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
+}
+
+run_snmp(){
+    killall -9 snmpd
+    /usr/local/snmp/sbin/snmpd
 }
 
 install_docker_pptp(){
@@ -555,6 +576,16 @@ run_cron(){
     # 0 * * * * /var/local/cron/every_hour.sh >> /var/local/cron/every_hour.log 2>&1
     # 1 * * * * /var/local/cron/every_hour.www-data.sh >> /var/local/cron/every_hour.log 2>&1
     # * * * * * /var/local/cron/every_minute.www-data.sh >> /var/local/cron/every_minute.log 2>&1
+}
+
+run_nginx(){
+    cd /var/local/nginx
+    ./test.sh
+    ./start.sh
+}
+
+run_php(){
+    /usr/share/php7/sbin/php-fpm
 }
 
 sync(){
@@ -593,37 +624,6 @@ check_if_update(){
         docker restart ss;
         rm /tmp/restart_ss.tmp;
     fi
-}
-
-install_vnc() {
-  apt-get update
-  apt-get install -y xfce4 xfce4-goodies gnome-icon-theme tightvncserver xrdp
-  apt-get install -y ibus ibus-clutter ibus-gtk ibus-gtk3 ibus-qt4
-  im-config -s ibus
-  apt-get install -y ibus-pinyin
-  systemctl enable xrdp
-
-cat >> /root/.bashrc << EOF
-export PATH=/usr/local/sbin:/usr/sbin:/sbin:$PATH
-EOF
-
-  dpkg-reconfigure locales
-
-  apt-get update
-  apt-get install -y iceweasel ttf-wqy-zenhei
-
-#cat >> /etc/apt/source.list << EOF
-#deb http://dl.google.com/linux/chrome/deb/ stable main
-#EOF
-
-#  wget https://dl-ssl.google.com/linux/linux_signing_key.pub
-#  apt-key add linux_signing_key.pub
-
-#  apt-get install -y google-chrome-stable google-chrome-beta google-chrome-unstable chromium chromium-l10n
-#  apt-get install -f
-#  apt-get install -y google-chrome-stable google-chrome-beta google-chrome-unstable chromium chromium-l10n iceweasel ttf-wqy-zenhei
-#  apt-get purge -y --auto-remove google-chrome-stable google-chrome-beta google-chrome-unstable chromium chromium-l10n iceweasel firefox firefox-esr
-
 }
 
 ppp_to_client(){
