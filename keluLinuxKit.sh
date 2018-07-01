@@ -511,15 +511,15 @@ install_docker_ss(){
 install_vnc() {
   apt-get update
 #  apt-get install -y xfce4 xfce4-goodies gnome-icon-theme tightvncserver xrdp
-  apt-get install -y jwm xterm
-  apt-get install -y ibus ibus-clutter ibus-gtk ibus-gtk3 ibus-qt4
-  im-config -s ibus
-  apt-get install -y ibus-pinyin
+  apt-get install -y jwm xterm xrdp
+#  apt-get install -y ibus ibus-clutter ibus-gtk ibus-gtk3 ibus-qt4
+#  im-config -s ibus
+#  apt-get install -y ibus-pinyin
   systemctl enable xrdp
 
-cat >> /root/.bashrc << EOF
-export PATH=/usr/local/sbin:/usr/sbin:/sbin:$PATH
-EOF
+#cat >> /root/.bashrc << EOF
+#export PATH=/usr/local/sbin:/usr/sbin:/sbin:$PATH
+#EOF
 
   dpkg-reconfigure locales
 
@@ -539,6 +539,18 @@ EOF
 #  apt-get purge -y --auto-remove google-chrome-stable google-chrome-beta google-chrome-unstable chromium chromium-l10n iceweasel firefox firefox-esr
 
 }
+
+install_p2p(){
+    # transmission
+    apt-get -y install transmission-daemon
+    service transmission-daemon stop
+    mkdir -p $HOME/Downloads/transmission-daemon/downloads
+    mkdir -p $HOME/Downloads/transmission-daemon/incomplete-downloads
+    mv /etc/transmission-daemon/settings.json /etc/transmission-daemon/settings.json_backup
+    cp $RESOURCE/transmission-daemon/settings.json /etc/transmission-daemon/settings.json
+    service transmission-daemon restart
+}
+
 run_docker_ss(){
    docker run -d --name=ss --net=host -v /var/local/ss-bash/ssmlt.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
 #   docker run -d --name=ss --net=host -v /usr/share/bash/ssmlt.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
