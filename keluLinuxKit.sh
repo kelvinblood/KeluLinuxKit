@@ -68,7 +68,7 @@ init() {
     locale-gen zh_CN.UTF-8
     locale-gen
     apt-get update && apt-get -y autoremove && apt-get -y upgrade
-    apt-get -y install vim git ruby zip sudo git rake htop iftop iotop wget curl aptitude psmisc dbus
+    apt-get -y install vim git ruby zip sudo git rake htop iftop iotop wget curl aptitude psmisc dbus net-tools iptables
 
     mkdir -p /var/local/log
 }
@@ -502,10 +502,14 @@ install_docker_ss(){
         mkdir -p /var/local/ss-bash/
     fi
     cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash/ssmlt.json;
-    mv /var/local/ss-bash/ssmlt.json /tmp/ssmlt.json
-    cp $RESOURCE/docker/shadowsocks/ssmlt.json /var/local/ss-bash/ssmlt.json;
 
     docker run -d --name=ss --net=host -v /var/local/ss-bash/ssmlt.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
+}
+
+install_docker_ss_local(){
+    docker pull oddrationale/docker-shadowsocks;
+    cp $RESOURCE/docker/shadowsocks/client.json /var/local/ss-bash/ssmlt.json;
+    docker run -d --name=ss --net=host --entrypoint="/usr/local/bin/sslocal" -v /var/local/ss-bash/local.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
 }
 
 install_vnc() {
@@ -540,7 +544,7 @@ install_vnc() {
 
 }
 
-install_p2p(){
+install_transmission(){
     # transmission
     apt-get -y install transmission-daemon
     service transmission-daemon stop
@@ -548,7 +552,8 @@ install_p2p(){
     mkdir -p $HOME/Downloads/transmission-daemon/incomplete-downloads
     mv /etc/transmission-daemon/settings.json /etc/transmission-daemon/settings.json_backup
     cp $RESOURCE/transmission-daemon/settings.json /etc/transmission-daemon/settings.json
-    service transmission-daemon restart
+    service transmission-daemon stop
+    systemctl enable transmission-daemon
 }
 
 run_docker_ss(){

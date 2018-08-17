@@ -66,5 +66,9 @@
     "upload-limit": 100, 
     "upload-limit-enabled": 0, 
     "upload-slots-per-torrent": 14, 
-    "utp-enabled": true
+    "utp-enabled": true,
+    "proxy-port": 1080,
+    "proxy-server": "127.0.0.1",
+    "proxy-server-enabled": 1,
+    "proxy-type": 2
 }
