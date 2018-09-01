@@ -439,6 +439,19 @@ install_docker(){
 #     update-rc.d docker start
 }
 
+install_docker_cn(){
+cat >> /etc/docker/daemon.json << EOF
+{
+"registry-mirror": ["https://7bezldxe.mirror.aliyuncs.com"]
+}
+EOF
+    systemctl daemon-reload
+    systemctl restart docker
+    git config --global http.proxy 'socks5://127.0.0.1:1080'
+    git config --global https.proxy 'socks5://127.0.0.1:1080'
+
+}
+
 install_haproxy(){
     apt-get -y install haproxy
     cp $RESOURCE/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg;
@@ -509,7 +522,9 @@ install_docker_ss(){
 install_docker_ss_local(){
     docker pull oddrationale/docker-shadowsocks;
     cp $RESOURCE/docker/shadowsocks/client.json /var/local/ss-bash/ssmlt.json;
-    docker run -d --name=ss --net=host --entrypoint="/usr/local/bin/sslocal" -v /var/local/ss-bash/local.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
+    docker run -d --name=sslocal --net=host --entrypoint="/usr/local/bin/sslocal" -v /var/local/ss-bash/local.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
+#    docker run -d --name=sslocal --net=host --entrypoint="/usr/local/bin/sslocal" -v C:\Users\lenovo\win.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
+#    docker run -d --name=sslocal --net=host --entrypoint="/usr/local/bin/sslocal" -v D:\docker\ss:/tmp:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
 }
 
 install_vnc() {
