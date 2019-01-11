@@ -141,6 +141,57 @@ install_supervisor() {
         mkdir -p '/var/local/log/supervisor'
     fi
 }
+install_zsh_centos() {
+    yum -y install zsh tmux git
+    # zsh重启生效引入zsh增强插件,支持git,rails等补全，可选多种外观皮肤
+    wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh
+
+    echo ''
+    echo ''
+    echo ''
+    echo "-- awesome-tmux -----------------------------------------------------"
+    # pass the_silver_searcher install
+    yum install -y install build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev rake
+    # awesome-tmux
+    cd $DOWNLOAD
+    if [ ! -e maximum-awesome-linux ]; then
+      git clone https://github.com/kelvinblood/maximum-awesome-centos.git
+    fi
+    cd maximum-awesome-centos
+    rake
+
+    # rake install:solarized['dark']
+
+    cp $DOWNLOAD/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome-linux/tmux.conf_backup
+    cp $RESOURCE/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome-linux/tmux.conf
+
+    # cp $RESOURCE/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome
+    # cp $RESOURCE/maximum-awesome-linux/.tmux* $HOME
+    # cp $RESOURCE/maximum-awesome-linux/.vimrc* $HOME
+    # cp $RESOURCE/maximum-awesome-linux/vimrc.bundles $DOWNLOAD/maximum-awesome-linux/vimrc.bundles
+
+    # git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+    # rm -r $HOME/.vim/bundle/vim-snipmate
+
+    # tmux-powerline
+    cd $HOME
+    touch .tmux.conf.local
+
+    cd $DOWNLOAD
+    if [ ! -e tmux-powerline ]; then
+      git clone https://github.com/erikw/tmux-powerline.git
+    fi
+    cp $DOWNLOAD/tmux-powerline/themes/default.sh $DOWNLOAD/tmux-powerline/themes/default.sh_backup
+    cp $RESOURCE/tmux-powerline/default.sh $DOWNLOAD/tmux-powerline/themes/default.sh
+cat >> $DOWNLOAD/maximum-awesome-linux/tmux.conf<< EOF
+# add by Kelu
+set-option -g status-left "#($DOWNLOAD/tmux-powerline/powerline.sh left)"
+set-option -g status-right "#($DOWNLOAD/tmux-powerline/powerline.sh right)"
+source-file ~/.tmux.conf.local
+EOF
+
+    cat $RESOURCE/Home/.zshrc >> $HOME/.zshrc
+}
 
 install_zsh() {
     apt-get -y install zsh tmux git
