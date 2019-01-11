@@ -154,7 +154,7 @@ install_zsh_centos() {
     yum install -y install build-essential automake pkg-config libpcre3-dev zlib1g-dev liblzma-dev rake
     # awesome-tmux
     cd $DOWNLOAD
-    if [ ! -e maximum-awesome-linux ]; then
+    if [ ! -e maximum-awesome-centos ]; then
       git clone https://github.com/kelvinblood/maximum-awesome-centos.git
     fi
     cd maximum-awesome-centos
