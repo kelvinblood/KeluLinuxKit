@@ -162,13 +162,13 @@ install_zsh_centos() {
 
     # rake install:solarized['dark']
 
-    cp $DOWNLOAD/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome-linux/tmux.conf_backup
-    cp $RESOURCE/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome-linux/tmux.conf
+    cp $DOWNLOAD/maximum-awesome-centos/tmux.conf $DOWNLOAD/maximum-awesome-centos/tmux.conf_backup
+    cp $RESOURCE/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome-centos/tmux.conf
 
-    # cp $RESOURCE/maximum-awesome-linux/tmux.conf $DOWNLOAD/maximum-awesome
-    # cp $RESOURCE/maximum-awesome-linux/.tmux* $HOME
-    # cp $RESOURCE/maximum-awesome-linux/.vimrc* $HOME
-    # cp $RESOURCE/maximum-awesome-linux/vimrc.bundles $DOWNLOAD/maximum-awesome-linux/vimrc.bundles
+    # cp $RESOURCE/maximum-awesome-centos/tmux.conf $DOWNLOAD/maximum-awesome
+    # cp $RESOURCE/maximum-awesome-centos/.tmux* $HOME
+    # cp $RESOURCE/maximum-awesome-centos/.vimrc* $HOME
+    # cp $RESOURCE/maximum-awesome-centos/vimrc.bundles $DOWNLOAD/maximum-awesome-centos/vimrc.bundles
 
     # git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
     # rm -r $HOME/.vim/bundle/vim-snipmate
