@@ -299,9 +299,10 @@ install_free(){
     dd  if=/dev/zero of=/swapfile bs=100M count=10;
     mkswap  /swapfile;
     swapon /swapfile;
+    cp /etc/fstab /etc/fstab_bak
 
-cat >> /etc/rc.local << EOF
-swapon /swapfile
+cat >> /etc/fstab << EOF
+/swapfile swap swap defaults 0 0
 EOF
 }
 
