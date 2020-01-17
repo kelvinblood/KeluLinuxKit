@@ -144,7 +144,7 @@ install_supervisor() {
 install_zsh_centos() {
     yum -y install zsh tmux git
     # zsh重启生效引入zsh增强插件,支持git,rails等补全，可选多种外观皮肤
-    wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh
+    wget http://d.kelu.org/install.sh -O - | sh
 
     echo ''
     echo ''
@@ -196,7 +196,7 @@ EOF
 install_zsh() {
     apt-get -y install zsh tmux git
     # zsh重启生效引入zsh增强插件,支持git,rails等补全，可选多种外观皮肤
-    wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh
+    wget http://d.kelu.org/install.sh -O - | sh
 
     echo ''
     echo ''
@@ -562,7 +562,7 @@ install_yundun(){
 
 install_bbr(){
     cd $DOWNLOAD
-    wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.10/linux-image-4.10.0-041000-generic_4.10.0-041000.201702191831_amd64.deb
+    wget http://d.kelu.org/linux-image-4.10.0-041000-generic_4.10.0-041000.201702191831_amd64.deb
     dpkg -i linux-image-4.10.0-041000-generic_4.10.0-041000.201702191831_amd64.deb
 
     echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
