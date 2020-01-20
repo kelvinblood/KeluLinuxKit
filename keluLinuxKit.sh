@@ -533,7 +533,7 @@ install_keluwechat(){
     run_docker_ss
 }
 
-install_yundun(){
+install_aliyundun(){
     cd $DOWNLOAD
     wget http://update.aegis.aliyun.com/download/uninstall.sh
     chmod +x uninstall.sh
