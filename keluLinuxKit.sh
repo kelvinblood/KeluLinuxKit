@@ -68,7 +68,7 @@ init() {
     locale-gen zh_CN.UTF-8
     locale-gen
     apt-get update && apt-get -y autoremove && apt-get -y upgrade
-    apt-get -y install vim git ruby zip sudo git rake htop iftop iotop wget curl aptitude psmisc dbus net-tools iptables
+    apt-get -y install vim git ruby zip sudo git rake htop iftop iotop wget curl aptitude psmisc dbus net-tools iptables ntpdate
 
     mkdir -p /var/local/log
 }
@@ -531,6 +531,9 @@ install_keluwechat(){
     install_docker
     install_docker_ss
     run_docker_ss
+}
+install_clear(){
+  rm /var/lib/apt/lists/*
 }
 
 install_aliyundun(){
