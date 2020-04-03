@@ -100,7 +100,7 @@ install_all() {
     install_zsh
     install_iptable
     install_log
-#    install_bbr
+    install_bbr
 #    install_openresty
 #    install_docker
 #    install_lnmp
@@ -475,6 +475,17 @@ EOF
 #    service ipsec restart
 #    service pppd-dns restart
 #    service xl2tpd restart
+}
+
+uninstall_docker(){
+dpkg -l | grep -i docker	
+apt-get purge -y docker-engine docker docker.io docker-ce
+apt-get autoremove -y --purge docker-engine docker docker.io docker-ce
+rm -rf /var/lib/docker /etc/docker
+rm /etc/apparmor.d/docker
+groupdel docker
+rm -rf /var/run/docker.sock
+
 }
 
 install_docker(){
