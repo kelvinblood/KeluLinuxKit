@@ -564,12 +564,18 @@ install_aliyundun(){
 }
 
 install_bbr(){
-    cd $DOWNLOAD
-    wget http://d.kelu.org/linux-image-4.10.0-041000-generic_4.10.0-041000.201702191831_amd64.deb
-    dpkg -i linux-image-4.10.0-041000-generic_4.10.0-041000.201702191831_amd64.deb
-
+    apt-get dist-upgrade
+    apt-get install -t stretch-backports linux-image-amd64
+    update-grub
+    apt-get clean
     echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
     echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
+    sysctl -p
+    echo ""
+    echo ""
+    sysctl net.ipv4.tcp_available_congestion_control
+    sysctl net.ipv4.tcp_congestion_control
+    lsmod | grep bbr
 }
 
 install_snmp(){
@@ -680,9 +686,13 @@ run_docker_pptp(){
 }
 
 #install_docker_l2tp(){
-#    docker pull fcojean/l2tp-ipsec-vpn-server
-#    modprobe af_key
-#    docker run --name l2tp --env-file /etc/ppp/l2tp.env -p 500:500/udp -p 4500:4500/udp -v /lib/modules:/lib/modules:ro -d --privileged fcojean/l2tp-ipsec-vpn-server
+    docker pull fcojean/l2tp-ipsec-vpn-server
+    modprobe af_key
+    docker run --name l2tp --env-file /etc/ppp/l2tp.env -p 500:500/udp -p 4500:4500/udp -v /lib/modules:/lib/modules:ro -d --privileged fcojean/l2tp-ipsec-vpn-server
+
+# VPN_IPSEC_PSK=abcdefg
+# VPN_USER_CREDENTIAL_LIST=[{"login":"user1","password":"123456"},{"login":"user2","password":"123456"}]
+
 #
 #    docker run --name l2tp --env-file /etc/ppp/l2tp.env --net=host -v /lib/modules:/lib/modules:ro -d --privileged fcojean/l2tp-ipsec-vpn-server
 #}
