@@ -48,6 +48,13 @@ if [ ! -e Download ]; then
 fi
 
 
+linux_version () {
+    linuxCent=`cat /etc/*release | grep CentOS | wc -l`
+    linuxDebian=`cat /etc/*release | grep Debian | wc -l`
+
+
+}
+
 usage () {
     cat $DIR/help
 }
@@ -626,8 +633,8 @@ install_docker_ss_local(){
     docker pull oddrationale/docker-shadowsocks;
     cp $RESOURCE/docker/shadowsocks/client.json /var/local/ss-bash/ssmlt.json;
     docker run -d --name=sslocal --net=host --entrypoint="/usr/local/bin/sslocal" -v /var/local/ss-bash/local.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
-#    docker run -d --name=sslocal --net=host --entrypoint="/usr/local/bin/sslocal" -v C:\Users\lenovo\win.json:/tmp/ssmlt.json:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
-#    docker run -d --name=sslocal --net=host --entrypoint="/usr/local/bin/sslocal" -v D:\docker\ss:/tmp:rw oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
+    ### for windows
+    # docker run -d --name=sslocal --net=host --entrypoint="/usr/local/bin/sslocal" -v D:/shadowsocks/win.json:/tmp/ssmlt.json:rw -v D:/shadowsocks/sources.list:/etc/apt/sources.list:rw  oddrationale/docker-shadowsocks -c /tmp/ssmlt.json
 }
 
 install_vnc() {
@@ -696,7 +703,7 @@ run_docker_pptp(){
    docker run -d --name=pptp --privileged --net=host -v /etc/ppp/chap-secrets:/etc/ppp/chap-secrets:rw mobtitude/vpn-pptp
 }
 
-#install_docker_l2tp(){
+install_docker_l2tp(){
     docker pull fcojean/l2tp-ipsec-vpn-server
     modprobe af_key
     docker run --name l2tp --env-file /etc/ppp/l2tp.env -p 500:500/udp -p 4500:4500/udp -v /lib/modules:/lib/modules:ro -d --privileged fcojean/l2tp-ipsec-vpn-server
@@ -706,7 +713,7 @@ run_docker_pptp(){
 
 #
 #    docker run --name l2tp --env-file /etc/ppp/l2tp.env --net=host -v /lib/modules:/lib/modules:ro -d --privileged fcojean/l2tp-ipsec-vpn-server
-#}
+}
 
 run_cron(){
     cp -R $RESOURCE/cron /var/local
