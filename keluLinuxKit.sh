@@ -582,10 +582,10 @@ install_aliyundun(){
 }
 
 install_bbr(){
-    apt-get dist-upgrade
-    apt-get install -t stretch-backports linux-image-amd64
-    update-grub
-    apt-get clean
+#    apt-get dist-upgrade
+#    apt-get install -t stretch-backports linux-image-amd64
+#    update-grub
+#    apt-get clean
     echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
     echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
     sysctl -p
