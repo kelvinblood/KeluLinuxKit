@@ -107,7 +107,7 @@ install_all() {
     install_zsh
     install_iptable
     install_log
-    install_bbr
+#    install_bbr
 #    install_openresty
 #    install_docker
 #    install_lnmp
