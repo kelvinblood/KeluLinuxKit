@@ -74,7 +74,7 @@ init() {
 
     locale-gen zh_CN.UTF-8
     locale-gen
-    apt-get update && apt-get -y autoremove && apt-get -y upgrade
+#    apt-get update && apt-get -y autoremove && apt-get -y upgrade
     apt-get -y install vim git ruby zip sudo git rake htop iftop iotop wget curl aptitude psmisc dbus net-tools iptables ntpdate
 
     mkdir -p /var/local/log
@@ -114,8 +114,8 @@ install_all() {
 #    install_l2tp
 #    install_snmp
 #    install_oneapm
-    echo "install finish, install docker/crontab later by yourself, reboot"
-    reboot
+    echo "install finish, install docker/crontab later by yourself"
+#    reboot
 }
 
 run_all(){
@@ -151,7 +151,7 @@ install_supervisor() {
 install_zsh_centos() {
     yum -y install zsh tmux git
     # zsh重启生效引入zsh增强插件,支持git,rails等补全，可选多种外观皮肤
-    wget http://d.kelu.org/install.sh -O - | sh
+    wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh
 
     echo ''
     echo ''
@@ -203,7 +203,7 @@ EOF
 install_zsh() {
     apt-get -y install zsh tmux git
     # zsh重启生效引入zsh增强插件,支持git,rails等补全，可选多种外观皮肤
-    wget http://d.kelu.org/install.sh -O - | sh
+    wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | sh
 
     echo ''
     echo ''
