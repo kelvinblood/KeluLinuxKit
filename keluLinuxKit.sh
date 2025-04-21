@@ -197,7 +197,7 @@ set-option -g status-right "#($DOWNLOAD/tmux-powerline/powerline.sh right)"
 source-file ~/.tmux.conf.local
 EOF
 
-    cat $RESOURCE/Home/.zshrc >> $HOME/.zshrc
+    # cat $RESOURCE/Home/.zshrc >> $HOME/.zshrc
 }
 
 install_zsh() {
@@ -249,7 +249,7 @@ set-option -g status-right "#($DOWNLOAD/tmux-powerline/powerline.sh right)"
 source-file ~/.tmux.conf.local
 EOF
 
-    cat $RESOURCE/Home/.zshrc >> $HOME/.zshrc
+    # cat $RESOURCE/Home/.zshrc >> $HOME/.zshrc
 }
 
 install_() {
